@@ -5,6 +5,7 @@ import { dependencies, name } from "./package.json";
 await $`rm -rf dist`;
 await $`bun build --outfile=dist/index.js --target=node --production --no-bundle index.ts`;
 await $`tsc --outFile dist/index.d.ts --declaration --emitDeclarationOnly --skipLibCheck index.ts`;
+await $`cp README.md dist/`;
 
 const vSchema = z.object({ version: z.string() });
 const mmpSchema = z.tuple([z.number(), z.number(), z.number()]);
