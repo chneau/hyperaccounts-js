@@ -1,6 +1,7 @@
 # @chneau/hyperaccounts
 
-A TypeScript client for the HyperAccounts REST API for Sage 50cloud, featuring type-safe requests and responses using Zod.
+A TypeScript client for the HyperAccounts REST API for Sage 50cloud, featuring
+type-safe requests and responses using Zod.
 
 ## Installation
 
@@ -22,14 +23,15 @@ Initialize the client with your HyperAccounts base URL and authentication token.
 import { HyperAccountsClient } from "@chneau/hyperaccounts";
 
 const client = new HyperAccountsClient({
-  baseURL: "https://your-hyperaccounts-api-url.com",
-  authToken: "YOUR_AUTH_TOKEN",
+	baseURL: "https://your-hyperaccounts-api-url.com",
+	authToken: "YOUR_AUTH_TOKEN",
 });
 ```
 
 ## Usage
 
-All API methods return a Promise that resolves to a typed response validated by Zod schemas.
+All API methods return a Promise that resolves to a typed response validated by
+Zod schemas.
 
 ### Check API Status
 
@@ -42,17 +44,17 @@ console.log(status);
 
 ```typescript
 const customers = await client.searchCustomer([
-  {
-    field: "name",
-    type: "like",
-    value: "Acme%",
-  },
+	{
+		field: "name",
+		type: "like",
+		value: "Acme%",
+	},
 ]);
 
 if (customers.success && customers.results) {
-  customers.results.forEach((customer) => {
-    console.log(`Found customer: ${customer.name} (${customer.accountRef})`);
-  });
+	customers.results.forEach((customer) => {
+		console.log(`Found customer: ${customer.name} (${customer.accountRef})`);
+	});
 }
 ```
 
@@ -67,27 +69,30 @@ console.log(customer.response);
 
 ```typescript
 const newOrder = await client.createSalesOrder({
-  customerAccountRef: "ACME001",
-  orderDate: "2023-10-27",
-  invoiceItems: [
-    {
-      stockCode: "WIDGET-01",
-      quantity: 10,
-      unitPrice: 15.50,
-      description: "Premium Widget",
-      taxCode: 1,
-    },
-  ],
+	customerAccountRef: "ACME001",
+	orderDate: "2023-10-27",
+	invoiceItems: [
+		{
+			stockCode: "WIDGET-01",
+			quantity: 10,
+			unitPrice: 15.50,
+			description: "Premium Widget",
+			taxCode: 1,
+		},
+	],
 });
 
 if (newOrder.success) {
-  console.log(`Order created successfully: ${newOrder.response}`);
+	console.log(`Order created successfully: ${newOrder.response}`);
 }
 ```
 
 ## Features
 
 - **Type-Safe**: Full TypeScript definitions for inputs and outputs.
-- **Runtime Validation**: Uses [Zod](https://zod.dev) to validate API responses, ensuring your application handles data correctly.
+- **Runtime Validation**: Uses [Zod](https://zod.dev) to validate API responses,
+  ensuring your application handles data correctly.
 - **Promise-Based**: Modern async/await API.
-- **Comprehensive Coverage**: Supports a wide range of HyperAccounts endpoints including Company Settings, Customers, Suppliers, Products, Stock, Sales Orders, Purchase Orders, and more.
+- **Comprehensive Coverage**: Supports a wide range of HyperAccounts endpoints
+  including Company Settings, Customers, Suppliers, Products, Stock, Sales
+  Orders, Purchase Orders, and more.
