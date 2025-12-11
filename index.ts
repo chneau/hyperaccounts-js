@@ -1,3 +1,4 @@
+/// <amd-module name="@chneau/hyperaccounts" />
 import { Axios } from "axios";
 import z from "zod";
 
