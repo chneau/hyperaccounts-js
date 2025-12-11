@@ -3,14 +3,13 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "hyperaccounts-js",
+      "name": "@chneau/hyperaccounts",
       "dependencies": {
         "axios": "latest",
         "zod": "latest",
       },
       "devDependencies": {
         "@types/bun": "latest",
-        "@types/node": "latest",
         "typescript": "latest",
       },
     },
