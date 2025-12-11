@@ -3,6 +3,11 @@
 A TypeScript client for the HyperAccounts REST API for Sage 50cloud, featuring
 type-safe requests and responses using Zod.
 
+> **Caution**: This API client has been auto-generated through AI.
+
+- **GitHub Repository**: https://github.com/chneau/hyperaccounts-js
+- **NPM Package**: https://www.npmjs.com/package/@chneau/hyperaccounts
+
 ## Installation
 
 ```bash
@@ -96,3 +101,7 @@ if (newOrder.success) {
 - **Comprehensive Coverage**: Supports a wide range of HyperAccounts endpoints
   including Company Settings, Customers, Suppliers, Products, Stock, Sales
   Orders, Purchase Orders, and more.
+
+## License
+
+MIT
