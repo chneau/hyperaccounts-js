@@ -55,7 +55,7 @@ const ReadCompanySettingsOutputSchema = z.object({
 		lastBackup: z.string(),
 		lastRestoreDate: z.string(),
 		lastClearAudit: z.string(),
-		lastMonthEnd: z.null(),
+		lastMonthEnd: z.string().nullable(),
 		name: z.string(),
 		programMajorVersion: z.number(),
 		programMinorVersion: z.number(),
@@ -69,7 +69,7 @@ const ReadCompanySettingsOutputSchema = z.object({
 		vatRegisteredFlag: z.boolean(),
 		lockDate: z.string(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadCompanySettingsOutput = z.infer<
 	typeof ReadCompanySettingsOutputSchema
@@ -82,7 +82,7 @@ const ReadRdaEnabledOutputSchema = z.object({
 	response: z.object({
 		isRDAEnabled: z.boolean(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadRdaEnabledOutput = z.infer<typeof ReadRdaEnabledOutputSchema>;
 const ReadExchangeRatesInputSchema = z.void();
@@ -105,8 +105,8 @@ const ReadExchangeRatesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadExchangeRatesOutput = z.infer<typeof ReadExchangeRatesOutputSchema>;
 const UpdateExchangeRateInputSchema = z.object({
@@ -123,7 +123,7 @@ const UpdateExchangeRateOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateExchangeRateOutput = z.infer<typeof UpdateExchangeRateOutputSchema>;
 const ReadCountriesInputSchema = z.void();
@@ -140,8 +140,8 @@ const ReadCountriesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadCountriesOutput = z.infer<typeof ReadCountriesOutputSchema>;
 const ReadCouriersInputSchema = z.void();
@@ -159,8 +159,8 @@ const ReadCouriersOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadCouriersOutput = z.infer<typeof ReadCouriersOutputSchema>;
 const ReadNominalsInputSchema = z.void();
@@ -177,8 +177,8 @@ const ReadNominalsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadNominalsOutput = z.infer<typeof ReadNominalsOutputSchema>;
 const ReadTaxCodesInputSchema = z.void();
@@ -193,8 +193,8 @@ const ReadTaxCodesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadTaxCodesOutput = z.infer<typeof ReadTaxCodesOutputSchema>;
 const ReadControlAccountsInputSchema = z.void();
@@ -223,7 +223,7 @@ const ReadControlAccountsOutputSchema = z.object({
 		uniqueNo: z.number(),
 		vatLiabilityNo: z.number(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadControlAccountsOutput = z.infer<
 	typeof ReadControlAccountsOutputSchema
@@ -241,8 +241,8 @@ const GetPaymentMethodsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type GetPaymentMethodsOutput = z.infer<typeof GetPaymentMethodsOutputSchema>;
 const ReadDepartmentsInputSchema = z.void();
@@ -259,8 +259,8 @@ const ReadDepartmentsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadDepartmentsOutput = z.infer<typeof ReadDepartmentsOutputSchema>;
 const ReadChartOfAccountsInputSchema = z.void();
@@ -275,8 +275,8 @@ const ReadChartOfAccountsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadChartOfAccountsOutput = z.infer<
 	typeof ReadChartOfAccountsOutputSchema
@@ -322,7 +322,7 @@ const SearchCustomerOutputSchema = z.object({
 			additionalRef2: z.string(),
 			additionalRef3: z.string(),
 			paymentType: z.number(),
-			paymentTypeName: z.null(),
+			paymentTypeName: z.string().nullable(),
 			turnoverYtd: z.number(),
 			priorYear: z.number(),
 			vatRegNumber: z.string(),
@@ -364,8 +364,8 @@ const SearchCustomerOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchCustomerOutput = z.infer<typeof SearchCustomerOutputSchema>;
 const ReadCustomerInputSchema = z.object({
@@ -444,7 +444,7 @@ const ReadCustomerOutputSchema = z.object({
 		telephone2: z.string(),
 		fax: z.string(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadCustomerOutput = z.infer<typeof ReadCustomerOutputSchema>;
 const CreateCustomerInputSchema = z.object({
@@ -483,7 +483,7 @@ const CreateCustomerOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateCustomerOutput = z.infer<typeof CreateCustomerOutputSchema>;
 const UpdateCustomerInputSchema = z.object({
@@ -503,7 +503,7 @@ const UpdateCustomerOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateCustomerOutput = z.infer<typeof UpdateCustomerOutputSchema>;
 const ReadCustomerAgedBalancesInputSchema = z.object({
@@ -524,7 +524,7 @@ const ReadCustomerAgedBalancesOutputSchema = z.object({
 		period90Days: z.number(),
 		older: z.number(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadCustomerAgedBalancesOutput = z.infer<
 	typeof ReadCustomerAgedBalancesOutputSchema
@@ -558,7 +558,7 @@ const ReadCustomerAddressOutputSchema = z.object({
 		addressType: z.number(),
 		taxCode: z.number(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadCustomerAddressOutput = z.infer<
 	typeof ReadCustomerAddressOutputSchema
@@ -590,7 +590,7 @@ const CreateCustomerAddressOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateCustomerAddressOutput = z.infer<
 	typeof CreateCustomerAddressOutputSchema
@@ -618,7 +618,7 @@ const UpdateCustomerAddressOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.boolean(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateCustomerAddressOutput = z.infer<
 	typeof UpdateCustomerAddressOutputSchema
@@ -663,8 +663,8 @@ const SearchCustomerAddressOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchCustomerAddressOutput = z.infer<
 	typeof SearchCustomerAddressOutputSchema
@@ -726,8 +726,8 @@ const SearchSupplierOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchSupplierOutput = z.infer<typeof SearchSupplierOutputSchema>;
 const ReadSupplierInputSchema = z.object({
@@ -773,7 +773,7 @@ const ReadSupplierOutputSchema = z.object({
 		eoriNumber: z.string(),
 		termsAgreed: z.boolean(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadSupplierOutput = z.infer<typeof ReadSupplierOutputSchema>;
 const CreateSupplierInputSchema = z.object({
@@ -796,7 +796,7 @@ const CreateSupplierOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateSupplierOutput = z.infer<typeof CreateSupplierOutputSchema>;
 const UpdateSupplierInputSchema = z.object({
@@ -833,7 +833,7 @@ const UpdateSupplierOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateSupplierOutput = z.infer<typeof UpdateSupplierOutputSchema>;
 const SearchProductInputSchema = z.array(
@@ -931,8 +931,8 @@ const SearchProductOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchProductOutput = z.infer<typeof SearchProductOutputSchema>;
 const ReadProductInputSchema = z.object({
@@ -970,7 +970,7 @@ const ReadProductOutputSchema = z.object({
 		lastPurchasePrice: z.number(),
 		lastDiscPurchasePrice: z.number(),
 		commodityCode: z.string(),
-		intrastatCommodityCode: z.null(),
+		intrastatCommodityCode: z.string().nullable(),
 		barcode: z.string(),
 		webDetails: z.string(),
 		webDescription: z.string(),
@@ -999,7 +999,7 @@ const ReadProductOutputSchema = z.object({
 		component10Code: z.string(),
 		component10Qty: z.number(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadProductOutput = z.infer<typeof ReadProductOutputSchema>;
 const ReadStockCategoriesInputSchema = z.void();
@@ -1013,8 +1013,8 @@ const ReadStockCategoriesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadStockCategoriesOutput = z.infer<
 	typeof ReadStockCategoriesOutputSchema
@@ -1026,7 +1026,7 @@ type ReadProductImageInput = z.infer<typeof ReadProductImageInputSchema>;
 const ReadProductImageOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
+	response: z.string().nullable(),
 	message: z.string(),
 });
 type ReadProductImageOutput = z.infer<typeof ReadProductImageOutputSchema>;
@@ -1047,7 +1047,7 @@ const CreateProductInputSchema = z.object({
 	taxCode: z.number(),
 	qtyAllocated: z.number(),
 	qtyInStock: z.number(),
-	stockTakeDate: z.null(),
+	stockTakeDate: z.string().nullable(),
 	stockCat: z.number(),
 	averageCostPrice: z.number(),
 	location: z.string(),
@@ -1063,7 +1063,7 @@ const CreateProductOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateProductOutput = z.infer<typeof CreateProductOutputSchema>;
 const UpdateProductInputSchema = z.object({
@@ -1083,7 +1083,7 @@ const UpdateProductInputSchema = z.object({
 	taxCode: z.number(),
 	qtyAllocated: z.number(),
 	qtyInStock: z.number(),
-	stockTakeDate: z.null(),
+	stockTakeDate: z.string().nullable(),
 	stockCat: z.number(),
 	averageCostPrice: z.number(),
 	location: z.string(),
@@ -1096,7 +1096,7 @@ const UpdateProductOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateProductOutput = z.infer<typeof UpdateProductOutputSchema>;
 const StockAdjustmentsInputSchema = z.object({
@@ -1113,7 +1113,7 @@ const StockAdjustmentsOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.boolean(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type StockAdjustmentsOutput = z.infer<typeof StockAdjustmentsOutputSchema>;
 const ReadStockMovementsInputSchema = z.object({
@@ -1134,8 +1134,8 @@ const ReadStockMovementsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadStockMovementsOutput = z.infer<typeof ReadStockMovementsOutputSchema>;
 const SearchStockMovementsInputSchema = z.array(
@@ -1163,8 +1163,8 @@ const SearchStockMovementsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchStockMovementsOutput = z.infer<
 	typeof SearchStockMovementsOutputSchema
@@ -1181,7 +1181,7 @@ const ReadCustomerPriceListsOutputSchema = z.object({
 	response: z.object({
 		currency: z.number(),
 		hasStaticPrices: z.number(),
-		lastUpdated: z.null(),
+		lastUpdated: z.string().nullable(),
 		name: z.string(),
 		recordCreateDate: z.string(),
 		recordDeleted: z.boolean(),
@@ -1206,7 +1206,7 @@ const ReadCustomerPriceListsOutputSchema = z.object({
 			}),
 		),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadCustomerPriceListsOutput = z.infer<
 	typeof ReadCustomerPriceListsOutputSchema
@@ -1228,8 +1228,8 @@ const ReadAllPriceListsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadAllPriceListsOutput = z.infer<typeof ReadAllPriceListsOutputSchema>;
 const SearchProductSellingPricesInputSchema = z.array(
@@ -1263,8 +1263,8 @@ const SearchProductSellingPricesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchProductSellingPricesOutput = z.infer<
 	typeof SearchProductSellingPricesOutputSchema
@@ -1332,8 +1332,8 @@ const SearchSalesOrderOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchSalesOrderOutput = z.infer<typeof SearchSalesOrderOutputSchema>;
 const CreateSalesOrderInputSchema = z.object({
@@ -1373,7 +1373,7 @@ const CreateSalesOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateSalesOrderOutput = z.infer<typeof CreateSalesOrderOutputSchema>;
 const ReadSalesOrderInputSchema = z.object({
@@ -1392,7 +1392,7 @@ const ReadSalesOrderOutputSchema = z.object({
 		analysis1: z.string(),
 		analysis2: z.string(),
 		analysis3: z.string(),
-		bankRef: z.null(),
+		bankRef: z.string().nullable(),
 		customerAccountRef: z.string(),
 		customerOrderNumber: z.string(),
 		customerTelephoneNumber: z.string(),
@@ -1414,10 +1414,10 @@ const ReadSalesOrderOutputSchema = z.object({
 		delAddress4: z.string(),
 		delAddress5: z.string(),
 		departmentNumber: z.number(),
-		globalDiscountRate: z.null(),
+		globalDiscountRate: z.string().nullable(),
 		globalNominal: z.string(),
 		globalDetails: z.string(),
-		globalDepartment: z.null(),
+		globalDepartment: z.string().nullable(),
 		globalTaxCode: z.number(),
 		itemsNet: z.number(),
 		itemsTax: z.number(),
@@ -1425,7 +1425,7 @@ const ReadSalesOrderOutputSchema = z.object({
 		foreignItemsTax: z.number(),
 		foreignRate: z.number(),
 		orderType: z.number(),
-		orderDueDate: z.null(),
+		orderDueDate: z.string().nullable(),
 		orderNumber: z.number(),
 		status: z.number(),
 		orderDate: z.string(),
@@ -1435,13 +1435,13 @@ const ReadSalesOrderOutputSchema = z.object({
 		notes1: z.string(),
 		notes2: z.string(),
 		notes3: z.string(),
-		quoteExpiry: z.null(),
+		quoteExpiry: z.string().nullable(),
 		quoteStatus: z.number(),
 		userName: z.string(),
 		settlementDiscRate: z.number(),
 		settlementDueDays: z.number(),
-		fillGlobalsFromCustomerDefaults: z.null(),
-		orderItemsDataFromStockItemData: z.null(),
+		fillGlobalsFromCustomerDefaults: z.string().nullable(),
+		orderItemsDataFromStockItemData: z.string().nullable(),
 		invoiceItems: z.array(
 			z.object({
 				itemId: z.number(),
@@ -1462,11 +1462,11 @@ const ReadSalesOrderOutputSchema = z.object({
 				comment2: z.string(),
 				discountAmount: z.number(),
 				netAmount: z.number(),
-				dueDate: z.null(),
+				dueDate: z.string().nullable(),
 			}),
 		),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadSalesOrderOutput = z.infer<typeof ReadSalesOrderOutputSchema>;
 const UpdateSalesOrderInputSchema = z.object({
@@ -1494,15 +1494,15 @@ const UpdateSalesOrderInputSchema = z.object({
 	carrNomCode: z.string(),
 	carrTaxCode: z.number(),
 	carriageDepartmentNumber: z.number(),
-	globalDiscountRate: z.null(),
+	globalDiscountRate: z.string().nullable(),
 	netValueDiscountAmount: z.number(),
 	netValueDiscountDescription: z.string(),
 	currency: z.number(),
 	departmentNumber: z.number(),
 	orderType: z.number(),
-	quoteExpiry: z.null(),
+	quoteExpiry: z.string().nullable(),
 	quoteStatus: z.number(),
-	orderDueDate: z.null(),
+	orderDueDate: z.string().nullable(),
 	notes1: z.string(),
 	notes2: z.string(),
 	notes3: z.string(),
@@ -1534,7 +1534,7 @@ const UpdateSalesOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateSalesOrderOutput = z.infer<typeof UpdateSalesOrderOutputSchema>;
 const PartiallyAllocateSalesOrderInputSchema = z.object({
@@ -1553,7 +1553,7 @@ const PartiallyAllocateSalesOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type PartiallyAllocateSalesOrderOutput = z.infer<
 	typeof PartiallyAllocateSalesOrderOutputSchema
@@ -1568,7 +1568,7 @@ const FullyAllocateSalesOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type FullyAllocateSalesOrderOutput = z.infer<
 	typeof FullyAllocateSalesOrderOutputSchema
@@ -1583,7 +1583,7 @@ const FullyUnAllocateSalesOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type FullyUnAllocateSalesOrderOutput = z.infer<
 	typeof FullyUnAllocateSalesOrderOutputSchema
@@ -1604,7 +1604,7 @@ const PartiallyDespatchSalesOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type PartiallyDespatchSalesOrderOutput = z.infer<
 	typeof PartiallyDespatchSalesOrderOutputSchema
@@ -1617,7 +1617,7 @@ const CompleteSalesOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CompleteSalesOrderOutput = z.infer<typeof CompleteSalesOrderOutputSchema>;
 const CompleteSalesOrderWithOwnInvoiceDateInputSchema = z.object({
@@ -1631,7 +1631,7 @@ const CompleteSalesOrderWithOwnInvoiceDateOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CompleteSalesOrderWithOwnInvoiceDateOutput = z.infer<
 	typeof CompleteSalesOrderWithOwnInvoiceDateOutputSchema
@@ -1644,7 +1644,7 @@ const HoldSalesOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type HoldSalesOrderOutput = z.infer<typeof HoldSalesOrderOutputSchema>;
 const CancelSalesOrderInputSchema = z.void();
@@ -1653,7 +1653,7 @@ const CancelSalesOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CancelSalesOrderOutput = z.infer<typeof CancelSalesOrderOutputSchema>;
 const SearchDispatchesInputSchema = z.array(
@@ -1687,8 +1687,8 @@ const SearchDispatchesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchDispatchesOutput = z.infer<typeof SearchDispatchesOutputSchema>;
 const SearchSalesItemsInputSchema = z.array(
@@ -1726,8 +1726,8 @@ const SearchSalesItemsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchSalesItemsOutput = z.infer<typeof SearchSalesItemsOutputSchema>;
 const UpdateSalesOrderItemsInputSchema = z.object({
@@ -1741,7 +1741,7 @@ const UpdateSalesOrderItemsOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateSalesOrderItemsOutput = z.infer<
 	typeof UpdateSalesOrderItemsOutputSchema
@@ -1791,8 +1791,8 @@ const SearchPurchaseOrdersOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchPurchaseOrdersOutput = z.infer<
 	typeof SearchPurchaseOrdersOutputSchema
@@ -1885,7 +1885,7 @@ const ReadPurchaseOrderOutputSchema = z.object({
 		status: z.number(),
 		currency: z.number(),
 		departmentNumber: z.number(),
-		dueDate: z.null(),
+		dueDate: z.string().nullable(),
 		projectID: z.number(),
 		costCodeID: z.number(),
 		invoiceItems: z.array(
@@ -1905,14 +1905,14 @@ const ReadPurchaseOrderOutputSchema = z.object({
 				comment2: z.string(),
 				projectRef: z.number(),
 				costCode: z.number(),
-				qtyInvoiced: z.null(),
+				qtyInvoiced: z.string().nullable(),
 				dueDate: z.string(),
 				lineInformation: z.string(),
-				quantityDiff: z.null(),
+				quantityDiff: z.string().nullable(),
 			}),
 		),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadPurchaseOrderOutput = z.infer<typeof ReadPurchaseOrderOutputSchema>;
 const UpdatePurchaseOrderInputSchema = z.object({
@@ -1950,7 +1950,7 @@ const UpdatePurchaseOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdatePurchaseOrderOutput = z.infer<
 	typeof UpdatePurchaseOrderOutputSchema
@@ -1963,7 +1963,7 @@ const DeletePurchaseOrderOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type DeletePurchaseOrderOutput = z.infer<
 	typeof DeletePurchaseOrderOutputSchema
@@ -1997,8 +1997,8 @@ const SearchPurchaseItemsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchPurchaseItemsOutput = z.infer<
 	typeof SearchPurchaseItemsOutputSchema
@@ -2034,8 +2034,8 @@ const SearchGoodsReceivedNotesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchGoodsReceivedNotesOutput = z.infer<
 	typeof SearchGoodsReceivedNotesOutputSchema
@@ -2054,7 +2054,7 @@ const GoodsReceivedNotesOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type GoodsReceivedNotesOutput = z.infer<typeof GoodsReceivedNotesOutputSchema>;
 const SearchDeliveriesInputSchema = z.array(
@@ -2086,8 +2086,8 @@ const SearchDeliveriesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchDeliveriesOutput = z.infer<typeof SearchDeliveriesOutputSchema>;
 const SearchSalesInvoicesInputSchema = z.array(
@@ -2226,8 +2226,8 @@ const SearchSalesInvoicesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchSalesInvoicesOutput = z.infer<
 	typeof SearchSalesInvoicesOutputSchema
@@ -2266,7 +2266,7 @@ const ReadSalesInvoiceOutputSchema = z.object({
 		carrTaxCode: z.number(),
 		carriageDepartmentNumber: z.number(),
 		courierNumber: z.number(),
-		globalDiscountRate: z.null(),
+		globalDiscountRate: z.string().nullable(),
 		ignoreCustomerDiscountRate: z.boolean(),
 		globalTaxCode: z.number(),
 		globalDepartmentNumber: z.number(),
@@ -2291,11 +2291,11 @@ const ReadSalesInvoiceOutputSchema = z.object({
 		baseSettlementDiscRate: z.number(),
 		posted: z.boolean(),
 		printed: z.boolean(),
-		emailed: z.null(),
+		emailed: z.string().nullable(),
 		invoiceTypeCode: z.number(),
-		shouldUpdateLedgers: z.null(),
+		shouldUpdateLedgers: z.string().nullable(),
 		consignmentRef: z.string(),
-		invoiceItemsDataFromStockItemData: z.null(),
+		invoiceItemsDataFromStockItemData: z.string().nullable(),
 		invoiceItems: z.array(
 			z.object({
 				id: z.number(),
@@ -2311,7 +2311,7 @@ const ReadSalesInvoiceOutputSchema = z.object({
 				discount: z.number(),
 				netAmount: z.number(),
 				serviceFlag: z.number(),
-				orderRef: z.null(),
+				orderRef: z.string().nullable(),
 				comment1: z.string(),
 				comment2: z.string(),
 				departmentNumber: z.number(),
@@ -2321,7 +2321,7 @@ const ReadSalesInvoiceOutputSchema = z.object({
 			}),
 		),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadSalesInvoiceOutput = z.infer<typeof ReadSalesInvoiceOutputSchema>;
 const UpdateSalesInvoiceInputSchema = z.object({
@@ -2339,7 +2339,7 @@ const UpdateSalesInvoiceInputSchema = z.object({
 	delAddress3: z.string(),
 	delAddress4: z.string(),
 	delAddress5: z.string(),
-	customerTelephoneNumber: z.null(),
+	customerTelephoneNumber: z.string().nullable(),
 	carrNet: z.number(),
 	carrTax: z.number(),
 	carrNomCode: z.number(),
@@ -2365,7 +2365,7 @@ const UpdateSalesInvoiceOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateSalesInvoiceOutput = z.infer<typeof UpdateSalesInvoiceOutputSchema>;
 const CreateSalesInvoiceInputSchema = z.object({
@@ -2382,7 +2382,7 @@ const CreateSalesInvoiceInputSchema = z.object({
 	delAddress3: z.string(),
 	delAddress4: z.string(),
 	delAddress5: z.string(),
-	customerTelephoneNumber: z.null(),
+	customerTelephoneNumber: z.string().nullable(),
 	carrNet: z.number(),
 	carrTax: z.number(),
 	carrNomCode: z.number(),
@@ -2408,7 +2408,7 @@ const CreateSalesInvoiceOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateSalesInvoiceOutput = z.infer<typeof CreateSalesInvoiceOutputSchema>;
 const SearchSalesInvoiceItemsInputSchema = z.array(
@@ -2446,8 +2446,8 @@ const SearchSalesInvoiceItemsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchSalesInvoiceItemsOutput = z.infer<
 	typeof SearchSalesInvoiceItemsOutputSchema
@@ -2481,7 +2481,7 @@ const CreatePurchaseInvoiceOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreatePurchaseInvoiceOutput = z.infer<
 	typeof CreatePurchaseInvoiceOutputSchema
@@ -2494,7 +2494,7 @@ const ReadDocumentLinkOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadDocumentLinkOutput = z.infer<typeof ReadDocumentLinkOutputSchema>;
 const SearchProjectsInputSchema = z.array(
@@ -2551,8 +2551,8 @@ const SearchProjectsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchProjectsOutput = z.infer<typeof SearchProjectsOutputSchema>;
 const CreateProjectInputSchema = z.object({
@@ -2567,7 +2567,7 @@ const CreateProjectOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateProjectOutput = z.infer<typeof CreateProjectOutputSchema>;
 const ReadProjectInputSchema = z.object({
@@ -2609,7 +2609,7 @@ const ReadProjectOutputSchema = z.object({
 		contact: z.string(),
 		email: z.string(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadProjectOutput = z.infer<typeof ReadProjectOutputSchema>;
 const UpdateProjectInputSchema = z.object({
@@ -2624,7 +2624,7 @@ const UpdateProjectOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateProjectOutput = z.infer<typeof UpdateProjectOutputSchema>;
 const ReadProjectTransactionsInputSchema = z.object({
@@ -2639,7 +2639,7 @@ const ReadProjectTransactionsOutputSchema = z.object({
 			amount: z.number(),
 			auditTrailID: z.number(),
 			costCodeRef: z.string(),
-			accountRef: z.null(),
+			accountRef: z.string().nullable(),
 			date: z.string(),
 			details: z.string(),
 			extReference: z.string(),
@@ -2653,8 +2653,8 @@ const ReadProjectTransactionsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadProjectTransactionsOutput = z.infer<
 	typeof ReadProjectTransactionsOutputSchema
@@ -2694,8 +2694,8 @@ const SearchProjectOnlyTransactionsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchProjectOnlyTransactionsOutput = z.infer<
 	typeof SearchProjectOnlyTransactionsOutputSchema
@@ -2730,8 +2730,8 @@ const SearchProjectTransactionsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchProjectTransactionsOutput = z.infer<
 	typeof SearchProjectTransactionsOutputSchema
@@ -2754,7 +2754,7 @@ const CreateProjectTransactionsOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateProjectTransactionsOutput = z.infer<
 	typeof CreateProjectTransactionsOutputSchema
@@ -2774,8 +2774,8 @@ const ReadProjectCostCodesOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadProjectCostCodesOutput = z.infer<
 	typeof ReadProjectCostCodesOutputSchema
@@ -2791,7 +2791,7 @@ const CreateProjectCostCodesOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateProjectCostCodesOutput = z.infer<
 	typeof CreateProjectCostCodesOutputSchema
@@ -2808,8 +2808,8 @@ const ReadProjectBudgetsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type ReadProjectBudgetsOutput = z.infer<typeof ReadProjectBudgetsOutputSchema>;
 const AllocatePaymentOnAccountInputSchema = z.object({
@@ -2878,8 +2878,8 @@ const SearchAuditHeadersOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchAuditHeadersOutput = z.infer<typeof SearchAuditHeadersOutputSchema>;
 const CreateHeaderTransactionInputSchema = z.object({
@@ -2901,7 +2901,7 @@ const CreateHeaderTransactionOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateHeaderTransactionOutput = z.infer<
 	typeof CreateHeaderTransactionOutputSchema
@@ -2934,7 +2934,7 @@ const CreateBatchHeaderTransactionOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.number(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateBatchHeaderTransactionOutput = z.infer<
 	typeof CreateBatchHeaderTransactionOutputSchema
@@ -2996,8 +2996,8 @@ const SearchAuditSplitsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchAuditSplitsOutput = z.infer<typeof SearchAuditSplitsOutputSchema>;
 const SearchAuditUsageInputSchema = z.array(
@@ -3028,8 +3028,8 @@ const SearchAuditUsageOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchAuditUsageOutput = z.infer<typeof SearchAuditUsageOutputSchema>;
 const CreateBankTxInputSchema = z.object({
@@ -3099,7 +3099,7 @@ const CreateFixedAssetsOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type CreateFixedAssetsOutput = z.infer<typeof CreateFixedAssetsOutputSchema>;
 const SearchFixedAssetsInputSchema = z.array(
@@ -3115,7 +3115,7 @@ const SearchFixedAssetsOutputSchema = z.object({
 		z.object({
 			recordCreateDate: z.string(),
 			recordModifyDate: z.string(),
-			salesPurchaseRef: z.null(),
+			salesPurchaseRef: z.string().nullable(),
 			assetRef: z.string(),
 			details1: z.string(),
 			details2: z.string(),
@@ -3138,8 +3138,8 @@ const SearchFixedAssetsOutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchFixedAssetsOutput = z.infer<typeof SearchFixedAssetsOutputSchema>;
 const ReadSearchAssetsInputSchema = z.void();
@@ -3167,7 +3167,7 @@ const ReadSearchAssetsOutputSchema = z.object({
 		depToDate: z.number(),
 		netBook: z.number(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadSearchAssetsOutput = z.infer<typeof ReadSearchAssetsOutputSchema>;
 const UpdateFixedAssetsInputSchema = z.object({
@@ -3195,7 +3195,7 @@ const UpdateFixedAssetsOutputSchema = z.object({
 	success: z.boolean(),
 	code: z.number(),
 	response: z.string(),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type UpdateFixedAssetsOutput = z.infer<typeof UpdateFixedAssetsOutputSchema>;
 const ReadApiVersion2InputSchema = z.void();
@@ -3232,7 +3232,7 @@ const ReadCompanySettings2OutputSchema = z.object({
 		lastBackup: z.string(),
 		lastRestoreDate: z.string(),
 		lastClearAudit: z.string(),
-		lastMonthEnd: z.null(),
+		lastMonthEnd: z.string().nullable(),
 		name: z.string(),
 		programMajorVersion: z.number(),
 		programMinorVersion: z.number(),
@@ -3245,7 +3245,7 @@ const ReadCompanySettings2OutputSchema = z.object({
 		vatRegNumber: z.string(),
 		vatRegisteredFlag: z.boolean(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadCompanySettings2Output = z.infer<
 	typeof ReadCompanySettings2OutputSchema
@@ -3326,8 +3326,8 @@ const SearchCustomer2OutputSchema = z.object({
 	),
 	success: z.boolean(),
 	code: z.number(),
-	response: z.null(),
-	message: z.null(),
+	response: z.string().nullable(),
+	message: z.string().nullable(),
 });
 type SearchCustomer2Output = z.infer<typeof SearchCustomer2OutputSchema>;
 const ReadCustomer2InputSchema = z.object({
@@ -3403,7 +3403,7 @@ const ReadCustomer2OutputSchema = z.object({
 		telephone2: z.string(),
 		fax: z.string(),
 	}),
-	message: z.null(),
+	message: z.string().nullable(),
 });
 type ReadCustomer2Output = z.infer<typeof ReadCustomer2OutputSchema>;
 const NewRequestInputSchema = z.void();
