@@ -9,7 +9,6 @@ const ResponseSchema = <T extends z.ZodTypeAny>(schema: T) =>
 		response: schema,
 		message: z.string().nullable().optional(),
 	});
-
 const ResultsSchema = <T extends z.ZodTypeAny>(schema: T) =>
 	z.object({
 		results: z.array(schema),
@@ -18,14 +17,11 @@ const ResultsSchema = <T extends z.ZodTypeAny>(schema: T) =>
 		response: z.string().nullable().optional(),
 		message: z.string().nullable().optional(),
 	});
-
 const HAConfigSchema = z.object({
 	baseURL: z.url(),
 	authToken: z.string().min(1),
 });
-
 const ReadApiStatusInputSchema = z.void();
-
 const ReadApiStatusOutputSchema = ResponseSchema(
 	z.object({
 		apiVersion: z.string(),
@@ -35,13 +31,9 @@ const ReadApiStatusOutputSchema = ResponseSchema(
 		odbcStatusOk: z.boolean(),
 	}),
 );
-
 const ReadApiVersionInputSchema = z.void();
-
 const ReadApiVersionOutputSchema = z.string();
-
 const ReadCompanySettingsInputSchema = z.void();
-
 const ReadCompanySettingsOutputSchema = ResponseSchema(
 	z.object({
 		address1: z.string(),
@@ -81,17 +73,13 @@ const ReadCompanySettingsOutputSchema = ResponseSchema(
 		lockDate: z.string(),
 	}),
 );
-
 const ReadRdaEnabledInputSchema = z.void();
-
 const ReadRdaEnabledOutputSchema = ResponseSchema(
 	z.object({
 		isRDAEnabled: z.boolean(),
 	}),
 );
-
 const ReadExchangeRatesInputSchema = z.void();
-
 const ReadExchangeRatesOutputSchema = ResultsSchema(
 	z.object({
 		id: z.number(),
@@ -107,7 +95,6 @@ const ReadExchangeRatesOutputSchema = ResultsSchema(
 		symbol: z.string(),
 	}),
 );
-
 const UpdateExchangeRateInputSchema = z.object({
 	id: z.number(),
 	code: z.string(),
@@ -117,11 +104,8 @@ const UpdateExchangeRateInputSchema = z.object({
 	minorUnit: z.string(),
 	name: z.string(),
 });
-
 const UpdateExchangeRateOutputSchema = ResponseSchema(z.string());
-
 const ReadCountriesInputSchema = z.void();
-
 const ReadCountriesOutputSchema = ResultsSchema(
 	z.object({
 		code: z.string(),
@@ -131,9 +115,7 @@ const ReadCountriesOutputSchema = ResultsSchema(
 		modifiedDate: z.string(),
 	}),
 );
-
 const ReadCouriersInputSchema = z.void();
-
 const ReadCouriersOutputSchema = ResultsSchema(
 	z.object({
 		id: z.number(),
@@ -144,9 +126,7 @@ const ReadCouriersOutputSchema = ResultsSchema(
 		modifiedDate: z.string(),
 	}),
 );
-
 const ReadNominalsInputSchema = z.void();
-
 const ReadNominalsOutputSchema = ResultsSchema(
 	z.object({
 		accountRef: z.string(),
@@ -156,9 +136,7 @@ const ReadNominalsOutputSchema = ResultsSchema(
 		inactiveFlag: z.number(),
 	}),
 );
-
 const ReadTaxCodesInputSchema = z.void();
-
 const ReadTaxCodesOutputSchema = ResultsSchema(
 	z.object({
 		index: z.number(),
@@ -166,9 +144,7 @@ const ReadTaxCodesOutputSchema = ResultsSchema(
 		rate: z.number(),
 	}),
 );
-
 const ReadControlAccountsInputSchema = z.void();
-
 const ReadControlAccountsOutputSchema = ResponseSchema(
 	z.object({
 		accrualsNo: z.number(),
@@ -192,9 +168,7 @@ const ReadControlAccountsOutputSchema = ResponseSchema(
 		vatLiabilityNo: z.number(),
 	}),
 );
-
 const GetPaymentMethodsInputSchema = z.void();
-
 const GetPaymentMethodsOutputSchema = ResultsSchema(
 	z.object({
 		id: z.number(),
@@ -203,9 +177,7 @@ const GetPaymentMethodsOutputSchema = ResultsSchema(
 		isReadonly: z.number(),
 	}),
 );
-
 const ReadDepartmentsInputSchema = z.void();
-
 const ReadDepartmentsOutputSchema = ResultsSchema(
 	z.object({
 		reference: z.string(),
@@ -215,9 +187,7 @@ const ReadDepartmentsOutputSchema = ResultsSchema(
 		recordModifyDate: z.string(),
 	}),
 );
-
 const ReadChartOfAccountsInputSchema = z.void();
-
 const ReadChartOfAccountsOutputSchema = ResultsSchema(
 	z.object({
 		name: z.string(),
@@ -225,7 +195,6 @@ const ReadChartOfAccountsOutputSchema = ResultsSchema(
 		high: z.string(),
 	}),
 );
-
 const SearchCustomerInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -233,7 +202,6 @@ const SearchCustomerInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchCustomerOutputSchema = ResultsSchema(
 	z.object({
 		accountRef: z.string(),
@@ -306,11 +274,9 @@ const SearchCustomerOutputSchema = ResultsSchema(
 		companyRegistrationNumber: z.string(),
 	}),
 );
-
 const ReadCustomerInputSchema = z.object({
 	customer: z.string(),
 });
-
 const ReadCustomerOutputSchema = ResponseSchema(
 	z.object({
 		accountRef: z.string(),
@@ -382,7 +348,6 @@ const ReadCustomerOutputSchema = ResponseSchema(
 		fax: z.string(),
 	}),
 );
-
 const CreateCustomerInputSchema = z.object({
 	name: z.string(),
 	address1: z.string(),
@@ -414,9 +379,7 @@ const CreateCustomerInputSchema = z.object({
 	paymentDueDays: z.number(),
 	inactiveAccount: z.boolean(),
 });
-
 const CreateCustomerOutputSchema = ResponseSchema(z.string());
-
 const UpdateCustomerInputSchema = z.object({
 	accountRef: z.string(),
 	name: z.string(),
@@ -429,13 +392,10 @@ const UpdateCustomerInputSchema = z.object({
 	contactName: z.string(),
 	telephone: z.string(),
 });
-
 const UpdateCustomerOutputSchema = ResponseSchema(z.string());
-
 const ReadCustomerAgedBalancesInputSchema = z.object({
 	customer: z.string(),
 });
-
 const ReadCustomerAgedBalancesOutputSchema = ResponseSchema(
 	z.object({
 		total: z.number(),
@@ -447,11 +407,9 @@ const ReadCustomerAgedBalancesOutputSchema = ResponseSchema(
 		older: z.number(),
 	}),
 );
-
 const ReadCustomerAddressInputSchema = z.object({
 	customer: z.string(),
 });
-
 const ReadCustomerAddressOutputSchema = ResponseSchema(
 	z.object({
 		accountRef: z.string(),
@@ -476,7 +434,6 @@ const ReadCustomerAddressOutputSchema = ResponseSchema(
 		taxCode: z.number(),
 	}),
 );
-
 const CreateCustomerAddressInputSchema = z.object({
 	accountRef: z.string(),
 	addressNumber: z.number(),
@@ -497,9 +454,7 @@ const CreateCustomerAddressInputSchema = z.object({
 	telephone2: z.string(),
 	taxCode: z.number(),
 });
-
 const CreateCustomerAddressOutputSchema = ResponseSchema(z.number());
-
 const UpdateCustomerAddressInputSchema = z.object({
 	accountRef: z.string(),
 	addressNumber: z.number(),
@@ -516,9 +471,7 @@ const UpdateCustomerAddressInputSchema = z.object({
 	fax: z.string(),
 	name: z.string(),
 });
-
 const UpdateCustomerAddressOutputSchema = ResponseSchema(z.boolean());
-
 const SearchCustomerAddressInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -526,7 +479,6 @@ const SearchCustomerAddressInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchCustomerAddressOutputSchema = ResultsSchema(
 	z.object({
 		accountRef: z.string(),
@@ -554,7 +506,6 @@ const SearchCustomerAddressOutputSchema = ResultsSchema(
 		recordModifyDate: z.string(),
 	}),
 );
-
 const SearchSupplierInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -562,7 +513,6 @@ const SearchSupplierInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchSupplierOutputSchema = ResultsSchema(
 	z.object({
 		accountRef: z.string(),
@@ -609,11 +559,9 @@ const SearchSupplierOutputSchema = ResultsSchema(
 		companyRegistrationNumber: z.string(),
 	}),
 );
-
 const ReadSupplierInputSchema = z.object({
 	supplier: z.string(),
 });
-
 const ReadSupplierOutputSchema = ResponseSchema(
 	z.object({
 		accountRef: z.string(),
@@ -652,7 +600,6 @@ const ReadSupplierOutputSchema = ResponseSchema(
 		termsAgreed: z.boolean(),
 	}),
 );
-
 const CreateSupplierInputSchema = z.object({
 	name: z.string(),
 	address1: z.string(),
@@ -668,9 +615,7 @@ const CreateSupplierInputSchema = z.object({
 	email: z.string(),
 	currency: z.number(),
 });
-
 const CreateSupplierOutputSchema = ResponseSchema(z.string());
-
 const UpdateSupplierInputSchema = z.object({
 	accountRef: z.string(),
 	name: z.string(),
@@ -700,9 +645,7 @@ const UpdateSupplierInputSchema = z.object({
 	defaultTaxCode: z.number(),
 	vatNumber: z.string(),
 });
-
 const UpdateSupplierOutputSchema = ResponseSchema(z.string());
-
 const SearchProductInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -710,7 +653,6 @@ const SearchProductInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchProductOutputSchema = ResultsSchema(
 	z.object({
 		stockCode: z.string(),
@@ -795,11 +737,9 @@ const SearchProductOutputSchema = ResultsSchema(
 		component10Qty: z.number(),
 	}),
 );
-
 const ReadProductInputSchema = z.object({
 	stockCode: z.string(),
 });
-
 const ReadProductOutputSchema = ResponseSchema(
 	z.object({
 		stockCode: z.string(),
@@ -859,22 +799,17 @@ const ReadProductOutputSchema = ResponseSchema(
 		component10Qty: z.number(),
 	}),
 );
-
 const ReadStockCategoriesInputSchema = z.void();
-
 const ReadStockCategoriesOutputSchema = ResultsSchema(
 	z.object({
 		id: z.number(),
 		name: z.string(),
 	}),
 );
-
 const ReadProductImageInputSchema = z.object({
 	stockCode: z.string(),
 });
-
 const ReadProductImageOutputSchema = ResponseSchema(z.string().nullable());
-
 const CreateProductInputSchema = z.object({
 	stockCode: z.string(),
 	description: z.string(),
@@ -903,9 +838,7 @@ const CreateProductInputSchema = z.object({
 	webDetails: z.string(),
 	webDescription: z.string(),
 });
-
 const CreateProductOutputSchema = ResponseSchema(z.string());
-
 const UpdateProductInputSchema = z.object({
 	stockCode: z.string(),
 	description: z.string(),
@@ -931,9 +864,7 @@ const UpdateProductInputSchema = z.object({
 	lastPurchasePrice: z.number(),
 	webDetails: z.string(),
 });
-
 const UpdateProductOutputSchema = ResponseSchema(z.string());
-
 const StockAdjustmentsInputSchema = z.object({
 	stockCode: z.string(),
 	quantity: z.number(),
@@ -943,13 +874,10 @@ const StockAdjustmentsInputSchema = z.object({
 	reference: z.string(),
 	details: z.string(),
 });
-
 const StockAdjustmentsOutputSchema = ResponseSchema(z.boolean());
-
 const ReadStockMovementsInputSchema = z.object({
 	stockCode: z.string(),
 });
-
 const ReadStockMovementsOutputSchema = ResultsSchema(
 	z.object({
 		stockCode: z.string(),
@@ -961,7 +889,6 @@ const ReadStockMovementsOutputSchema = ResultsSchema(
 		details: z.string(),
 	}),
 );
-
 const SearchStockMovementsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -969,7 +896,6 @@ const SearchStockMovementsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchStockMovementsOutputSchema = ResultsSchema(
 	z.object({
 		tranNumber: z.number(),
@@ -982,11 +908,9 @@ const SearchStockMovementsOutputSchema = ResultsSchema(
 		details: z.string(),
 	}),
 );
-
 const ReadCustomerPriceListsInputSchema = z.object({
 	customer: z.string(),
 });
-
 const ReadCustomerPriceListsOutputSchema = ResponseSchema(
 	z.object({
 		currency: z.number(),
@@ -1017,9 +941,7 @@ const ReadCustomerPriceListsOutputSchema = ResponseSchema(
 		),
 	}),
 );
-
 const ReadAllPriceListsInputSchema = z.void();
-
 const ReadAllPriceListsOutputSchema = ResultsSchema(
 	z.object({
 		type: z.string(),
@@ -1032,7 +954,6 @@ const ReadAllPriceListsOutputSchema = ResultsSchema(
 		recordDeleted: z.number(),
 	}),
 );
-
 const SearchProductSellingPricesInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1040,7 +961,6 @@ const SearchProductSellingPricesInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchProductSellingPricesOutputSchema = ResultsSchema(
 	z.object({
 		priceId: z.string(),
@@ -1059,7 +979,6 @@ const SearchProductSellingPricesOutputSchema = ResultsSchema(
 		recordDeleted: z.boolean(),
 	}),
 );
-
 const SearchSalesOrderInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1067,7 +986,6 @@ const SearchSalesOrderInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchSalesOrderOutputSchema = ResultsSchema(
 	z.object({
 		orderNumber: z.string(),
@@ -1120,7 +1038,6 @@ const SearchSalesOrderOutputSchema = ResultsSchema(
 		courierName: z.string(),
 	}),
 );
-
 const CreateSalesOrderInputSchema = z.object({
 	customerAccountRef: z.string(),
 	orderDate: z.string(),
@@ -1153,13 +1070,10 @@ const CreateSalesOrderInputSchema = z.object({
 		}),
 	),
 });
-
 const CreateSalesOrderOutputSchema = ResponseSchema(z.number());
-
 const ReadSalesOrderInputSchema = z.object({
 	orderNumber: z.string(),
 });
-
 const ReadSalesOrderOutputSchema = ResponseSchema(
 	z.object({
 		address1: z.string(),
@@ -1245,7 +1159,6 @@ const ReadSalesOrderOutputSchema = ResponseSchema(
 		),
 	}),
 );
-
 const UpdateSalesOrderInputSchema = z.object({
 	customerAccountRef: z.string(),
 	orderNumber: z.number(),
@@ -1306,9 +1219,7 @@ const UpdateSalesOrderInputSchema = z.object({
 		}),
 	),
 });
-
 const UpdateSalesOrderOutputSchema = ResponseSchema(z.number());
-
 const PartiallyAllocateSalesOrderInputSchema = z.object({
 	orderNumber: z.string(),
 	items: z.array(
@@ -1318,21 +1229,15 @@ const PartiallyAllocateSalesOrderInputSchema = z.object({
 		}),
 	),
 });
-
 const PartiallyAllocateSalesOrderOutputSchema = ResponseSchema(z.number());
-
 const FullyAllocateSalesOrderInputSchema = z.object({
 	id: z.string(),
 });
-
 const FullyAllocateSalesOrderOutputSchema = ResponseSchema(z.number());
-
 const FullyUnAllocateSalesOrderInputSchema = z.object({
 	id: z.string(),
 });
-
 const FullyUnAllocateSalesOrderOutputSchema = ResponseSchema(z.number());
-
 const PartiallyDespatchSalesOrderInputSchema = z.object({
 	orderNumber: z.string(),
 	items: z.array(
@@ -1342,34 +1247,24 @@ const PartiallyDespatchSalesOrderInputSchema = z.object({
 		}),
 	),
 });
-
 const PartiallyDespatchSalesOrderOutputSchema = ResponseSchema(z.number());
-
 const CompleteSalesOrderInputSchema = z.object({
 	id: z.string(),
 });
-
 const CompleteSalesOrderOutputSchema = ResponseSchema(z.number());
-
 const CompleteSalesOrderWithOwnInvoiceDateInputSchema = z.object({
 	orderNumber: z.number(),
 	date: z.string(),
 });
-
 const CompleteSalesOrderWithOwnInvoiceDateOutputSchema = ResponseSchema(
 	z.number(),
 );
-
 const HoldSalesOrderInputSchema = z.object({
 	id: z.string(),
 });
-
 const HoldSalesOrderOutputSchema = ResponseSchema(z.number());
-
 const CancelSalesOrderInputSchema = z.void();
-
 const CancelSalesOrderOutputSchema = ResponseSchema(z.number());
-
 const SearchDispatchesInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1377,7 +1272,6 @@ const SearchDispatchesInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchDispatchesOutputSchema = ResultsSchema(
 	z.object({
 		uniqueID: z.number(),
@@ -1398,7 +1292,6 @@ const SearchDispatchesOutputSchema = ResultsSchema(
 		recordDeleted: z.boolean(),
 	}),
 );
-
 const SearchSalesItemsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1406,7 +1299,6 @@ const SearchSalesItemsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchSalesItemsOutputSchema = ResultsSchema(
 	z.object({
 		itemId: z.number(),
@@ -1431,14 +1323,11 @@ const SearchSalesItemsOutputSchema = ResultsSchema(
 		deleted: z.number(),
 	}),
 );
-
 const UpdateSalesOrderItemsInputSchema = z.object({
 	itemId: z.number(),
 	quantityOnOrder: z.number(),
 });
-
 const UpdateSalesOrderItemsOutputSchema = ResponseSchema(z.number());
-
 const SearchPurchaseOrdersInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1446,7 +1335,6 @@ const SearchPurchaseOrdersInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchPurchaseOrdersOutputSchema = ResultsSchema(
 	z.object({
 		orderNumber: z.string(),
@@ -1479,7 +1367,6 @@ const SearchPurchaseOrdersOutputSchema = ResultsSchema(
 		analysis3: z.string(),
 	}),
 );
-
 const CreatePurchaseOrderInputSchema = z.object({
 	supplierAccountRef: z.string(),
 	telephoneNumber: z.string(),
@@ -1514,13 +1401,10 @@ const CreatePurchaseOrderInputSchema = z.object({
 		}),
 	),
 });
-
 const CreatePurchaseOrderOutputSchema = ResponseSchema(z.number());
-
 const ReadPurchaseOrderInputSchema = z.object({
 	orderNumber: z.string(),
 });
-
 const ReadPurchaseOrderOutputSchema = ResponseSchema(
 	z.object({
 		supplierAccountRef: z.string(),
@@ -1587,7 +1471,6 @@ const ReadPurchaseOrderOutputSchema = ResponseSchema(
 		),
 	}),
 );
-
 const UpdatePurchaseOrderInputSchema = z.object({
 	supplierAccountRef: z.string(),
 	userName: z.string(),
@@ -1618,15 +1501,11 @@ const UpdatePurchaseOrderInputSchema = z.object({
 	),
 	orderDate: z.string(),
 });
-
 const UpdatePurchaseOrderOutputSchema = ResponseSchema(z.number());
-
 const DeletePurchaseOrderInputSchema = z.object({
 	orderNumber: z.string(),
 });
-
 const DeletePurchaseOrderOutputSchema = ResponseSchema(z.number());
-
 const SearchPurchaseItemsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1634,7 +1513,6 @@ const SearchPurchaseItemsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchPurchaseItemsOutputSchema = ResultsSchema(
 	z.object({
 		id: z.string(),
@@ -1653,7 +1531,6 @@ const SearchPurchaseItemsOutputSchema = ResultsSchema(
 		qtyYetToDispatch: z.number(),
 	}),
 );
-
 const SearchGoodsReceivedNotesInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1661,7 +1538,6 @@ const SearchGoodsReceivedNotesInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchGoodsReceivedNotesOutputSchema = ResultsSchema(
 	z.object({
 		grnNumber: z.number(),
@@ -1680,7 +1556,6 @@ const SearchGoodsReceivedNotesOutputSchema = ResultsSchema(
 		recordDeleted: z.boolean(),
 	}),
 );
-
 const GoodsReceivedNotesInputSchema = z.object({
 	orderNumber: z.number(),
 	items: z.array(
@@ -1690,9 +1565,7 @@ const GoodsReceivedNotesInputSchema = z.object({
 		}),
 	),
 });
-
 const GoodsReceivedNotesOutputSchema = ResponseSchema(z.string());
-
 const SearchDeliveriesInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1700,7 +1573,6 @@ const SearchDeliveriesInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchDeliveriesOutputSchema = ResultsSchema(
 	z.object({
 		grnNumber: z.number(),
@@ -1719,7 +1591,6 @@ const SearchDeliveriesOutputSchema = ResultsSchema(
 		recordDeleted: z.boolean(),
 	}),
 );
-
 const SearchSalesInvoicesInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1727,7 +1598,6 @@ const SearchSalesInvoicesInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchSalesInvoicesOutputSchema = ResultsSchema(
 	z.object({
 		invoiceNumber: z.string(),
@@ -1853,11 +1723,9 @@ const SearchSalesInvoicesOutputSchema = ResultsSchema(
 		recordDeleted: z.string(),
 	}),
 );
-
 const ReadSalesInvoiceInputSchema = z.object({
 	id: z.string(),
 });
-
 const ReadSalesInvoiceOutputSchema = ResponseSchema(
 	z.object({
 		invoiceNumber: z.number(),
@@ -1942,7 +1810,6 @@ const ReadSalesInvoiceOutputSchema = ResponseSchema(
 		),
 	}),
 );
-
 const UpdateSalesInvoiceInputSchema = z.object({
 	customerAccountRef: z.string(),
 	invoiceNumber: z.number(),
@@ -1979,9 +1846,7 @@ const UpdateSalesInvoiceInputSchema = z.object({
 		}),
 	),
 });
-
 const UpdateSalesInvoiceOutputSchema = ResponseSchema(z.number());
-
 const CreateSalesInvoiceInputSchema = z.object({
 	customerAccountRef: z.string(),
 	orderNumber: z.string(),
@@ -2017,9 +1882,7 @@ const CreateSalesInvoiceInputSchema = z.object({
 		}),
 	),
 });
-
 const CreateSalesInvoiceOutputSchema = ResponseSchema(z.number());
-
 const SearchSalesInvoiceItemsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2027,7 +1890,6 @@ const SearchSalesInvoiceItemsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchSalesInvoiceItemsOutputSchema = ResultsSchema(
 	z.object({
 		id: z.number(),
@@ -2050,7 +1912,6 @@ const SearchSalesInvoiceItemsOutputSchema = ResultsSchema(
 		recordCreateDate: z.string(),
 	}),
 );
-
 const CreatePurchaseInvoiceInputSchema = z.object({
 	accountRef: z.string(),
 	invRef: z.string(),
@@ -2073,15 +1934,11 @@ const CreatePurchaseInvoiceInputSchema = z.object({
 		}),
 	),
 });
-
 const CreatePurchaseInvoiceOutputSchema = ResponseSchema(z.number());
-
 const ReadDocumentLinkInputSchema = z.object({
 	transactionNumber: z.string(),
 });
-
 const ReadDocumentLinkOutputSchema = ResponseSchema(z.string());
-
 const SearchProjectsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2089,7 +1946,6 @@ const SearchProjectsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchProjectsOutputSchema = ResultsSchema(
 	z.object({
 		reference: z.string(),
@@ -2133,7 +1989,6 @@ const SearchProjectsOutputSchema = ResultsSchema(
 		recordDeleted: z.boolean(),
 	}),
 );
-
 const CreateProjectInputSchema = z.object({
 	name: z.string(),
 	reference: z.string(),
@@ -2141,13 +1996,10 @@ const CreateProjectInputSchema = z.object({
 	endDate: z.string(),
 	description: z.string(),
 });
-
 const CreateProjectOutputSchema = ResponseSchema(z.number());
-
 const ReadProjectInputSchema = z.object({
 	id: z.string(),
 });
-
 const ReadProjectOutputSchema = ResponseSchema(
 	z.object({
 		billedNet: z.number(),
@@ -2182,7 +2034,6 @@ const ReadProjectOutputSchema = ResponseSchema(
 		email: z.string(),
 	}),
 );
-
 const UpdateProjectInputSchema = z.object({
 	name: z.string(),
 	reference: z.string(),
@@ -2190,13 +2041,10 @@ const UpdateProjectInputSchema = z.object({
 	endDate: z.string(),
 	description: z.string(),
 });
-
 const UpdateProjectOutputSchema = ResponseSchema(z.number());
-
 const ReadProjectTransactionsInputSchema = z.object({
 	projectReference: z.string(),
 });
-
 const ReadProjectTransactionsOutputSchema = ResultsSchema(
 	z.object({
 		amount: z.number(),
@@ -2214,7 +2062,6 @@ const ReadProjectTransactionsOutputSchema = ResultsSchema(
 		type: z.number(),
 	}),
 );
-
 const SearchProjectOnlyTransactionsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2222,7 +2069,6 @@ const SearchProjectOnlyTransactionsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchProjectOnlyTransactionsOutputSchema = ResultsSchema(
 	z.object({
 		projectTranID: z.number(),
@@ -2245,7 +2091,6 @@ const SearchProjectOnlyTransactionsOutputSchema = ResultsSchema(
 		recordDeleted: z.boolean(),
 	}),
 );
-
 const SearchProjectTransactionsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2253,7 +2098,6 @@ const SearchProjectTransactionsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchProjectTransactionsOutputSchema = ResultsSchema(
 	z.object({
 		projectTranID: z.number(),
@@ -2271,7 +2115,6 @@ const SearchProjectTransactionsOutputSchema = ResultsSchema(
 		recordDeleted: z.boolean(),
 	}),
 );
-
 const CreateProjectTransactionsInputSchema = z.object({
 	projectReference: z.string(),
 	costCodeRef: z.string(),
@@ -2283,11 +2126,8 @@ const CreateProjectTransactionsInputSchema = z.object({
 	taxAmount: z.number(),
 	type: z.number(),
 });
-
 const CreateProjectTransactionsOutputSchema = ResponseSchema(z.number());
-
 const ReadProjectCostCodesInputSchema = z.void();
-
 const ReadProjectCostCodesOutputSchema = ResultsSchema(
 	z.object({
 		costCodeID: z.number(),
@@ -2296,16 +2136,12 @@ const ReadProjectCostCodesOutputSchema = ResultsSchema(
 		costTypeId: z.number(),
 	}),
 );
-
 const CreateProjectCostCodesInputSchema = z.object({
 	description: z.string(),
 	reference: z.string(),
 });
-
 const CreateProjectCostCodesOutputSchema = ResponseSchema(z.number());
-
 const ReadProjectBudgetsInputSchema = z.void();
-
 const ReadProjectBudgetsOutputSchema = ResultsSchema(
 	z.object({
 		projectId: z.number(),
@@ -2313,18 +2149,14 @@ const ReadProjectBudgetsOutputSchema = ResultsSchema(
 		amount: z.number(),
 	}),
 );
-
 const AllocatePaymentOnAccountInputSchema = z.object({
 	accountRef: z.string(),
 	paymentTransactionNumber: z.number(),
 	amount: z.string(),
 	invRef: z.string(),
 });
-
 const AllocatePaymentOnAccountOutputSchema = ResponseSchema(z.boolean());
-
 const SearchAuditHeadersInputSchema = z.void();
-
 const SearchAuditHeadersOutputSchema = ResultsSchema(
 	z.object({
 		accountRef: z.string(),
@@ -2368,7 +2200,6 @@ const SearchAuditHeadersOutputSchema = ResultsSchema(
 		salesPurchaseRef: z.string(),
 	}),
 );
-
 const CreateHeaderTransactionInputSchema = z.object({
 	date: z.string(),
 	invRef: z.string(),
@@ -2381,9 +2212,7 @@ const CreateHeaderTransactionInputSchema = z.object({
 	taxCode: z.number(),
 	type: z.number(),
 });
-
 const CreateHeaderTransactionOutputSchema = ResponseSchema(z.number());
-
 const CreateBatchHeaderTransactionInputSchema = z.object({
 	type: z.number(),
 	date: z.string(),
@@ -2405,9 +2234,7 @@ const CreateBatchHeaderTransactionInputSchema = z.object({
 		}),
 	),
 });
-
 const CreateBatchHeaderTransactionOutputSchema = ResponseSchema(z.number());
-
 const SearchAuditSplitsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2415,7 +2242,6 @@ const SearchAuditSplitsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchAuditSplitsOutputSchema = ResultsSchema(
 	z.object({
 		amountPaid: z.number(),
@@ -2462,7 +2288,6 @@ const SearchAuditSplitsOutputSchema = ResultsSchema(
 		vatReconciledDate: z.string(),
 	}),
 );
-
 const SearchAuditUsageInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2470,7 +2295,6 @@ const SearchAuditUsageInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchAuditUsageOutputSchema = ResultsSchema(
 	z.object({
 		type: z.string(),
@@ -2488,7 +2312,6 @@ const SearchAuditUsageOutputSchema = ResultsSchema(
 		recordModifyDate: z.string(),
 	}),
 );
-
 const CreateBankTxInputSchema = z.object({
 	bankCode: z.string(),
 	netAmount: z.number(),
@@ -2500,9 +2323,7 @@ const CreateBankTxInputSchema = z.object({
 	invRef: z.string(),
 	type: z.number(),
 });
-
 const CreateBankTxOutputSchema = ResponseSchema(z.number());
-
 const CreateJournalTxInputSchema = z.object({
 	date: z.string(),
 	invRef: z.string(),
@@ -2520,9 +2341,7 @@ const CreateJournalTxInputSchema = z.object({
 		}),
 	),
 });
-
 const CreateJournalTxOutputSchema = ResponseSchema(z.number());
-
 const CreateFixedAssetsInputSchema = z.object({
 	assetRef: z.string(),
 	details1: z.string(),
@@ -2541,9 +2360,7 @@ const CreateFixedAssetsInputSchema = z.object({
 	depToDate: z.number(),
 	netBook: z.number(),
 });
-
 const CreateFixedAssetsOutputSchema = ResponseSchema(z.string());
-
 const SearchFixedAssetsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2551,7 +2368,6 @@ const SearchFixedAssetsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
-
 const SearchFixedAssetsOutputSchema = ResultsSchema(
 	z.object({
 		recordCreateDate: z.string(),
@@ -2577,9 +2393,7 @@ const SearchFixedAssetsOutputSchema = ResultsSchema(
 		netBook: z.number(),
 	}),
 );
-
 const ReadSearchAssetsInputSchema = z.void();
-
 const ReadSearchAssetsOutputSchema = ResponseSchema(
 	z.object({
 		assetRef: z.string(),
@@ -2602,7 +2416,6 @@ const ReadSearchAssetsOutputSchema = ResponseSchema(
 		netBook: z.number(),
 	}),
 );
-
 const UpdateFixedAssetsInputSchema = z.object({
 	assetRef: z.string(),
 	details1: z.string(),
@@ -2623,9 +2436,7 @@ const UpdateFixedAssetsInputSchema = z.object({
 	depToDate: z.number(),
 	netBook: z.number(),
 });
-
 const UpdateFixedAssetsOutputSchema = ResponseSchema(z.string());
-
 export class HyperAccountsClient {
 	axios: Axios;
 	constructor(config: z.infer<typeof HAConfigSchema>) {
