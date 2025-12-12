@@ -2,6 +2,23 @@
 import { Axios } from "axios";
 import z from "zod";
 
+const ResponseSchema = <T extends z.ZodTypeAny>(schema: T) =>
+	z.object({
+		success: z.boolean(),
+		code: z.number(),
+		response: schema,
+		message: z.string().nullable().optional(),
+	});
+
+const ResultsSchema = <T extends z.ZodTypeAny>(schema: T) =>
+	z.object({
+		results: z.array(schema),
+		success: z.boolean(),
+		code: z.number(),
+		response: z.string().nullable().optional(),
+		message: z.string().nullable().optional(),
+	});
+
 const HAConfigSchema = z.object({
 	baseURL: z.url(),
 	authToken: z.string().min(1),
@@ -10,29 +27,26 @@ type HAConfig = z.infer<typeof HAConfigSchema>;
 
 const ReadApiStatusInputSchema = z.void();
 type ReadApiStatusInput = z.infer<typeof ReadApiStatusInputSchema>;
-const ReadApiStatusOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadApiStatusOutputSchema = ResponseSchema(
+	z.object({
 		apiVersion: z.string(),
 		sageVersion: z.string(),
 		companyName: z.string(),
 		sdoStatusOk: z.boolean(),
 		odbcStatusOk: z.boolean(),
 	}),
-	message: z.string(),
-});
+);
 type ReadApiStatusOutput = z.infer<typeof ReadApiStatusOutputSchema>;
+
 const ReadApiVersionInputSchema = z.void();
 type ReadApiVersionInput = z.infer<typeof ReadApiVersionInputSchema>;
 const ReadApiVersionOutputSchema = z.string();
 type ReadApiVersionOutput = z.infer<typeof ReadApiVersionOutputSchema>;
+
 const ReadCompanySettingsInputSchema = z.void();
 type ReadCompanySettingsInput = z.infer<typeof ReadCompanySettingsInputSchema>;
-const ReadCompanySettingsOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadCompanySettingsOutputSchema = ResponseSchema(
+	z.object({
 		address1: z.string(),
 		address2: z.string(),
 		address3: z.string(),
@@ -69,46 +83,39 @@ const ReadCompanySettingsOutputSchema = z.object({
 		vatRegisteredFlag: z.boolean(),
 		lockDate: z.string(),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadCompanySettingsOutput = z.infer<
 	typeof ReadCompanySettingsOutputSchema
 >;
+
 const ReadRdaEnabledInputSchema = z.void();
 type ReadRdaEnabledInput = z.infer<typeof ReadRdaEnabledInputSchema>;
-const ReadRdaEnabledOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadRdaEnabledOutputSchema = ResponseSchema(
+	z.object({
 		isRDAEnabled: z.boolean(),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadRdaEnabledOutput = z.infer<typeof ReadRdaEnabledOutputSchema>;
+
 const ReadExchangeRatesInputSchema = z.void();
 type ReadExchangeRatesInput = z.infer<typeof ReadExchangeRatesInputSchema>;
-const ReadExchangeRatesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			id: z.number(),
-			code: z.string(),
-			emuMember: z.number(),
-			exchangeRate: z.number(),
-			locked: z.number(),
-			majorUnit: z.string(),
-			minorUnit: z.string(),
-			name: z.string(),
-			createdDate: z.string(),
-			modifiedDate: z.string(),
-			symbol: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadExchangeRatesOutputSchema = ResultsSchema(
+	z.object({
+		id: z.number(),
+		code: z.string(),
+		emuMember: z.number(),
+		exchangeRate: z.number(),
+		locked: z.number(),
+		majorUnit: z.string(),
+		minorUnit: z.string(),
+		name: z.string(),
+		createdDate: z.string(),
+		modifiedDate: z.string(),
+		symbol: z.string(),
+	}),
+);
 type ReadExchangeRatesOutput = z.infer<typeof ReadExchangeRatesOutputSchema>;
+
 const UpdateExchangeRateInputSchema = z.object({
 	id: z.number(),
 	code: z.string(),
@@ -119,90 +126,64 @@ const UpdateExchangeRateInputSchema = z.object({
 	name: z.string(),
 });
 type UpdateExchangeRateInput = z.infer<typeof UpdateExchangeRateInputSchema>;
-const UpdateExchangeRateOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const UpdateExchangeRateOutputSchema = ResponseSchema(z.string());
 type UpdateExchangeRateOutput = z.infer<typeof UpdateExchangeRateOutputSchema>;
+
 const ReadCountriesInputSchema = z.void();
 type ReadCountriesInput = z.infer<typeof ReadCountriesInputSchema>;
-const ReadCountriesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			code: z.string(),
-			name: z.string(),
-			euMember: z.boolean(),
-			createdDate: z.string(),
-			modifiedDate: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadCountriesOutputSchema = ResultsSchema(
+	z.object({
+		code: z.string(),
+		name: z.string(),
+		euMember: z.boolean(),
+		createdDate: z.string(),
+		modifiedDate: z.string(),
+	}),
+);
 type ReadCountriesOutput = z.infer<typeof ReadCountriesOutputSchema>;
+
 const ReadCouriersInputSchema = z.void();
 type ReadCouriersInput = z.infer<typeof ReadCouriersInputSchema>;
-const ReadCouriersOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			id: z.number(),
-			name: z.string(),
-			www: z.string(),
-			search: z.string(),
-			createdDate: z.string(),
-			modifiedDate: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadCouriersOutputSchema = ResultsSchema(
+	z.object({
+		id: z.number(),
+		name: z.string(),
+		www: z.string(),
+		search: z.string(),
+		createdDate: z.string(),
+		modifiedDate: z.string(),
+	}),
+);
 type ReadCouriersOutput = z.infer<typeof ReadCouriersOutputSchema>;
+
 const ReadNominalsInputSchema = z.void();
 type ReadNominalsInput = z.infer<typeof ReadNominalsInputSchema>;
-const ReadNominalsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			accountRef: z.string(),
-			name: z.string(),
-			type: z.number(),
-			balance: z.number(),
-			inactiveFlag: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadNominalsOutputSchema = ResultsSchema(
+	z.object({
+		accountRef: z.string(),
+		name: z.string(),
+		type: z.number(),
+		balance: z.number(),
+		inactiveFlag: z.number(),
+	}),
+);
 type ReadNominalsOutput = z.infer<typeof ReadNominalsOutputSchema>;
+
 const ReadTaxCodesInputSchema = z.void();
 type ReadTaxCodesInput = z.infer<typeof ReadTaxCodesInputSchema>;
-const ReadTaxCodesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			index: z.number(),
-			description: z.string(),
-			rate: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadTaxCodesOutputSchema = ResultsSchema(
+	z.object({
+		index: z.number(),
+		description: z.string(),
+		rate: z.number(),
+	}),
+);
 type ReadTaxCodesOutput = z.infer<typeof ReadTaxCodesOutputSchema>;
+
 const ReadControlAccountsInputSchema = z.void();
 type ReadControlAccountsInput = z.infer<typeof ReadControlAccountsInputSchema>;
-const ReadControlAccountsOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadControlAccountsOutputSchema = ResponseSchema(
+	z.object({
 		accrualsNo: z.number(),
 		badDebtsNo: z.number(),
 		creditorsNo: z.number(),
@@ -223,64 +204,49 @@ const ReadControlAccountsOutputSchema = z.object({
 		uniqueNo: z.number(),
 		vatLiabilityNo: z.number(),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadControlAccountsOutput = z.infer<
 	typeof ReadControlAccountsOutputSchema
 >;
+
 const GetPaymentMethodsInputSchema = z.void();
 type GetPaymentMethodsInput = z.infer<typeof GetPaymentMethodsInputSchema>;
-const GetPaymentMethodsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			id: z.number(),
-			description: z.string(),
-			isOnline: z.number(),
-			isReadonly: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const GetPaymentMethodsOutputSchema = ResultsSchema(
+	z.object({
+		id: z.number(),
+		description: z.string(),
+		isOnline: z.number(),
+		isReadonly: z.number(),
+	}),
+);
 type GetPaymentMethodsOutput = z.infer<typeof GetPaymentMethodsOutputSchema>;
+
 const ReadDepartmentsInputSchema = z.void();
 type ReadDepartmentsInput = z.infer<typeof ReadDepartmentsInputSchema>;
-const ReadDepartmentsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			reference: z.string(),
-			name: z.string(),
-			id: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadDepartmentsOutputSchema = ResultsSchema(
+	z.object({
+		reference: z.string(),
+		name: z.string(),
+		id: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+	}),
+);
 type ReadDepartmentsOutput = z.infer<typeof ReadDepartmentsOutputSchema>;
+
 const ReadChartOfAccountsInputSchema = z.void();
 type ReadChartOfAccountsInput = z.infer<typeof ReadChartOfAccountsInputSchema>;
-const ReadChartOfAccountsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			name: z.string(),
-			low: z.string(),
-			high: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadChartOfAccountsOutputSchema = ResultsSchema(
+	z.object({
+		name: z.string(),
+		low: z.string(),
+		high: z.string(),
+	}),
+);
 type ReadChartOfAccountsOutput = z.infer<
 	typeof ReadChartOfAccountsOutputSchema
 >;
+
 const SearchCustomerInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -289,93 +255,86 @@ const SearchCustomerInputSchema = z.array(
 	}),
 );
 type SearchCustomerInput = z.infer<typeof SearchCustomerInputSchema>;
-const SearchCustomerOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			accountRef: z.string(),
-			name: z.string(),
-			balance: z.number(),
-			currency: z.string(),
-			contactName: z.string(),
-			telephoneNumber: z.string(),
-			address1: z.string(),
-			address2: z.string(),
-			address3: z.string(),
-			address4: z.string(),
-			address5: z.string(),
-			delName: z.string(),
-			delAddress1: z.string(),
-			delAddress2: z.string(),
-			delAddress3: z.string(),
-			delAddress4: z.string(),
-			delAddress5: z.string(),
-			accountOnHold: z.boolean(),
-			accountStatusText: z.string(),
-			averagePayDays: z.number(),
-			creditLimit: z.number(),
-			terms: z.string(),
-			bacsRef: z.string(),
-			iban: z.string(),
-			bicSwift: z.string(),
-			rollNumber: z.string(),
-			additionalRef1: z.string(),
-			additionalRef2: z.string(),
-			additionalRef3: z.string(),
-			paymentType: z.number(),
-			paymentTypeName: z.string().nullable(),
-			turnoverYtd: z.number(),
-			priorYear: z.number(),
-			vatRegNumber: z.string(),
-			eoriNumber: z.string(),
-			lastPaymentDate: z.string(),
-			lastInvDate: z.string(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			telephone2: z.string(),
-			fax: z.string(),
-			webAddress: z.string(),
-			countryCode: z.string(),
-			email: z.string(),
-			email2: z.string(),
-			email3: z.string(),
-			email4: z.string(),
-			email5: z.string(),
-			email6: z.string(),
-			defTaxCode: z.string(),
-			defNomCode: z.string(),
-			analysis1: z.string(),
-			analysis2: z.string(),
-			analysis3: z.string(),
-			analysis4: z.string(),
-			analysis5: z.string(),
-			analysis6: z.string(),
-			deptNumber: z.number(),
-			inactiveAccount: z.number(),
-			settleDueDays: z.number(),
-			paymentDueDays: z.number(),
-			paymentDueFrom: z.number(),
-			creditPosition: z.string(),
-			discountRate: z.number(),
-			discountType: z.number(),
-			priceListRef: z.string(),
-			tradeContact: z.string(),
-			companyRegistrationNumber: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchCustomerOutputSchema = ResultsSchema(
+	z.object({
+		accountRef: z.string(),
+		name: z.string(),
+		balance: z.number(),
+		currency: z.string(),
+		contactName: z.string(),
+		telephoneNumber: z.string(),
+		address1: z.string(),
+		address2: z.string(),
+		address3: z.string(),
+		address4: z.string(),
+		address5: z.string(),
+		delName: z.string(),
+		delAddress1: z.string(),
+		delAddress2: z.string(),
+		delAddress3: z.string(),
+		delAddress4: z.string(),
+		delAddress5: z.string(),
+		accountOnHold: z.boolean(),
+		accountStatusText: z.string(),
+		averagePayDays: z.number(),
+		creditLimit: z.number(),
+		terms: z.string(),
+		bacsRef: z.string(),
+		iban: z.string(),
+		bicSwift: z.string(),
+		rollNumber: z.string(),
+		additionalRef1: z.string(),
+		additionalRef2: z.string(),
+		additionalRef3: z.string(),
+		paymentType: z.number(),
+		paymentTypeName: z.string().nullable(),
+		turnoverYtd: z.number(),
+		priorYear: z.number(),
+		vatRegNumber: z.string(),
+		eoriNumber: z.string(),
+		lastPaymentDate: z.string(),
+		lastInvDate: z.string(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		telephone2: z.string(),
+		fax: z.string(),
+		webAddress: z.string(),
+		countryCode: z.string(),
+		email: z.string(),
+		email2: z.string(),
+		email3: z.string(),
+		email4: z.string(),
+		email5: z.string(),
+		email6: z.string(),
+		defTaxCode: z.string(),
+		defNomCode: z.string(),
+		analysis1: z.string(),
+		analysis2: z.string(),
+		analysis3: z.string(),
+		analysis4: z.string(),
+		analysis5: z.string(),
+		analysis6: z.string(),
+		deptNumber: z.number(),
+		inactiveAccount: z.number(),
+		settleDueDays: z.number(),
+		paymentDueDays: z.number(),
+		paymentDueFrom: z.number(),
+		creditPosition: z.string(),
+		discountRate: z.number(),
+		discountType: z.number(),
+		priceListRef: z.string(),
+		tradeContact: z.string(),
+		companyRegistrationNumber: z.string(),
+	}),
+);
 type SearchCustomerOutput = z.infer<typeof SearchCustomerOutputSchema>;
+
 const ReadCustomerInputSchema = z.object({
 	customer: z.string(),
 });
 type ReadCustomerInput = z.infer<typeof ReadCustomerInputSchema>;
-const ReadCustomerOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadCustomerOutputSchema = ResponseSchema(
+	z.object({
 		accountRef: z.string(),
 		name: z.string(),
 		address1: z.string(),
@@ -444,9 +403,9 @@ const ReadCustomerOutputSchema = z.object({
 		telephone2: z.string(),
 		fax: z.string(),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadCustomerOutput = z.infer<typeof ReadCustomerOutputSchema>;
+
 const CreateCustomerInputSchema = z.object({
 	name: z.string(),
 	address1: z.string(),
@@ -479,13 +438,9 @@ const CreateCustomerInputSchema = z.object({
 	inactiveAccount: z.boolean(),
 });
 type CreateCustomerInput = z.infer<typeof CreateCustomerInputSchema>;
-const CreateCustomerOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const CreateCustomerOutputSchema = ResponseSchema(z.string());
 type CreateCustomerOutput = z.infer<typeof CreateCustomerOutputSchema>;
+
 const UpdateCustomerInputSchema = z.object({
 	accountRef: z.string(),
 	name: z.string(),
@@ -499,23 +454,17 @@ const UpdateCustomerInputSchema = z.object({
 	telephone: z.string(),
 });
 type UpdateCustomerInput = z.infer<typeof UpdateCustomerInputSchema>;
-const UpdateCustomerOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const UpdateCustomerOutputSchema = ResponseSchema(z.string());
 type UpdateCustomerOutput = z.infer<typeof UpdateCustomerOutputSchema>;
+
 const ReadCustomerAgedBalancesInputSchema = z.object({
 	customer: z.string(),
 });
 type ReadCustomerAgedBalancesInput = z.infer<
 	typeof ReadCustomerAgedBalancesInputSchema
 >;
-const ReadCustomerAgedBalancesOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadCustomerAgedBalancesOutputSchema = ResponseSchema(
+	z.object({
 		total: z.number(),
 		current: z.number(),
 		future: z.number(),
@@ -524,19 +473,17 @@ const ReadCustomerAgedBalancesOutputSchema = z.object({
 		period90Days: z.number(),
 		older: z.number(),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadCustomerAgedBalancesOutput = z.infer<
 	typeof ReadCustomerAgedBalancesOutputSchema
 >;
+
 const ReadCustomerAddressInputSchema = z.object({
 	customer: z.string(),
 });
 type ReadCustomerAddressInput = z.infer<typeof ReadCustomerAddressInputSchema>;
-const ReadCustomerAddressOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadCustomerAddressOutputSchema = ResponseSchema(
+	z.object({
 		accountRef: z.string(),
 		addressNumber: z.number(),
 		addressLine1: z.string(),
@@ -558,11 +505,11 @@ const ReadCustomerAddressOutputSchema = z.object({
 		addressType: z.number(),
 		taxCode: z.number(),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadCustomerAddressOutput = z.infer<
 	typeof ReadCustomerAddressOutputSchema
 >;
+
 const CreateCustomerAddressInputSchema = z.object({
 	accountRef: z.string(),
 	addressNumber: z.number(),
@@ -586,15 +533,11 @@ const CreateCustomerAddressInputSchema = z.object({
 type CreateCustomerAddressInput = z.infer<
 	typeof CreateCustomerAddressInputSchema
 >;
-const CreateCustomerAddressOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CreateCustomerAddressOutputSchema = ResponseSchema(z.number());
 type CreateCustomerAddressOutput = z.infer<
 	typeof CreateCustomerAddressOutputSchema
 >;
+
 const UpdateCustomerAddressInputSchema = z.object({
 	accountRef: z.string(),
 	addressNumber: z.number(),
@@ -614,15 +557,11 @@ const UpdateCustomerAddressInputSchema = z.object({
 type UpdateCustomerAddressInput = z.infer<
 	typeof UpdateCustomerAddressInputSchema
 >;
-const UpdateCustomerAddressOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.boolean(),
-	message: z.string().nullable(),
-});
+const UpdateCustomerAddressOutputSchema = ResponseSchema(z.boolean());
 type UpdateCustomerAddressOutput = z.infer<
 	typeof UpdateCustomerAddressOutputSchema
 >;
+
 const SearchCustomerAddressInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -633,39 +572,33 @@ const SearchCustomerAddressInputSchema = z.array(
 type SearchCustomerAddressInput = z.infer<
 	typeof SearchCustomerAddressInputSchema
 >;
-const SearchCustomerAddressOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			accountRef: z.string(),
-			addressNumber: z.number(),
-			addressLine1: z.string(),
-			addressLine2: z.string(),
-			addressLine3: z.string(),
-			addressLine4: z.string(),
-			addressLine5: z.string(),
-			countryCode: z.string(),
-			role: z.string(),
-			contact: z.string(),
-			description: z.string(),
-			email: z.string(),
-			fax: z.string(),
-			name: z.string(),
-			notes: z.string(),
-			telephone: z.string(),
-			telephone2: z.string(),
-			vatNumber: z.string(),
-			taxCode: z.number(),
-			addressTypeName: z.string(),
-			addressType: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchCustomerAddressOutputSchema = ResultsSchema(
+	z.object({
+		accountRef: z.string(),
+		addressNumber: z.number(),
+		addressLine1: z.string(),
+		addressLine2: z.string(),
+		addressLine3: z.string(),
+		addressLine4: z.string(),
+		addressLine5: z.string(),
+		countryCode: z.string(),
+		role: z.string(),
+		contact: z.string(),
+		description: z.string(),
+		email: z.string(),
+		fax: z.string(),
+		name: z.string(),
+		notes: z.string(),
+		telephone: z.string(),
+		telephone2: z.string(),
+		vatNumber: z.string(),
+		taxCode: z.number(),
+		addressTypeName: z.string(),
+		addressType: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+	}),
+);
 type SearchCustomerAddressOutput = z.infer<
 	typeof SearchCustomerAddressOutputSchema
 >;
@@ -677,67 +610,60 @@ const SearchSupplierInputSchema = z.array(
 	}),
 );
 type SearchSupplierInput = z.infer<typeof SearchSupplierInputSchema>;
-const SearchSupplierOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			accountRef: z.string(),
-			name: z.string(),
-			balance: z.number(),
-			currency: z.string(),
-			contactName: z.string(),
-			telephoneNumber: z.string(),
-			address1: z.string(),
-			address2: z.string(),
-			address3: z.string(),
-			address4: z.string(),
-			address5: z.string(),
-			accountOnHold: z.boolean(),
-			accountStatusText: z.string(),
-			creditLimit: z.number(),
-			terms: z.string(),
-			turnoverYtd: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			telephone2: z.string(),
-			fax: z.string(),
-			webAddress: z.string(),
-			countryCode: z.string(),
-			email: z.string(),
-			email2: z.string(),
-			email3: z.string(),
-			defTaxCode: z.string(),
-			analysis1: z.string(),
-			analysis2: z.string(),
-			analysis3: z.string(),
-			deptNumber: z.number(),
-			inactiveAccount: z.number(),
-			discountRate: z.number(),
-			paymentDueDays: z.number(),
-			paymentDueFrom: z.number(),
-			paymentMethodId: z.number(),
-			defNomCode: z.string(),
-			settleDueDays: z.number(),
-			creditPosition: z.string(),
-			tradeContact: z.string(),
-			vatRegNumber: z.string(),
-			eoriNumber: z.string(),
-			companyRegistrationNumber: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchSupplierOutputSchema = ResultsSchema(
+	z.object({
+		accountRef: z.string(),
+		name: z.string(),
+		balance: z.number(),
+		currency: z.string(),
+		contactName: z.string(),
+		telephoneNumber: z.string(),
+		address1: z.string(),
+		address2: z.string(),
+		address3: z.string(),
+		address4: z.string(),
+		address5: z.string(),
+		accountOnHold: z.boolean(),
+		accountStatusText: z.string(),
+		creditLimit: z.number(),
+		terms: z.string(),
+		turnoverYtd: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		telephone2: z.string(),
+		fax: z.string(),
+		webAddress: z.string(),
+		countryCode: z.string(),
+		email: z.string(),
+		email2: z.string(),
+		email3: z.string(),
+		defTaxCode: z.string(),
+		analysis1: z.string(),
+		analysis2: z.string(),
+		analysis3: z.string(),
+		deptNumber: z.number(),
+		inactiveAccount: z.number(),
+		discountRate: z.number(),
+		paymentDueDays: z.number(),
+		paymentDueFrom: z.number(),
+		paymentMethodId: z.number(),
+		defNomCode: z.string(),
+		settleDueDays: z.number(),
+		creditPosition: z.string(),
+		tradeContact: z.string(),
+		vatRegNumber: z.string(),
+		eoriNumber: z.string(),
+		companyRegistrationNumber: z.string(),
+	}),
+);
 type SearchSupplierOutput = z.infer<typeof SearchSupplierOutputSchema>;
+
 const ReadSupplierInputSchema = z.object({
 	supplier: z.string(),
 });
 type ReadSupplierInput = z.infer<typeof ReadSupplierInputSchema>;
-const ReadSupplierOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadSupplierOutputSchema = ResponseSchema(
+	z.object({
 		accountRef: z.string(),
 		name: z.string(),
 		address1: z.string(),
@@ -773,9 +699,9 @@ const ReadSupplierOutputSchema = z.object({
 		eoriNumber: z.string(),
 		termsAgreed: z.boolean(),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadSupplierOutput = z.infer<typeof ReadSupplierOutputSchema>;
+
 const CreateSupplierInputSchema = z.object({
 	name: z.string(),
 	address1: z.string(),
@@ -792,13 +718,9 @@ const CreateSupplierInputSchema = z.object({
 	currency: z.number(),
 });
 type CreateSupplierInput = z.infer<typeof CreateSupplierInputSchema>;
-const CreateSupplierOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const CreateSupplierOutputSchema = ResponseSchema(z.string());
 type CreateSupplierOutput = z.infer<typeof CreateSupplierOutputSchema>;
+
 const UpdateSupplierInputSchema = z.object({
 	accountRef: z.string(),
 	name: z.string(),
@@ -829,13 +751,9 @@ const UpdateSupplierInputSchema = z.object({
 	vatNumber: z.string(),
 });
 type UpdateSupplierInput = z.infer<typeof UpdateSupplierInputSchema>;
-const UpdateSupplierOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const UpdateSupplierOutputSchema = ResponseSchema(z.string());
 type UpdateSupplierOutput = z.infer<typeof UpdateSupplierOutputSchema>;
+
 const SearchProductInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -844,105 +762,98 @@ const SearchProductInputSchema = z.array(
 	}),
 );
 type SearchProductInput = z.infer<typeof SearchProductInputSchema>;
-const SearchProductOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			stockCode: z.string(),
-			description: z.string(),
-			salesNominalCode: z.string(),
-			taxCode: z.string(),
-			unitOfSale: z.string(),
-			qtyInStock: z.number(),
-			qtyOnOrder: z.number(),
-			qtyAllocated: z.number(),
-			salesPrice: z.number(),
-			supplierPartNumber: z.string(),
-			purchaseNominalCode: z.string(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			supplierRef: z.string(),
-			itemType: z.number(),
-			webCategoryA: z.string(),
-			webCategoryB: z.string(),
-			webCategoryC: z.string(),
-			barcode: z.string(),
-			instrastatCommCode: z.string(),
-			commodityCode: z.string(),
-			reorderLevel: z.number(),
-			reorderQty: z.number(),
-			webPublish: z.number(),
-			webSpecialOffer: z.number(),
-			webDetails: z.string(),
-			webDescription: z.string(),
-			webImage: z.string(),
-			inactiveFlag: z.number(),
-			unitWeight: z.number(),
-			deptNumber: z.number(),
-			stockCat: z.number(),
-			stockCatName: z.string(),
-			qtyLastStockTake: z.number(),
-			stockTakeDate: z.string(),
-			location: z.string(),
-			assemblyLevel: z.number(),
-			lastCostPrice: z.number(),
-			lastDiscPurchasePrice: z.number(),
-			countryCodeOfOrigin: z.string(),
-			discALevel1Rate: z.number(),
-			discALevel2Rate: z.number(),
-			discALevel3Rate: z.number(),
-			discALevel4Rate: z.number(),
-			discALevel5Rate: z.number(),
-			discALevel6Rate: z.number(),
-			discALevel7Rate: z.number(),
-			discALevel8Rate: z.number(),
-			discALevel9Rate: z.number(),
-			discALevel10Rate: z.number(),
-			discALevel1Qty: z.number(),
-			discALevel2Qty: z.number(),
-			discALevel3Qty: z.number(),
-			discALevel4Qty: z.number(),
-			discALevel5Qty: z.number(),
-			discALevel6Qty: z.number(),
-			discALevel7Qty: z.number(),
-			discALevel8Qty: z.number(),
-			discALevel9Qty: z.number(),
-			discALevel10Qty: z.number(),
-			component1Code: z.string(),
-			component2Code: z.string(),
-			component3Code: z.string(),
-			component4Code: z.string(),
-			component5Code: z.string(),
-			component6Code: z.string(),
-			component7Code: z.string(),
-			component8Code: z.string(),
-			component9Code: z.string(),
-			component10Code: z.string(),
-			component1Qty: z.number(),
-			component2Qty: z.number(),
-			component3Qty: z.number(),
-			component4Qty: z.number(),
-			component5Qty: z.number(),
-			component6Qty: z.number(),
-			component7Qty: z.number(),
-			component8Qty: z.number(),
-			component9Qty: z.number(),
-			component10Qty: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchProductOutputSchema = ResultsSchema(
+	z.object({
+		stockCode: z.string(),
+		description: z.string(),
+		salesNominalCode: z.string(),
+		taxCode: z.string(),
+		unitOfSale: z.string(),
+		qtyInStock: z.number(),
+		qtyOnOrder: z.number(),
+		qtyAllocated: z.number(),
+		salesPrice: z.number(),
+		supplierPartNumber: z.string(),
+		purchaseNominalCode: z.string(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		supplierRef: z.string(),
+		itemType: z.number(),
+		webCategoryA: z.string(),
+		webCategoryB: z.string(),
+		webCategoryC: z.string(),
+		barcode: z.string(),
+		instrastatCommCode: z.string(),
+		commodityCode: z.string(),
+		reorderLevel: z.number(),
+		reorderQty: z.number(),
+		webPublish: z.number(),
+		webSpecialOffer: z.number(),
+		webDetails: z.string(),
+		webDescription: z.string(),
+		webImage: z.string(),
+		inactiveFlag: z.number(),
+		unitWeight: z.number(),
+		deptNumber: z.number(),
+		stockCat: z.number(),
+		stockCatName: z.string(),
+		qtyLastStockTake: z.number(),
+		stockTakeDate: z.string(),
+		location: z.string(),
+		assemblyLevel: z.number(),
+		lastCostPrice: z.number(),
+		lastDiscPurchasePrice: z.number(),
+		countryCodeOfOrigin: z.string(),
+		discALevel1Rate: z.number(),
+		discALevel2Rate: z.number(),
+		discALevel3Rate: z.number(),
+		discALevel4Rate: z.number(),
+		discALevel5Rate: z.number(),
+		discALevel6Rate: z.number(),
+		discALevel7Rate: z.number(),
+		discALevel8Rate: z.number(),
+		discALevel9Rate: z.number(),
+		discALevel10Rate: z.number(),
+		discALevel1Qty: z.number(),
+		discALevel2Qty: z.number(),
+		discALevel3Qty: z.number(),
+		discALevel4Qty: z.number(),
+		discALevel5Qty: z.number(),
+		discALevel6Qty: z.number(),
+		discALevel7Qty: z.number(),
+		discALevel8Qty: z.number(),
+		discALevel9Qty: z.number(),
+		discALevel10Qty: z.number(),
+		component1Code: z.string(),
+		component2Code: z.string(),
+		component3Code: z.string(),
+		component4Code: z.string(),
+		component5Code: z.string(),
+		component6Code: z.string(),
+		component7Code: z.string(),
+		component8Code: z.string(),
+		component9Code: z.string(),
+		component10Code: z.string(),
+		component1Qty: z.number(),
+		component2Qty: z.number(),
+		component3Qty: z.number(),
+		component4Qty: z.number(),
+		component5Qty: z.number(),
+		component6Qty: z.number(),
+		component7Qty: z.number(),
+		component8Qty: z.number(),
+		component9Qty: z.number(),
+		component10Qty: z.number(),
+	}),
+);
 type SearchProductOutput = z.infer<typeof SearchProductOutputSchema>;
+
 const ReadProductInputSchema = z.object({
 	stockCode: z.string(),
 });
 type ReadProductInput = z.infer<typeof ReadProductInputSchema>;
-const ReadProductOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadProductOutputSchema = ResponseSchema(
+	z.object({
 		stockCode: z.string(),
 		description: z.string(),
 		itemType: z.number(),
@@ -999,37 +910,28 @@ const ReadProductOutputSchema = z.object({
 		component10Code: z.string(),
 		component10Qty: z.number(),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadProductOutput = z.infer<typeof ReadProductOutputSchema>;
+
 const ReadStockCategoriesInputSchema = z.void();
 type ReadStockCategoriesInput = z.infer<typeof ReadStockCategoriesInputSchema>;
-const ReadStockCategoriesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			id: z.number(),
-			name: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadStockCategoriesOutputSchema = ResultsSchema(
+	z.object({
+		id: z.number(),
+		name: z.string(),
+	}),
+);
 type ReadStockCategoriesOutput = z.infer<
 	typeof ReadStockCategoriesOutputSchema
 >;
+
 const ReadProductImageInputSchema = z.object({
 	stockCode: z.string(),
 });
 type ReadProductImageInput = z.infer<typeof ReadProductImageInputSchema>;
-const ReadProductImageOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string(),
-});
+const ReadProductImageOutputSchema = ResponseSchema(z.string().nullable());
 type ReadProductImageOutput = z.infer<typeof ReadProductImageOutputSchema>;
+
 const CreateProductInputSchema = z.object({
 	stockCode: z.string(),
 	description: z.string(),
@@ -1059,13 +961,9 @@ const CreateProductInputSchema = z.object({
 	webDescription: z.string(),
 });
 type CreateProductInput = z.infer<typeof CreateProductInputSchema>;
-const CreateProductOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const CreateProductOutputSchema = ResponseSchema(z.string());
 type CreateProductOutput = z.infer<typeof CreateProductOutputSchema>;
+
 const UpdateProductInputSchema = z.object({
 	stockCode: z.string(),
 	description: z.string(),
@@ -1092,13 +990,9 @@ const UpdateProductInputSchema = z.object({
 	webDetails: z.string(),
 });
 type UpdateProductInput = z.infer<typeof UpdateProductInputSchema>;
-const UpdateProductOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const UpdateProductOutputSchema = ResponseSchema(z.string());
 type UpdateProductOutput = z.infer<typeof UpdateProductOutputSchema>;
+
 const StockAdjustmentsInputSchema = z.object({
 	stockCode: z.string(),
 	quantity: z.number(),
@@ -1109,35 +1003,26 @@ const StockAdjustmentsInputSchema = z.object({
 	details: z.string(),
 });
 type StockAdjustmentsInput = z.infer<typeof StockAdjustmentsInputSchema>;
-const StockAdjustmentsOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.boolean(),
-	message: z.string().nullable(),
-});
+const StockAdjustmentsOutputSchema = ResponseSchema(z.boolean());
 type StockAdjustmentsOutput = z.infer<typeof StockAdjustmentsOutputSchema>;
+
 const ReadStockMovementsInputSchema = z.object({
 	stockCode: z.string(),
 });
 type ReadStockMovementsInput = z.infer<typeof ReadStockMovementsInputSchema>;
-const ReadStockMovementsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			stockCode: z.string(),
-			date: z.string(),
-			type: z.number(),
-			costPrice: z.number(),
-			quantity: z.number(),
-			reference: z.string(),
-			details: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadStockMovementsOutputSchema = ResultsSchema(
+	z.object({
+		stockCode: z.string(),
+		date: z.string(),
+		type: z.number(),
+		costPrice: z.number(),
+		quantity: z.number(),
+		reference: z.string(),
+		details: z.string(),
+	}),
+);
 type ReadStockMovementsOutput = z.infer<typeof ReadStockMovementsOutputSchema>;
+
 const SearchStockMovementsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1148,37 +1033,30 @@ const SearchStockMovementsInputSchema = z.array(
 type SearchStockMovementsInput = z.infer<
 	typeof SearchStockMovementsInputSchema
 >;
-const SearchStockMovementsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			tranNumber: z.number(),
-			stockCode: z.string(),
-			date: z.string(),
-			type: z.string(),
-			costPrice: z.number(),
-			quantity: z.number(),
-			reference: z.string(),
-			details: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchStockMovementsOutputSchema = ResultsSchema(
+	z.object({
+		tranNumber: z.number(),
+		stockCode: z.string(),
+		date: z.string(),
+		type: z.string(),
+		costPrice: z.number(),
+		quantity: z.number(),
+		reference: z.string(),
+		details: z.string(),
+	}),
+);
 type SearchStockMovementsOutput = z.infer<
 	typeof SearchStockMovementsOutputSchema
 >;
+
 const ReadCustomerPriceListsInputSchema = z.object({
 	customer: z.string(),
 });
 type ReadCustomerPriceListsInput = z.infer<
 	typeof ReadCustomerPriceListsInputSchema
 >;
-const ReadCustomerPriceListsOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadCustomerPriceListsOutputSchema = ResponseSchema(
+	z.object({
 		currency: z.number(),
 		hasStaticPrices: z.number(),
 		lastUpdated: z.string().nullable(),
@@ -1206,32 +1084,27 @@ const ReadCustomerPriceListsOutputSchema = z.object({
 			}),
 		),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadCustomerPriceListsOutput = z.infer<
 	typeof ReadCustomerPriceListsOutputSchema
 >;
+
 const ReadAllPriceListsInputSchema = z.void();
 type ReadAllPriceListsInput = z.infer<typeof ReadAllPriceListsInputSchema>;
-const ReadAllPriceListsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			type: z.string(),
-			pricingRef: z.string(),
-			name: z.string(),
-			currency: z.number(),
-			hasStaticPrices: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			recordDeleted: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadAllPriceListsOutputSchema = ResultsSchema(
+	z.object({
+		type: z.string(),
+		pricingRef: z.string(),
+		name: z.string(),
+		currency: z.number(),
+		hasStaticPrices: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		recordDeleted: z.number(),
+	}),
+);
 type ReadAllPriceListsOutput = z.infer<typeof ReadAllPriceListsOutputSchema>;
+
 const SearchProductSellingPricesInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1242,33 +1115,28 @@ const SearchProductSellingPricesInputSchema = z.array(
 type SearchProductSellingPricesInput = z.infer<
 	typeof SearchProductSellingPricesInputSchema
 >;
-const SearchProductSellingPricesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			priceId: z.string(),
-			type: z.string(),
-			pricingRef: z.string(),
-			stockCode: z.string(),
-			calcMethod: z.string(),
-			calcValue: z.number(),
-			storedPrice: z.number(),
-			rounderMethod: z.string(),
-			rounderDirection: z.string(),
-			rounderMultipleOf: z.string(),
-			rounderAdjustment: z.string(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			recordDeleted: z.boolean(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchProductSellingPricesOutputSchema = ResultsSchema(
+	z.object({
+		priceId: z.string(),
+		type: z.string(),
+		pricingRef: z.string(),
+		stockCode: z.string(),
+		calcMethod: z.string(),
+		calcValue: z.number(),
+		storedPrice: z.number(),
+		rounderMethod: z.string(),
+		rounderDirection: z.string(),
+		rounderMultipleOf: z.string(),
+		rounderAdjustment: z.string(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		recordDeleted: z.boolean(),
+	}),
+);
 type SearchProductSellingPricesOutput = z.infer<
 	typeof SearchProductSellingPricesOutputSchema
 >;
+
 const SearchSalesOrderInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1277,65 +1145,60 @@ const SearchSalesOrderInputSchema = z.array(
 	}),
 );
 type SearchSalesOrderInput = z.infer<typeof SearchSalesOrderInputSchema>;
-const SearchSalesOrderOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			orderNumber: z.string(),
-			orderDate: z.string(),
-			accountRef: z.string(),
-			name: z.string(),
-			contactName: z.string(),
-			invoiceRef: z.string(),
-			customerOrderNumber: z.string(),
-			itemsNet: z.number(),
-			itemsTax: z.number(),
-			foreignItemsNet: z.number(),
-			foreignItemsTax: z.number(),
-			foreignRate: z.number(),
-			itemsGross: z.number(),
-			carrNomCode: z.string(),
-			carrTaxCode: z.string(),
-			carrNet: z.number(),
-			carrTax: z.number(),
-			carrGross: z.number(),
-			currency: z.number(),
-			orderDueDate: z.string(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			address1: z.string(),
-			address2: z.string(),
-			address3: z.string(),
-			address4: z.string(),
-			address5: z.string(),
-			delAddress1: z.string(),
-			delAddress2: z.string(),
-			delAddress3: z.string(),
-			delAddress4: z.string(),
-			delAddress5: z.string(),
-			customerTelephoneNumber: z.string(),
-			taxRate1: z.number(),
-			orderOrQuote: z.string(),
-			quoteStatus: z.string(),
-			dispatchStatus: z.string(),
-			allocationStatus: z.string(),
-			consignmentRef: z.string(),
-			notes1: z.string(),
-			notes2: z.string(),
-			notes3: z.string(),
-			analysis1: z.string(),
-			analysis2: z.string(),
-			analysis3: z.string(),
-			netValueDiscountPercentage: z.number(),
-			courierNumber: z.string(),
-			courierName: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchSalesOrderOutputSchema = ResultsSchema(
+	z.object({
+		orderNumber: z.string(),
+		orderDate: z.string(),
+		accountRef: z.string(),
+		name: z.string(),
+		contactName: z.string(),
+		invoiceRef: z.string(),
+		customerOrderNumber: z.string(),
+		itemsNet: z.number(),
+		itemsTax: z.number(),
+		foreignItemsNet: z.number(),
+		foreignItemsTax: z.number(),
+		foreignRate: z.number(),
+		itemsGross: z.number(),
+		carrNomCode: z.string(),
+		carrTaxCode: z.string(),
+		carrNet: z.number(),
+		carrTax: z.number(),
+		carrGross: z.number(),
+		currency: z.number(),
+		orderDueDate: z.string(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		address1: z.string(),
+		address2: z.string(),
+		address3: z.string(),
+		address4: z.string(),
+		address5: z.string(),
+		delAddress1: z.string(),
+		delAddress2: z.string(),
+		delAddress3: z.string(),
+		delAddress4: z.string(),
+		delAddress5: z.string(),
+		customerTelephoneNumber: z.string(),
+		taxRate1: z.number(),
+		orderOrQuote: z.string(),
+		quoteStatus: z.string(),
+		dispatchStatus: z.string(),
+		allocationStatus: z.string(),
+		consignmentRef: z.string(),
+		notes1: z.string(),
+		notes2: z.string(),
+		notes3: z.string(),
+		analysis1: z.string(),
+		analysis2: z.string(),
+		analysis3: z.string(),
+		netValueDiscountPercentage: z.number(),
+		courierNumber: z.string(),
+		courierName: z.string(),
+	}),
+);
 type SearchSalesOrderOutput = z.infer<typeof SearchSalesOrderOutputSchema>;
+
 const CreateSalesOrderInputSchema = z.object({
 	customerAccountRef: z.string(),
 	orderDate: z.string(),
@@ -1369,21 +1232,15 @@ const CreateSalesOrderInputSchema = z.object({
 	),
 });
 type CreateSalesOrderInput = z.infer<typeof CreateSalesOrderInputSchema>;
-const CreateSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CreateSalesOrderOutputSchema = ResponseSchema(z.number());
 type CreateSalesOrderOutput = z.infer<typeof CreateSalesOrderOutputSchema>;
+
 const ReadSalesOrderInputSchema = z.object({
 	orderNumber: z.string(),
 });
 type ReadSalesOrderInput = z.infer<typeof ReadSalesOrderInputSchema>;
-const ReadSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadSalesOrderOutputSchema = ResponseSchema(
+	z.object({
 		address1: z.string(),
 		address2: z.string(),
 		address3: z.string(),
@@ -1466,9 +1323,9 @@ const ReadSalesOrderOutputSchema = z.object({
 			}),
 		),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadSalesOrderOutput = z.infer<typeof ReadSalesOrderOutputSchema>;
+
 const UpdateSalesOrderInputSchema = z.object({
 	customerAccountRef: z.string(),
 	orderNumber: z.number(),
@@ -1530,13 +1387,9 @@ const UpdateSalesOrderInputSchema = z.object({
 	),
 });
 type UpdateSalesOrderInput = z.infer<typeof UpdateSalesOrderInputSchema>;
-const UpdateSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const UpdateSalesOrderOutputSchema = ResponseSchema(z.number());
 type UpdateSalesOrderOutput = z.infer<typeof UpdateSalesOrderOutputSchema>;
+
 const PartiallyAllocateSalesOrderInputSchema = z.object({
 	orderNumber: z.string(),
 	items: z.array(
@@ -1549,45 +1402,33 @@ const PartiallyAllocateSalesOrderInputSchema = z.object({
 type PartiallyAllocateSalesOrderInput = z.infer<
 	typeof PartiallyAllocateSalesOrderInputSchema
 >;
-const PartiallyAllocateSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const PartiallyAllocateSalesOrderOutputSchema = ResponseSchema(z.number());
 type PartiallyAllocateSalesOrderOutput = z.infer<
 	typeof PartiallyAllocateSalesOrderOutputSchema
 >;
+
 const FullyAllocateSalesOrderInputSchema = z.object({
 	id: z.string(),
 });
 type FullyAllocateSalesOrderInput = z.infer<
 	typeof FullyAllocateSalesOrderInputSchema
 >;
-const FullyAllocateSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const FullyAllocateSalesOrderOutputSchema = ResponseSchema(z.number());
 type FullyAllocateSalesOrderOutput = z.infer<
 	typeof FullyAllocateSalesOrderOutputSchema
 >;
+
 const FullyUnAllocateSalesOrderInputSchema = z.object({
 	id: z.string(),
 });
 type FullyUnAllocateSalesOrderInput = z.infer<
 	typeof FullyUnAllocateSalesOrderInputSchema
 >;
-const FullyUnAllocateSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const FullyUnAllocateSalesOrderOutputSchema = ResponseSchema(z.number());
 type FullyUnAllocateSalesOrderOutput = z.infer<
 	typeof FullyUnAllocateSalesOrderOutputSchema
 >;
+
 const PartiallyDespatchSalesOrderInputSchema = z.object({
 	orderNumber: z.string(),
 	items: z.array(
@@ -1600,26 +1441,18 @@ const PartiallyDespatchSalesOrderInputSchema = z.object({
 type PartiallyDespatchSalesOrderInput = z.infer<
 	typeof PartiallyDespatchSalesOrderInputSchema
 >;
-const PartiallyDespatchSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const PartiallyDespatchSalesOrderOutputSchema = ResponseSchema(z.number());
 type PartiallyDespatchSalesOrderOutput = z.infer<
 	typeof PartiallyDespatchSalesOrderOutputSchema
 >;
+
 const CompleteSalesOrderInputSchema = z.object({
 	id: z.string(),
 });
 type CompleteSalesOrderInput = z.infer<typeof CompleteSalesOrderInputSchema>;
-const CompleteSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CompleteSalesOrderOutputSchema = ResponseSchema(z.number());
 type CompleteSalesOrderOutput = z.infer<typeof CompleteSalesOrderOutputSchema>;
+
 const CompleteSalesOrderWithOwnInvoiceDateInputSchema = z.object({
 	orderNumber: z.number(),
 	date: z.string(),
@@ -1627,34 +1460,23 @@ const CompleteSalesOrderWithOwnInvoiceDateInputSchema = z.object({
 type CompleteSalesOrderWithOwnInvoiceDateInput = z.infer<
 	typeof CompleteSalesOrderWithOwnInvoiceDateInputSchema
 >;
-const CompleteSalesOrderWithOwnInvoiceDateOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CompleteSalesOrderWithOwnInvoiceDateOutputSchema = ResponseSchema(
+	z.number(),
+);
 type CompleteSalesOrderWithOwnInvoiceDateOutput = z.infer<
 	typeof CompleteSalesOrderWithOwnInvoiceDateOutputSchema
 >;
+
 const HoldSalesOrderInputSchema = z.object({
 	id: z.string(),
 });
 type HoldSalesOrderInput = z.infer<typeof HoldSalesOrderInputSchema>;
-const HoldSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const HoldSalesOrderOutputSchema = ResponseSchema(z.number());
 type HoldSalesOrderOutput = z.infer<typeof HoldSalesOrderOutputSchema>;
+
 const CancelSalesOrderInputSchema = z.void();
 type CancelSalesOrderInput = z.infer<typeof CancelSalesOrderInputSchema>;
-const CancelSalesOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CancelSalesOrderOutputSchema = ResponseSchema(z.number());
 type CancelSalesOrderOutput = z.infer<typeof CancelSalesOrderOutputSchema>;
 const SearchDispatchesInputSchema = z.array(
 	z.object({
@@ -1664,33 +1486,28 @@ const SearchDispatchesInputSchema = z.array(
 	}),
 );
 type SearchDispatchesInput = z.infer<typeof SearchDispatchesInputSchema>;
-const SearchDispatchesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			uniqueID: z.number(),
-			gdnNumber: z.number(),
-			itemNumber: z.number(),
-			orderNumber: z.number(),
-			orderItem: z.number(),
-			accountRef: z.string(),
-			customerGdnNumber: z.string(),
-			stockCode: z.string(),
-			description: z.string(),
-			date: z.string(),
-			qtyDispatched: z.number(),
-			qtyOnOrder: z.number(),
-			printedFlag: z.boolean(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			recordDeleted: z.boolean(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchDispatchesOutputSchema = ResultsSchema(
+	z.object({
+		uniqueID: z.number(),
+		gdnNumber: z.number(),
+		itemNumber: z.number(),
+		orderNumber: z.number(),
+		orderItem: z.number(),
+		accountRef: z.string(),
+		customerGdnNumber: z.string(),
+		stockCode: z.string(),
+		description: z.string(),
+		date: z.string(),
+		qtyDispatched: z.number(),
+		qtyOnOrder: z.number(),
+		printedFlag: z.boolean(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		recordDeleted: z.boolean(),
+	}),
+);
 type SearchDispatchesOutput = z.infer<typeof SearchDispatchesOutputSchema>;
+
 const SearchSalesItemsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1699,37 +1516,32 @@ const SearchSalesItemsInputSchema = z.array(
 	}),
 );
 type SearchSalesItemsInput = z.infer<typeof SearchSalesItemsInputSchema>;
-const SearchSalesItemsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			itemId: z.number(),
-			id: z.string(),
-			orderNumber: z.string(),
-			description: z.string(),
-			stockCode: z.string(),
-			qtyOrder: z.number(),
-			unitPrice: z.number(),
-			unitOfSale: z.string(),
-			nominalCode: z.string(),
-			deptName: z.string(),
-			netAmount: z.number(),
-			taxAmount: z.number(),
-			taxRate: z.number(),
-			grossAmount: z.number(),
-			qtyAllocated: z.number(),
-			qtyDelivered: z.number(),
-			qtyYetToDispatch: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			deleted: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchSalesItemsOutputSchema = ResultsSchema(
+	z.object({
+		itemId: z.number(),
+		id: z.string(),
+		orderNumber: z.string(),
+		description: z.string(),
+		stockCode: z.string(),
+		qtyOrder: z.number(),
+		unitPrice: z.number(),
+		unitOfSale: z.string(),
+		nominalCode: z.string(),
+		deptName: z.string(),
+		netAmount: z.number(),
+		taxAmount: z.number(),
+		taxRate: z.number(),
+		grossAmount: z.number(),
+		qtyAllocated: z.number(),
+		qtyDelivered: z.number(),
+		qtyYetToDispatch: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		deleted: z.number(),
+	}),
+);
 type SearchSalesItemsOutput = z.infer<typeof SearchSalesItemsOutputSchema>;
+
 const UpdateSalesOrderItemsInputSchema = z.object({
 	itemId: z.number(),
 	quantityOnOrder: z.number(),
@@ -1737,15 +1549,11 @@ const UpdateSalesOrderItemsInputSchema = z.object({
 type UpdateSalesOrderItemsInput = z.infer<
 	typeof UpdateSalesOrderItemsInputSchema
 >;
-const UpdateSalesOrderItemsOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const UpdateSalesOrderItemsOutputSchema = ResponseSchema(z.number());
 type UpdateSalesOrderItemsOutput = z.infer<
 	typeof UpdateSalesOrderItemsOutputSchema
 >;
+
 const SearchPurchaseOrdersInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1756,47 +1564,42 @@ const SearchPurchaseOrdersInputSchema = z.array(
 type SearchPurchaseOrdersInput = z.infer<
 	typeof SearchPurchaseOrdersInputSchema
 >;
-const SearchPurchaseOrdersOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			orderNumber: z.string(),
-			reference: z.string(),
-			orderDate: z.string(),
-			accountRef: z.string(),
-			name: z.string(),
-			contactName: z.string(),
-			address1: z.string(),
-			address2: z.string(),
-			address3: z.string(),
-			address4: z.string(),
-			address5: z.string(),
-			itemsNet: z.number(),
-			itemsTax: z.number(),
-			itemsGross: z.number(),
-			carrNomCode: z.string(),
-			carrTaxCode: z.string(),
-			carrNet: z.number(),
-			carrTax: z.number(),
-			carrGross: z.number(),
-			currency: z.number(),
-			projectID: z.string(),
-			quoteStatus: z.string(),
-			notes1: z.string(),
-			notes2: z.string(),
-			notes3: z.string(),
-			analysis1: z.string(),
-			analysis2: z.string(),
-			analysis3: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchPurchaseOrdersOutputSchema = ResultsSchema(
+	z.object({
+		orderNumber: z.string(),
+		reference: z.string(),
+		orderDate: z.string(),
+		accountRef: z.string(),
+		name: z.string(),
+		contactName: z.string(),
+		address1: z.string(),
+		address2: z.string(),
+		address3: z.string(),
+		address4: z.string(),
+		address5: z.string(),
+		itemsNet: z.number(),
+		itemsTax: z.number(),
+		itemsGross: z.number(),
+		carrNomCode: z.string(),
+		carrTaxCode: z.string(),
+		carrNet: z.number(),
+		carrTax: z.number(),
+		carrGross: z.number(),
+		currency: z.number(),
+		projectID: z.string(),
+		quoteStatus: z.string(),
+		notes1: z.string(),
+		notes2: z.string(),
+		notes3: z.string(),
+		analysis1: z.string(),
+		analysis2: z.string(),
+		analysis3: z.string(),
+	}),
+);
 type SearchPurchaseOrdersOutput = z.infer<
 	typeof SearchPurchaseOrdersOutputSchema
 >;
+
 const CreatePurchaseOrderInputSchema = z.object({
 	supplierAccountRef: z.string(),
 	telephoneNumber: z.string(),
@@ -1832,23 +1635,17 @@ const CreatePurchaseOrderInputSchema = z.object({
 	),
 });
 type CreatePurchaseOrderInput = z.infer<typeof CreatePurchaseOrderInputSchema>;
-const CreatePurchaseOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string(),
-});
+const CreatePurchaseOrderOutputSchema = ResponseSchema(z.number());
 type CreatePurchaseOrderOutput = z.infer<
 	typeof CreatePurchaseOrderOutputSchema
 >;
+
 const ReadPurchaseOrderInputSchema = z.object({
 	orderNumber: z.string(),
 });
 type ReadPurchaseOrderInput = z.infer<typeof ReadPurchaseOrderInputSchema>;
-const ReadPurchaseOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadPurchaseOrderOutputSchema = ResponseSchema(
+	z.object({
 		supplierAccountRef: z.string(),
 		orderNumber: z.number(),
 		reference: z.string(),
@@ -1912,9 +1709,9 @@ const ReadPurchaseOrderOutputSchema = z.object({
 			}),
 		),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadPurchaseOrderOutput = z.infer<typeof ReadPurchaseOrderOutputSchema>;
+
 const UpdatePurchaseOrderInputSchema = z.object({
 	supplierAccountRef: z.string(),
 	userName: z.string(),
@@ -1946,28 +1743,20 @@ const UpdatePurchaseOrderInputSchema = z.object({
 	orderDate: z.string(),
 });
 type UpdatePurchaseOrderInput = z.infer<typeof UpdatePurchaseOrderInputSchema>;
-const UpdatePurchaseOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const UpdatePurchaseOrderOutputSchema = ResponseSchema(z.number());
 type UpdatePurchaseOrderOutput = z.infer<
 	typeof UpdatePurchaseOrderOutputSchema
 >;
+
 const DeletePurchaseOrderInputSchema = z.object({
 	orderNumber: z.string(),
 });
 type DeletePurchaseOrderInput = z.infer<typeof DeletePurchaseOrderInputSchema>;
-const DeletePurchaseOrderOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const DeletePurchaseOrderOutputSchema = ResponseSchema(z.number());
 type DeletePurchaseOrderOutput = z.infer<
 	typeof DeletePurchaseOrderOutputSchema
 >;
+
 const SearchPurchaseItemsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -1976,33 +1765,28 @@ const SearchPurchaseItemsInputSchema = z.array(
 	}),
 );
 type SearchPurchaseItemsInput = z.infer<typeof SearchPurchaseItemsInputSchema>;
-const SearchPurchaseItemsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			id: z.string(),
-			orderNumber: z.string(),
-			description: z.string(),
-			stockCode: z.string(),
-			qtyOrder: z.number(),
-			unitPrice: z.number(),
-			nominalCode: z.string(),
-			deptName: z.string(),
-			netAmount: z.number(),
-			taxAmount: z.number(),
-			grossAmount: z.number(),
-			qtyAllocated: z.number(),
-			qtyDelivered: z.number(),
-			qtyYetToDispatch: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchPurchaseItemsOutputSchema = ResultsSchema(
+	z.object({
+		id: z.string(),
+		orderNumber: z.string(),
+		description: z.string(),
+		stockCode: z.string(),
+		qtyOrder: z.number(),
+		unitPrice: z.number(),
+		nominalCode: z.string(),
+		deptName: z.string(),
+		netAmount: z.number(),
+		taxAmount: z.number(),
+		grossAmount: z.number(),
+		qtyAllocated: z.number(),
+		qtyDelivered: z.number(),
+		qtyYetToDispatch: z.number(),
+	}),
+);
 type SearchPurchaseItemsOutput = z.infer<
 	typeof SearchPurchaseItemsOutputSchema
 >;
+
 const SearchGoodsReceivedNotesInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2013,33 +1797,28 @@ const SearchGoodsReceivedNotesInputSchema = z.array(
 type SearchGoodsReceivedNotesInput = z.infer<
 	typeof SearchGoodsReceivedNotesInputSchema
 >;
-const SearchGoodsReceivedNotesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			grnNumber: z.number(),
-			itemNumber: z.number(),
-			orderNumber: z.number(),
-			orderItem: z.number(),
-			accountRef: z.string(),
-			supplierGrnNumber: z.string(),
-			stockCode: z.string(),
-			description: z.string(),
-			date: z.string(),
-			qtyReceived: z.number(),
-			qtyOnOrder: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			recordDeleted: z.boolean(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchGoodsReceivedNotesOutputSchema = ResultsSchema(
+	z.object({
+		grnNumber: z.number(),
+		itemNumber: z.number(),
+		orderNumber: z.number(),
+		orderItem: z.number(),
+		accountRef: z.string(),
+		supplierGrnNumber: z.string(),
+		stockCode: z.string(),
+		description: z.string(),
+		date: z.string(),
+		qtyReceived: z.number(),
+		qtyOnOrder: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		recordDeleted: z.boolean(),
+	}),
+);
 type SearchGoodsReceivedNotesOutput = z.infer<
 	typeof SearchGoodsReceivedNotesOutputSchema
 >;
+
 const GoodsReceivedNotesInputSchema = z.object({
 	orderNumber: z.number(),
 	items: z.array(
@@ -2050,13 +1829,9 @@ const GoodsReceivedNotesInputSchema = z.object({
 	),
 });
 type GoodsReceivedNotesInput = z.infer<typeof GoodsReceivedNotesInputSchema>;
-const GoodsReceivedNotesOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const GoodsReceivedNotesOutputSchema = ResponseSchema(z.string());
 type GoodsReceivedNotesOutput = z.infer<typeof GoodsReceivedNotesOutputSchema>;
+
 const SearchDeliveriesInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2065,31 +1840,26 @@ const SearchDeliveriesInputSchema = z.array(
 	}),
 );
 type SearchDeliveriesInput = z.infer<typeof SearchDeliveriesInputSchema>;
-const SearchDeliveriesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			grnNumber: z.number(),
-			itemNumber: z.number(),
-			orderNumber: z.number(),
-			orderItem: z.number(),
-			accountRef: z.string(),
-			supplierGrnNumber: z.string(),
-			stockCode: z.string(),
-			description: z.string(),
-			date: z.string(),
-			qtyReceived: z.number(),
-			qtyOnOrder: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			recordDeleted: z.boolean(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchDeliveriesOutputSchema = ResultsSchema(
+	z.object({
+		grnNumber: z.number(),
+		itemNumber: z.number(),
+		orderNumber: z.number(),
+		orderItem: z.number(),
+		accountRef: z.string(),
+		supplierGrnNumber: z.string(),
+		stockCode: z.string(),
+		description: z.string(),
+		date: z.string(),
+		qtyReceived: z.number(),
+		qtyOnOrder: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		recordDeleted: z.boolean(),
+	}),
+);
 type SearchDeliveriesOutput = z.infer<typeof SearchDeliveriesOutputSchema>;
+
 const SearchSalesInvoicesInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2098,148 +1868,141 @@ const SearchSalesInvoicesInputSchema = z.array(
 	}),
 );
 type SearchSalesInvoicesInput = z.infer<typeof SearchSalesInvoicesInputSchema>;
-const SearchSalesInvoicesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			invoiceNumber: z.string(),
-			invoiceTypeCode: z.number(),
-			invoiceType: z.string(),
-			invoiceOrCredit: z.string(),
-			invoiceDate: z.string(),
-			accountRef: z.string(),
-			name: z.string(),
-			address1: z.string(),
-			address2: z.string(),
-			address3: z.string(),
-			address4: z.string(),
-			address5: z.string(),
-			cAddress1: z.string(),
-			cAddress2: z.string(),
-			cAddress3: z.string(),
-			cAddress4: z.string(),
-			cAddress5: z.string(),
-			delName: z.string(),
-			delAddress1: z.string(),
-			delAddress2: z.string(),
-			delAddress3: z.string(),
-			delAddress4: z.string(),
-			delAddress5: z.string(),
-			vatRegNumber: z.string(),
-			orderNumber: z.string(),
-			orderNumberNumeric: z.string(),
-			contactName: z.string(),
-			takenBy: z.string(),
-			custOrderNumber: z.string(),
-			custTelNumber: z.string(),
-			notes1: z.string(),
-			notes2: z.string(),
-			notes3: z.string(),
-			custDiscRate: z.number(),
-			foreignItemsNet: z.number(),
-			foreignItemsTax: z.number(),
-			foreignItemsGross: z.number(),
-			itemsNet: z.number(),
-			itemsTax: z.number(),
-			itemsGross: z.number(),
-			taxRate1: z.number(),
-			taxRate2: z.number(),
-			taxRate3: z.number(),
-			taxRate4: z.number(),
-			taxRate5: z.number(),
-			netAmount1: z.number(),
-			netAmount2: z.number(),
-			netAmount3: z.number(),
-			netAmount4: z.number(),
-			netAmount5: z.number(),
-			taxAmount1: z.number(),
-			taxAmount2: z.number(),
-			taxAmount3: z.number(),
-			taxAmount4: z.number(),
-			taxAmount5: z.number(),
-			globalNomCode: z.string(),
-			globalDetails: z.string(),
-			globalTaxCode: z.string(),
-			globalDeptNumber: z.string(),
-			globalDeptName: z.string(),
-			courierNumber: z.string(),
-			courierName: z.string(),
-			consignment: z.string(),
-			carrNomCode: z.string(),
-			carrTaxCode: z.string(),
-			carrDeptNumber: z.string(),
-			carrDeptName: z.string(),
-			foreignCarrNet: z.number(),
-			foreignCarrTax: z.number(),
-			foreignCarrGross: z.number(),
-			carrNet: z.number(),
-			carrTax: z.number(),
-			carrGross: z.number(),
-			foreignInvoiceNet: z.number(),
-			foreignInvoiceTax: z.number(),
-			foreignInvoiceGross: z.number(),
-			invoiceNet: z.number(),
-			invoiceTax: z.number(),
-			invoiceGross: z.number(),
-			currency: z.string(),
-			currencyType: z.string(),
-			euroGross: z.number(),
-			euroRate: z.number(),
-			foreignRate: z.number(),
-			settlementDueDays: z.string(),
-			settlementDiscRate: z.number(),
-			foreignSettlementDiscAmount: z.number(),
-			foreignSettlementTotal: z.number(),
-			foreignAmountPrepaid: z.number(),
-			settlementDiscAmount: z.number(),
-			settlementTotal: z.number(),
-			amountPrepaid: z.number(),
-			paymentRef: z.string(),
-			printed: z.string(),
-			printedCode: z.string(),
-			posted: z.string(),
-			postedCode: z.string(),
-			quoteExpiryDate: z.string(),
-			quoteStatus: z.string(),
-			quoteStatusID: z.string(),
-			recurringRef: z.string(),
-			dunsNumber: z.string(),
-			netValueDiscountAmount: z.number(),
-			netValueDiscountRate: z.number(),
-			netValueDiscountDescription: z.string(),
-			netValueDiscountComment1: z.string(),
-			netValueDiscountComment2: z.string(),
-			paymentType: z.string(),
-			bankRef: z.string(),
-			gdnNumber: z.string(),
-			projectID: z.string(),
-			analysis1: z.string(),
-			analysis2: z.string(),
-			analysis3: z.string(),
-			paymentDueDate: z.string(),
-			invoicePaymentID: z.string(),
-			resubmitInvoicePaymentRequired: z.string(),
-			containsCisReverseChargeItems: z.string(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			recordDeleted: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchSalesInvoicesOutputSchema = ResultsSchema(
+	z.object({
+		invoiceNumber: z.string(),
+		invoiceTypeCode: z.number(),
+		invoiceType: z.string(),
+		invoiceOrCredit: z.string(),
+		invoiceDate: z.string(),
+		accountRef: z.string(),
+		name: z.string(),
+		address1: z.string(),
+		address2: z.string(),
+		address3: z.string(),
+		address4: z.string(),
+		address5: z.string(),
+		cAddress1: z.string(),
+		cAddress2: z.string(),
+		cAddress3: z.string(),
+		cAddress4: z.string(),
+		cAddress5: z.string(),
+		delName: z.string(),
+		delAddress1: z.string(),
+		delAddress2: z.string(),
+		delAddress3: z.string(),
+		delAddress4: z.string(),
+		delAddress5: z.string(),
+		vatRegNumber: z.string(),
+		orderNumber: z.string(),
+		orderNumberNumeric: z.string(),
+		contactName: z.string(),
+		takenBy: z.string(),
+		custOrderNumber: z.string(),
+		custTelNumber: z.string(),
+		notes1: z.string(),
+		notes2: z.string(),
+		notes3: z.string(),
+		custDiscRate: z.number(),
+		foreignItemsNet: z.number(),
+		foreignItemsTax: z.number(),
+		foreignItemsGross: z.number(),
+		itemsNet: z.number(),
+		itemsTax: z.number(),
+		itemsGross: z.number(),
+		taxRate1: z.number(),
+		taxRate2: z.number(),
+		taxRate3: z.number(),
+		taxRate4: z.number(),
+		taxRate5: z.number(),
+		netAmount1: z.number(),
+		netAmount2: z.number(),
+		netAmount3: z.number(),
+		netAmount4: z.number(),
+		netAmount5: z.number(),
+		taxAmount1: z.number(),
+		taxAmount2: z.number(),
+		taxAmount3: z.number(),
+		taxAmount4: z.number(),
+		taxAmount5: z.number(),
+		globalNomCode: z.string(),
+		globalDetails: z.string(),
+		globalTaxCode: z.string(),
+		globalDeptNumber: z.string(),
+		globalDeptName: z.string(),
+		courierNumber: z.string(),
+		courierName: z.string(),
+		consignment: z.string(),
+		carrNomCode: z.string(),
+		carrTaxCode: z.string(),
+		carrDeptNumber: z.string(),
+		carrDeptName: z.string(),
+		foreignCarrNet: z.number(),
+		foreignCarrTax: z.number(),
+		foreignCarrGross: z.number(),
+		carrNet: z.number(),
+		carrTax: z.number(),
+		carrGross: z.number(),
+		foreignInvoiceNet: z.number(),
+		foreignInvoiceTax: z.number(),
+		foreignInvoiceGross: z.number(),
+		invoiceNet: z.number(),
+		invoiceTax: z.number(),
+		invoiceGross: z.number(),
+		currency: z.string(),
+		currencyType: z.string(),
+		euroGross: z.number(),
+		euroRate: z.number(),
+		foreignRate: z.number(),
+		settlementDueDays: z.string(),
+		settlementDiscRate: z.number(),
+		foreignSettlementDiscAmount: z.number(),
+		foreignSettlementTotal: z.number(),
+		foreignAmountPrepaid: z.number(),
+		settlementDiscAmount: z.number(),
+		settlementTotal: z.number(),
+		amountPrepaid: z.number(),
+		paymentRef: z.string(),
+		printed: z.string(),
+		printedCode: z.string(),
+		posted: z.string(),
+		postedCode: z.string(),
+		quoteExpiryDate: z.string(),
+		quoteStatus: z.string(),
+		quoteStatusID: z.string(),
+		recurringRef: z.string(),
+		dunsNumber: z.string(),
+		netValueDiscountAmount: z.number(),
+		netValueDiscountRate: z.number(),
+		netValueDiscountDescription: z.string(),
+		netValueDiscountComment1: z.string(),
+		netValueDiscountComment2: z.string(),
+		paymentType: z.string(),
+		bankRef: z.string(),
+		gdnNumber: z.string(),
+		projectID: z.string(),
+		analysis1: z.string(),
+		analysis2: z.string(),
+		analysis3: z.string(),
+		paymentDueDate: z.string(),
+		invoicePaymentID: z.string(),
+		resubmitInvoicePaymentRequired: z.string(),
+		containsCisReverseChargeItems: z.string(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		recordDeleted: z.string(),
+	}),
+);
 type SearchSalesInvoicesOutput = z.infer<
 	typeof SearchSalesInvoicesOutputSchema
 >;
+
 const ReadSalesInvoiceInputSchema = z.object({
 	id: z.string(),
 });
 type ReadSalesInvoiceInput = z.infer<typeof ReadSalesInvoiceInputSchema>;
-const ReadSalesInvoiceOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadSalesInvoiceOutputSchema = ResponseSchema(
+	z.object({
 		invoiceNumber: z.number(),
 		customerAccountRef: z.string(),
 		orderNumber: z.string(),
@@ -2321,9 +2084,9 @@ const ReadSalesInvoiceOutputSchema = z.object({
 			}),
 		),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadSalesInvoiceOutput = z.infer<typeof ReadSalesInvoiceOutputSchema>;
+
 const UpdateSalesInvoiceInputSchema = z.object({
 	customerAccountRef: z.string(),
 	invoiceNumber: z.number(),
@@ -2361,13 +2124,9 @@ const UpdateSalesInvoiceInputSchema = z.object({
 	),
 });
 type UpdateSalesInvoiceInput = z.infer<typeof UpdateSalesInvoiceInputSchema>;
-const UpdateSalesInvoiceOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const UpdateSalesInvoiceOutputSchema = ResponseSchema(z.number());
 type UpdateSalesInvoiceOutput = z.infer<typeof UpdateSalesInvoiceOutputSchema>;
+
 const CreateSalesInvoiceInputSchema = z.object({
 	customerAccountRef: z.string(),
 	orderNumber: z.string(),
@@ -2404,13 +2163,9 @@ const CreateSalesInvoiceInputSchema = z.object({
 	),
 });
 type CreateSalesInvoiceInput = z.infer<typeof CreateSalesInvoiceInputSchema>;
-const CreateSalesInvoiceOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CreateSalesInvoiceOutputSchema = ResponseSchema(z.number());
 type CreateSalesInvoiceOutput = z.infer<typeof CreateSalesInvoiceOutputSchema>;
+
 const SearchSalesInvoiceItemsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2421,37 +2176,32 @@ const SearchSalesInvoiceItemsInputSchema = z.array(
 type SearchSalesInvoiceItemsInput = z.infer<
 	typeof SearchSalesInvoiceItemsInputSchema
 >;
-const SearchSalesInvoiceItemsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			id: z.number(),
-			invoiceNumber: z.number(),
-			description: z.string(),
-			stockCode: z.string(),
-			nominal: z.string(),
-			details: z.string(),
-			taxCode: z.string(),
-			taxRate: z.number(),
-			unitPrice: z.number(),
-			quantity: z.number(),
-			discount: z.number(),
-			netAmount: z.number(),
-			foreignNetAmount: z.number(),
-			comment1: z.string(),
-			comment2: z.string(),
-			departmentNumber: z.number(),
-			projectId: z.number(),
-			recordCreateDate: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchSalesInvoiceItemsOutputSchema = ResultsSchema(
+	z.object({
+		id: z.number(),
+		invoiceNumber: z.number(),
+		description: z.string(),
+		stockCode: z.string(),
+		nominal: z.string(),
+		details: z.string(),
+		taxCode: z.string(),
+		taxRate: z.number(),
+		unitPrice: z.number(),
+		quantity: z.number(),
+		discount: z.number(),
+		netAmount: z.number(),
+		foreignNetAmount: z.number(),
+		comment1: z.string(),
+		comment2: z.string(),
+		departmentNumber: z.number(),
+		projectId: z.number(),
+		recordCreateDate: z.string(),
+	}),
+);
 type SearchSalesInvoiceItemsOutput = z.infer<
 	typeof SearchSalesInvoiceItemsOutputSchema
 >;
+
 const CreatePurchaseInvoiceInputSchema = z.object({
 	accountRef: z.string(),
 	invRef: z.string(),
@@ -2477,26 +2227,18 @@ const CreatePurchaseInvoiceInputSchema = z.object({
 type CreatePurchaseInvoiceInput = z.infer<
 	typeof CreatePurchaseInvoiceInputSchema
 >;
-const CreatePurchaseInvoiceOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CreatePurchaseInvoiceOutputSchema = ResponseSchema(z.number());
 type CreatePurchaseInvoiceOutput = z.infer<
 	typeof CreatePurchaseInvoiceOutputSchema
 >;
+
 const ReadDocumentLinkInputSchema = z.object({
 	transactionNumber: z.string(),
 });
 type ReadDocumentLinkInput = z.infer<typeof ReadDocumentLinkInputSchema>;
-const ReadDocumentLinkOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const ReadDocumentLinkOutputSchema = ResponseSchema(z.string());
 type ReadDocumentLinkOutput = z.infer<typeof ReadDocumentLinkOutputSchema>;
+
 const SearchProjectsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2505,56 +2247,51 @@ const SearchProjectsInputSchema = z.array(
 	}),
 );
 type SearchProjectsInput = z.infer<typeof SearchProjectsInputSchema>;
-const SearchProjectsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			reference: z.string(),
-			name: z.string(),
-			description: z.string(),
-			statusID: z.string(),
-			startDate: z.string(),
-			endDate: z.string(),
-			customerRef: z.string(),
-			orderNumber: z.string(),
-			analysis1: z.string(),
-			analysis2: z.string(),
-			analysis3: z.string(),
-			address1: z.string(),
-			address2: z.string(),
-			address3: z.string(),
-			address4: z.string(),
-			address5: z.string(),
-			contactName: z.string(),
-			telephone: z.string(),
-			fax: z.string(),
-			email: z.string(),
-			countryCode: z.string(),
-			totalBilled: z.number(),
-			billedNet: z.number(),
-			billedTax: z.number(),
-			outstandingToBill: z.number(),
-			priceQuoted: z.number(),
-			profitToDate: z.number(),
-			totalCost: z.number(),
-			totalBudget: z.number(),
-			variance: z.number(),
-			lastBilledDate: z.string(),
-			lastCostDate: z.string(),
-			projectID: z.string(),
-			parentProjectNo: z.string(),
-			childPosition: z.string(),
-			committedCost: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			recordDeleted: z.boolean(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchProjectsOutputSchema = ResultsSchema(
+	z.object({
+		reference: z.string(),
+		name: z.string(),
+		description: z.string(),
+		statusID: z.string(),
+		startDate: z.string(),
+		endDate: z.string(),
+		customerRef: z.string(),
+		orderNumber: z.string(),
+		analysis1: z.string(),
+		analysis2: z.string(),
+		analysis3: z.string(),
+		address1: z.string(),
+		address2: z.string(),
+		address3: z.string(),
+		address4: z.string(),
+		address5: z.string(),
+		contactName: z.string(),
+		telephone: z.string(),
+		fax: z.string(),
+		email: z.string(),
+		countryCode: z.string(),
+		totalBilled: z.number(),
+		billedNet: z.number(),
+		billedTax: z.number(),
+		outstandingToBill: z.number(),
+		priceQuoted: z.number(),
+		profitToDate: z.number(),
+		totalCost: z.number(),
+		totalBudget: z.number(),
+		variance: z.number(),
+		lastBilledDate: z.string(),
+		lastCostDate: z.string(),
+		projectID: z.string(),
+		parentProjectNo: z.string(),
+		childPosition: z.string(),
+		committedCost: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		recordDeleted: z.boolean(),
+	}),
+);
 type SearchProjectsOutput = z.infer<typeof SearchProjectsOutputSchema>;
+
 const CreateProjectInputSchema = z.object({
 	name: z.string(),
 	reference: z.string(),
@@ -2563,21 +2300,15 @@ const CreateProjectInputSchema = z.object({
 	description: z.string(),
 });
 type CreateProjectInput = z.infer<typeof CreateProjectInputSchema>;
-const CreateProjectOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CreateProjectOutputSchema = ResponseSchema(z.number());
 type CreateProjectOutput = z.infer<typeof CreateProjectOutputSchema>;
+
 const ReadProjectInputSchema = z.object({
 	id: z.string(),
 });
 type ReadProjectInput = z.infer<typeof ReadProjectInputSchema>;
-const ReadProjectOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const ReadProjectOutputSchema = ResponseSchema(
+	z.object({
 		billedNet: z.number(),
 		billedVAT: z.number(),
 		lastBilledDate: z.string(),
@@ -2609,9 +2340,9 @@ const ReadProjectOutputSchema = z.object({
 		contact: z.string(),
 		email: z.string(),
 	}),
-	message: z.string().nullable(),
-});
+);
 type ReadProjectOutput = z.infer<typeof ReadProjectOutputSchema>;
+
 const UpdateProjectInputSchema = z.object({
 	name: z.string(),
 	reference: z.string(),
@@ -2620,45 +2351,36 @@ const UpdateProjectInputSchema = z.object({
 	description: z.string(),
 });
 type UpdateProjectInput = z.infer<typeof UpdateProjectInputSchema>;
-const UpdateProjectOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const UpdateProjectOutputSchema = ResponseSchema(z.number());
 type UpdateProjectOutput = z.infer<typeof UpdateProjectOutputSchema>;
+
 const ReadProjectTransactionsInputSchema = z.object({
 	projectReference: z.string(),
 });
 type ReadProjectTransactionsInput = z.infer<
 	typeof ReadProjectTransactionsInputSchema
 >;
-const ReadProjectTransactionsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			amount: z.number(),
-			auditTrailID: z.number(),
-			costCodeRef: z.string(),
-			accountRef: z.string().nullable(),
-			date: z.string(),
-			details: z.string(),
-			extReference: z.string(),
-			reference: z.string(),
-			quantity: z.number(),
-			rate: z.number(),
-			taxAmount: z.number(),
-			transactionID: z.number(),
-			type: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadProjectTransactionsOutputSchema = ResultsSchema(
+	z.object({
+		amount: z.number(),
+		auditTrailID: z.number(),
+		costCodeRef: z.string(),
+		accountRef: z.string().nullable(),
+		date: z.string(),
+		details: z.string(),
+		extReference: z.string(),
+		reference: z.string(),
+		quantity: z.number(),
+		rate: z.number(),
+		taxAmount: z.number(),
+		transactionID: z.number(),
+		type: z.number(),
+	}),
+);
 type ReadProjectTransactionsOutput = z.infer<
 	typeof ReadProjectTransactionsOutputSchema
 >;
+
 const SearchProjectOnlyTransactionsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2669,37 +2391,32 @@ const SearchProjectOnlyTransactionsInputSchema = z.array(
 type SearchProjectOnlyTransactionsInput = z.infer<
 	typeof SearchProjectOnlyTransactionsInputSchema
 >;
-const SearchProjectOnlyTransactionsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			projectTranID: z.number(),
-			projectReference: z.string(),
-			type: z.string(),
-			accountRef: z.string(),
-			nominalCode: z.string(),
-			reference: z.string(),
-			extraRef: z.string(),
-			details: z.string(),
-			resourceID: z.number(),
-			quantity: z.number(),
-			rate: z.number(),
-			taxAmount: z.number(),
-			taxCode: z.string(),
-			deptNumber: z.number(),
-			deptName: z.string(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			recordDeleted: z.boolean(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchProjectOnlyTransactionsOutputSchema = ResultsSchema(
+	z.object({
+		projectTranID: z.number(),
+		projectReference: z.string(),
+		type: z.string(),
+		accountRef: z.string(),
+		nominalCode: z.string(),
+		reference: z.string(),
+		extraRef: z.string(),
+		details: z.string(),
+		resourceID: z.number(),
+		quantity: z.number(),
+		rate: z.number(),
+		taxAmount: z.number(),
+		taxCode: z.string(),
+		deptNumber: z.number(),
+		deptName: z.string(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		recordDeleted: z.boolean(),
+	}),
+);
 type SearchProjectOnlyTransactionsOutput = z.infer<
 	typeof SearchProjectOnlyTransactionsOutputSchema
 >;
+
 const SearchProjectTransactionsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2710,32 +2427,27 @@ const SearchProjectTransactionsInputSchema = z.array(
 type SearchProjectTransactionsInput = z.infer<
 	typeof SearchProjectTransactionsInputSchema
 >;
-const SearchProjectTransactionsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			projectTranID: z.number(),
-			auditTrailID: z.number(),
-			stockTrailID: z.number(),
-			projectID: z.number(),
-			projectReference: z.string(),
-			costCodeID: z.number(),
-			reveueCodeID: z.number(),
-			popItemID: z.number(),
-			stockAllocationID: z.number(),
-			date: z.string(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			recordDeleted: z.boolean(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchProjectTransactionsOutputSchema = ResultsSchema(
+	z.object({
+		projectTranID: z.number(),
+		auditTrailID: z.number(),
+		stockTrailID: z.number(),
+		projectID: z.number(),
+		projectReference: z.string(),
+		costCodeID: z.number(),
+		reveueCodeID: z.number(),
+		popItemID: z.number(),
+		stockAllocationID: z.number(),
+		date: z.string(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		recordDeleted: z.boolean(),
+	}),
+);
 type SearchProjectTransactionsOutput = z.infer<
 	typeof SearchProjectTransactionsOutputSchema
 >;
+
 const CreateProjectTransactionsInputSchema = z.object({
 	projectReference: z.string(),
 	costCodeRef: z.string(),
@@ -2750,36 +2462,27 @@ const CreateProjectTransactionsInputSchema = z.object({
 type CreateProjectTransactionsInput = z.infer<
 	typeof CreateProjectTransactionsInputSchema
 >;
-const CreateProjectTransactionsOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CreateProjectTransactionsOutputSchema = ResponseSchema(z.number());
 type CreateProjectTransactionsOutput = z.infer<
 	typeof CreateProjectTransactionsOutputSchema
 >;
+
 const ReadProjectCostCodesInputSchema = z.void();
 type ReadProjectCostCodesInput = z.infer<
 	typeof ReadProjectCostCodesInputSchema
 >;
-const ReadProjectCostCodesOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			costCodeID: z.number(),
-			description: z.string(),
-			reference: z.string(),
-			costTypeId: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadProjectCostCodesOutputSchema = ResultsSchema(
+	z.object({
+		costCodeID: z.number(),
+		description: z.string(),
+		reference: z.string(),
+		costTypeId: z.number(),
+	}),
+);
 type ReadProjectCostCodesOutput = z.infer<
 	typeof ReadProjectCostCodesOutputSchema
 >;
+
 const CreateProjectCostCodesInputSchema = z.object({
 	description: z.string(),
 	reference: z.string(),
@@ -2787,31 +2490,22 @@ const CreateProjectCostCodesInputSchema = z.object({
 type CreateProjectCostCodesInput = z.infer<
 	typeof CreateProjectCostCodesInputSchema
 >;
-const CreateProjectCostCodesOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CreateProjectCostCodesOutputSchema = ResponseSchema(z.number());
 type CreateProjectCostCodesOutput = z.infer<
 	typeof CreateProjectCostCodesOutputSchema
 >;
+
 const ReadProjectBudgetsInputSchema = z.void();
 type ReadProjectBudgetsInput = z.infer<typeof ReadProjectBudgetsInputSchema>;
-const ReadProjectBudgetsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			projectId: z.number(),
-			costCodeId: z.number(),
-			amount: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const ReadProjectBudgetsOutputSchema = ResultsSchema(
+	z.object({
+		projectId: z.number(),
+		costCodeId: z.number(),
+		amount: z.number(),
+	}),
+);
 type ReadProjectBudgetsOutput = z.infer<typeof ReadProjectBudgetsOutputSchema>;
+
 const AllocatePaymentOnAccountInputSchema = z.object({
 	accountRef: z.string(),
 	paymentTransactionNumber: z.number(),
@@ -2821,67 +2515,58 @@ const AllocatePaymentOnAccountInputSchema = z.object({
 type AllocatePaymentOnAccountInput = z.infer<
 	typeof AllocatePaymentOnAccountInputSchema
 >;
-const AllocatePaymentOnAccountOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.boolean(),
-	message: z.string(),
-});
+const AllocatePaymentOnAccountOutputSchema = ResponseSchema(z.boolean());
 type AllocatePaymentOnAccountOutput = z.infer<
 	typeof AllocatePaymentOnAccountOutputSchema
 >;
+
 const SearchAuditHeadersInputSchema = z.void();
 type SearchAuditHeadersInput = z.infer<typeof SearchAuditHeadersInputSchema>;
-const SearchAuditHeadersOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			accountRef: z.string(),
-			amountPaid: z.number(),
-			bankCode: z.string(),
-			currency: z.number(),
-			type: z.string(),
-			date: z.string(),
-			details: z.string(),
-			invRef: z.string(),
-			netAmount: z.number(),
-			taxAmount: z.number(),
-			grossAmount: z.number(),
-			foreignNetAmount: z.number(),
-			foreignTaxAmount: z.number(),
-			foreignGrossAmount: z.number(),
-			tranNumber: z.number(),
-			userName: z.string(),
-			outstanding: z.number(),
-			bankAmount: z.number(),
-			bankFlag: z.string(),
-			bankName: z.string(),
-			dateBankReconciled: z.string(),
-			dateEntered: z.string(),
-			deletedFlag: z.number(),
-			disputed: z.string(),
-			dueDate: z.string(),
-			foreignAmountPaid: z.number(),
-			foreignBankAmount: z.number(),
-			foreignOutstanding: z.number(),
-			foreignRate: z.number(),
-			agedBalance: z.number(),
-			headerNumber: z.number(),
-			invRefNumeric: z.number(),
-			itemCount: z.number(),
-			paidFlag: z.string(),
-			paidStatus: z.string(),
-			payment: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			salesPurchaseRef: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchAuditHeadersOutputSchema = ResultsSchema(
+	z.object({
+		accountRef: z.string(),
+		amountPaid: z.number(),
+		bankCode: z.string(),
+		currency: z.number(),
+		type: z.string(),
+		date: z.string(),
+		details: z.string(),
+		invRef: z.string(),
+		netAmount: z.number(),
+		taxAmount: z.number(),
+		grossAmount: z.number(),
+		foreignNetAmount: z.number(),
+		foreignTaxAmount: z.number(),
+		foreignGrossAmount: z.number(),
+		tranNumber: z.number(),
+		userName: z.string(),
+		outstanding: z.number(),
+		bankAmount: z.number(),
+		bankFlag: z.string(),
+		bankName: z.string(),
+		dateBankReconciled: z.string(),
+		dateEntered: z.string(),
+		deletedFlag: z.number(),
+		disputed: z.string(),
+		dueDate: z.string(),
+		foreignAmountPaid: z.number(),
+		foreignBankAmount: z.number(),
+		foreignOutstanding: z.number(),
+		foreignRate: z.number(),
+		agedBalance: z.number(),
+		headerNumber: z.number(),
+		invRefNumeric: z.number(),
+		itemCount: z.number(),
+		paidFlag: z.string(),
+		paidStatus: z.string(),
+		payment: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		salesPurchaseRef: z.string(),
+	}),
+);
 type SearchAuditHeadersOutput = z.infer<typeof SearchAuditHeadersOutputSchema>;
+
 const CreateHeaderTransactionInputSchema = z.object({
 	date: z.string(),
 	invRef: z.string(),
@@ -2897,15 +2582,11 @@ const CreateHeaderTransactionInputSchema = z.object({
 type CreateHeaderTransactionInput = z.infer<
 	typeof CreateHeaderTransactionInputSchema
 >;
-const CreateHeaderTransactionOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CreateHeaderTransactionOutputSchema = ResponseSchema(z.number());
 type CreateHeaderTransactionOutput = z.infer<
 	typeof CreateHeaderTransactionOutputSchema
 >;
+
 const CreateBatchHeaderTransactionInputSchema = z.object({
 	type: z.number(),
 	date: z.string(),
@@ -2930,15 +2611,11 @@ const CreateBatchHeaderTransactionInputSchema = z.object({
 type CreateBatchHeaderTransactionInput = z.infer<
 	typeof CreateBatchHeaderTransactionInputSchema
 >;
-const CreateBatchHeaderTransactionOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string().nullable(),
-});
+const CreateBatchHeaderTransactionOutputSchema = ResponseSchema(z.number());
 type CreateBatchHeaderTransactionOutput = z.infer<
 	typeof CreateBatchHeaderTransactionOutputSchema
 >;
+
 const SearchAuditSplitsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -2947,59 +2624,54 @@ const SearchAuditSplitsInputSchema = z.array(
 	}),
 );
 type SearchAuditSplitsInput = z.infer<typeof SearchAuditSplitsInputSchema>;
-const SearchAuditSplitsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			amountPaid: z.number(),
-			netAmount: z.number(),
-			taxAmount: z.number(),
-			nominalCode: z.string(),
-			details: z.string(),
-			transactionNumber: z.number(),
-			headerNumber: z.number(),
-			accountRef: z.string(),
-			bankCode: z.string(),
-			bankFlag: z.string(),
-			costCodeId: z.number(),
-			date: z.string(),
-			dateEntered: z.string(),
-			dateFlag: z.number(),
-			deletedFlag: z.number(),
-			deptName: z.string(),
-			deptNumber: z.number(),
-			disputeCode: z.number(),
-			disputed: z.number(),
-			extraRef: z.string(),
-			foreignAmountPaid: z.number(),
-			foreignGrossAmount: z.number(),
-			foreignNetAmount: z.number(),
-			foreignOutstanding: z.number(),
-			foreignTaxAmount: z.number(),
-			grossAmount: z.number(),
-			invRef: z.string(),
-			outstanding: z.number(),
-			paidFlag: z.string(),
-			paidStatus: z.string(),
-			payment: z.number(),
-			projectId: z.number(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			splitNumber: z.number(),
-			stmtText: z.string(),
-			taxCode: z.string(),
-			type: z.string(),
-			userName: z.string(),
-			vatFlag: z.string(),
-			vatFlagCode: z.number(),
-			vatReconciledDate: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchAuditSplitsOutputSchema = ResultsSchema(
+	z.object({
+		amountPaid: z.number(),
+		netAmount: z.number(),
+		taxAmount: z.number(),
+		nominalCode: z.string(),
+		details: z.string(),
+		transactionNumber: z.number(),
+		headerNumber: z.number(),
+		accountRef: z.string(),
+		bankCode: z.string(),
+		bankFlag: z.string(),
+		costCodeId: z.number(),
+		date: z.string(),
+		dateEntered: z.string(),
+		dateFlag: z.number(),
+		deletedFlag: z.number(),
+		deptName: z.string(),
+		deptNumber: z.number(),
+		disputeCode: z.number(),
+		disputed: z.number(),
+		extraRef: z.string(),
+		foreignAmountPaid: z.number(),
+		foreignGrossAmount: z.number(),
+		foreignNetAmount: z.number(),
+		foreignOutstanding: z.number(),
+		foreignTaxAmount: z.number(),
+		grossAmount: z.number(),
+		invRef: z.string(),
+		outstanding: z.number(),
+		paidFlag: z.string(),
+		paidStatus: z.string(),
+		payment: z.number(),
+		projectId: z.number(),
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		splitNumber: z.number(),
+		stmtText: z.string(),
+		taxCode: z.string(),
+		type: z.string(),
+		userName: z.string(),
+		vatFlag: z.string(),
+		vatFlagCode: z.number(),
+		vatReconciledDate: z.string(),
+	}),
+);
 type SearchAuditSplitsOutput = z.infer<typeof SearchAuditSplitsOutputSchema>;
+
 const SearchAuditUsageInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -3008,30 +2680,25 @@ const SearchAuditUsageInputSchema = z.array(
 	}),
 );
 type SearchAuditUsageInput = z.infer<typeof SearchAuditUsageInputSchema>;
-const SearchAuditUsageOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			type: z.string(),
-			usageNumber: z.number(),
-			splitNumber: z.number(),
-			splitiCrossRef: z.string(),
-			reference: z.string(),
-			details: z.string(),
-			username: z.string(),
-			date: z.string(),
-			amount: z.number(),
-			foreignAmount: z.number(),
-			deletedFlag: z.boolean(),
-			recordCreatedDate: z.string(),
-			recordModifyDate: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
+const SearchAuditUsageOutputSchema = ResultsSchema(
+	z.object({
+		type: z.string(),
+		usageNumber: z.number(),
+		splitNumber: z.number(),
+		splitiCrossRef: z.string(),
+		reference: z.string(),
+		details: z.string(),
+		username: z.string(),
+		date: z.string(),
+		amount: z.number(),
+		foreignAmount: z.number(),
+		deletedFlag: z.boolean(),
+		recordCreatedDate: z.string(),
+		recordModifyDate: z.string(),
+	}),
+);
 type SearchAuditUsageOutput = z.infer<typeof SearchAuditUsageOutputSchema>;
+
 const CreateBankTxInputSchema = z.object({
 	bankCode: z.string(),
 	netAmount: z.number(),
@@ -3044,13 +2711,9 @@ const CreateBankTxInputSchema = z.object({
 	type: z.number(),
 });
 type CreateBankTxInput = z.infer<typeof CreateBankTxInputSchema>;
-const CreateBankTxOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string(),
-});
+const CreateBankTxOutputSchema = ResponseSchema(z.number());
 type CreateBankTxOutput = z.infer<typeof CreateBankTxOutputSchema>;
+
 const CreateJournalTxInputSchema = z.object({
 	date: z.string(),
 	invRef: z.string(),
@@ -3069,13 +2732,9 @@ const CreateJournalTxInputSchema = z.object({
 	),
 });
 type CreateJournalTxInput = z.infer<typeof CreateJournalTxInputSchema>;
-const CreateJournalTxOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.number(),
-	message: z.string(),
-});
+const CreateJournalTxOutputSchema = ResponseSchema(z.number());
 type CreateJournalTxOutput = z.infer<typeof CreateJournalTxOutputSchema>;
+
 const CreateFixedAssetsInputSchema = z.object({
 	assetRef: z.string(),
 	details1: z.string(),
@@ -3095,13 +2754,9 @@ const CreateFixedAssetsInputSchema = z.object({
 	netBook: z.number(),
 });
 type CreateFixedAssetsInput = z.infer<typeof CreateFixedAssetsInputSchema>;
-const CreateFixedAssetsOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const CreateFixedAssetsOutputSchema = ResponseSchema(z.string());
 type CreateFixedAssetsOutput = z.infer<typeof CreateFixedAssetsOutputSchema>;
+
 const SearchFixedAssetsInputSchema = z.array(
 	z.object({
 		field: z.string(),
@@ -3110,44 +2765,11 @@ const SearchFixedAssetsInputSchema = z.array(
 	}),
 );
 type SearchFixedAssetsInput = z.infer<typeof SearchFixedAssetsInputSchema>;
-const SearchFixedAssetsOutputSchema = z.object({
-	results: z.array(
-		z.object({
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			salesPurchaseRef: z.string().nullable(),
-			assetRef: z.string(),
-			details1: z.string(),
-			details2: z.string(),
-			details3: z.string(),
-			employee: z.string(),
-			serialNumber: z.string(),
-			purchaseRef: z.string(),
-			balSheetNomCode: z.string(),
-			profitLossNomCode: z.string(),
-			depMethodCode: z.number(),
-			depRate: z.number(),
-			deptNumber: z.number(),
-			assetCat: z.number(),
-			purchaseDate: z.string(),
-			costPrice: z.number(),
-			depLast: z.number(),
-			depToDate: z.number(),
-			netBook: z.number(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
-type SearchFixedAssetsOutput = z.infer<typeof SearchFixedAssetsOutputSchema>;
-const ReadSearchAssetsInputSchema = z.void();
-type ReadSearchAssetsInput = z.infer<typeof ReadSearchAssetsInputSchema>;
-const ReadSearchAssetsOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
+const SearchFixedAssetsOutputSchema = ResultsSchema(
+	z.object({
+		recordCreateDate: z.string(),
+		recordModifyDate: z.string(),
+		salesPurchaseRef: z.string().nullable(),
 		assetRef: z.string(),
 		details1: z.string(),
 		details2: z.string(),
@@ -3167,9 +2789,35 @@ const ReadSearchAssetsOutputSchema = z.object({
 		depToDate: z.number(),
 		netBook: z.number(),
 	}),
-	message: z.string().nullable(),
-});
+);
+type SearchFixedAssetsOutput = z.infer<typeof SearchFixedAssetsOutputSchema>;
+
+const ReadSearchAssetsInputSchema = z.void();
+type ReadSearchAssetsInput = z.infer<typeof ReadSearchAssetsInputSchema>;
+const ReadSearchAssetsOutputSchema = ResponseSchema(
+	z.object({
+		assetRef: z.string(),
+		details1: z.string(),
+		details2: z.string(),
+		details3: z.string(),
+		employee: z.string(),
+		serialNumber: z.string(),
+		purchaseRef: z.string(),
+		balSheetNomCode: z.string(),
+		profitLossNomCode: z.string(),
+		depMethodCode: z.number(),
+		depRate: z.number(),
+		deptNumber: z.number(),
+		assetCat: z.number(),
+		purchaseDate: z.string(),
+		costPrice: z.number(),
+		depLast: z.number(),
+		depToDate: z.number(),
+		netBook: z.number(),
+	}),
+);
 type ReadSearchAssetsOutput = z.infer<typeof ReadSearchAssetsOutputSchema>;
+
 const UpdateFixedAssetsInputSchema = z.object({
 	assetRef: z.string(),
 	details1: z.string(),
@@ -3191,225 +2839,8 @@ const UpdateFixedAssetsInputSchema = z.object({
 	netBook: z.number(),
 });
 type UpdateFixedAssetsInput = z.infer<typeof UpdateFixedAssetsInputSchema>;
-const UpdateFixedAssetsOutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string(),
-	message: z.string().nullable(),
-});
+const UpdateFixedAssetsOutputSchema = ResponseSchema(z.string());
 type UpdateFixedAssetsOutput = z.infer<typeof UpdateFixedAssetsOutputSchema>;
-const ReadApiVersion2InputSchema = z.void();
-type ReadApiVersion2Input = z.infer<typeof ReadApiVersion2InputSchema>;
-const ReadApiVersion2OutputSchema = z.string();
-type ReadApiVersion2Output = z.infer<typeof ReadApiVersion2OutputSchema>;
-const ReadCompanySettings2InputSchema = z.void();
-type ReadCompanySettings2Input = z.infer<
-	typeof ReadCompanySettings2InputSchema
->;
-const ReadCompanySettings2OutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
-		address1: z.string(),
-		address2: z.string(),
-		address3: z.string(),
-		address4: z.string(),
-		address5: z.string(),
-		allowNegativeStock: z.boolean(),
-		budgetingType: z.number(),
-		companyId: z.string(),
-		countryCode: z.string(),
-		creditRef: z.string(),
-		defaultChart: z.number(),
-		email: z.string(),
-		fax: z.string(),
-		enableProjectCosting: z.boolean(),
-		financialYearMonth: z.number(),
-		financialYearYear: z.number(),
-		fixedAsssetsLabel: z.string(),
-		flatRateVatPercent: z.number(),
-		lastAuditCheck: z.string(),
-		lastBackup: z.string(),
-		lastRestoreDate: z.string(),
-		lastClearAudit: z.string(),
-		lastMonthEnd: z.string().nullable(),
-		name: z.string(),
-		programMajorVersion: z.number(),
-		programMinorVersion: z.number(),
-		programBuildVersion: z.number(),
-		programBugfixVersion: z.number(),
-		recordCreateDate: z.string(),
-		recordModifyDate: z.string(),
-		telephone: z.string(),
-		vatCashFlag: z.number(),
-		vatRegNumber: z.string(),
-		vatRegisteredFlag: z.boolean(),
-	}),
-	message: z.string().nullable(),
-});
-type ReadCompanySettings2Output = z.infer<
-	typeof ReadCompanySettings2OutputSchema
->;
-const SearchCustomer2InputSchema = z.array(
-	z.object({
-		field: z.string(),
-		type: z.string(),
-		value: z.string(),
-	}),
-);
-type SearchCustomer2Input = z.infer<typeof SearchCustomer2InputSchema>;
-const SearchCustomer2OutputSchema = z.object({
-	results: z.array(
-		z.object({
-			accountRef: z.string(),
-			name: z.string(),
-			balance: z.number(),
-			currency: z.string(),
-			contactName: z.string(),
-			telephoneNumber: z.string(),
-			address1: z.string(),
-			address2: z.string(),
-			address3: z.string(),
-			address4: z.string(),
-			address5: z.string(),
-			delName: z.string(),
-			delAddress1: z.string(),
-			delAddress2: z.string(),
-			delAddress3: z.string(),
-			delAddress4: z.string(),
-			delAddress5: z.string(),
-			accountOnHold: z.boolean(),
-			accountStatusText: z.string(),
-			averagePayDays: z.number(),
-			creditLimit: z.number(),
-			terms: z.string(),
-			bacsRef: z.string(),
-			iban: z.string(),
-			bicSwift: z.string(),
-			rollNumber: z.string(),
-			additionalRef1: z.string(),
-			additionalRef2: z.string(),
-			additionalRef3: z.string(),
-			paymentType: z.number(),
-			turnoverYtd: z.number(),
-			vatRegNumber: z.string(),
-			eoriNumber: z.string(),
-			lastPaymentDate: z.string(),
-			recordCreateDate: z.string(),
-			recordModifyDate: z.string(),
-			telephone2: z.string(),
-			fax: z.string(),
-			webAddress: z.string(),
-			countryCode: z.string(),
-			email: z.string(),
-			email2: z.string(),
-			email3: z.string(),
-			email4: z.string(),
-			email5: z.string(),
-			email6: z.string(),
-			defTaxCode: z.string(),
-			defNomCode: z.string(),
-			analysis1: z.string(),
-			analysis2: z.string(),
-			analysis3: z.string(),
-			deptNumber: z.number(),
-			inactiveAccount: z.number(),
-			settleDueDays: z.number(),
-			paymentDueDays: z.number(),
-			paymentDueFrom: z.number(),
-			creditPosition: z.string(),
-			discountRate: z.number(),
-			discountType: z.number(),
-			priceListRef: z.string(),
-			tradeContact: z.string(),
-		}),
-	),
-	success: z.boolean(),
-	code: z.number(),
-	response: z.string().nullable(),
-	message: z.string().nullable(),
-});
-type SearchCustomer2Output = z.infer<typeof SearchCustomer2OutputSchema>;
-const ReadCustomer2InputSchema = z.object({
-	customer: z.string(),
-});
-type ReadCustomer2Input = z.infer<typeof ReadCustomer2InputSchema>;
-const ReadCustomer2OutputSchema = z.object({
-	success: z.boolean(),
-	code: z.number(),
-	response: z.object({
-		accountRef: z.string(),
-		name: z.string(),
-		address1: z.string(),
-		address2: z.string(),
-		address3: z.string(),
-		address4: z.string(),
-		address5: z.string(),
-		countryCode: z.string(),
-		contactName: z.string(),
-		telephone: z.string(),
-		deliveryName: z.string(),
-		deliveryAddress1: z.string(),
-		deliveryAddress2: z.string(),
-		deliveryAddress3: z.string(),
-		deliveryAddress4: z.string(),
-		deliveryAddress5: z.string(),
-		email: z.string(),
-		email2: z.string(),
-		email3: z.string(),
-		email4: z.string(),
-		email5: z.string(),
-		email6: z.string(),
-		eoriNumber: z.string(),
-		defNomCode: z.string(),
-		defNomCodeUseDefault: z.boolean(),
-		defTaxCode: z.number(),
-		defTaxCodeUseDefault: z.boolean(),
-		terms: z.string(),
-		termsAgreed: z.boolean(),
-		turnoverYtd: z.number(),
-		currency: z.number(),
-		bankAccountName: z.string(),
-		bankSortCode: z.string(),
-		bankAccountNumber: z.string(),
-		bacsRef: z.string(),
-		iban: z.string(),
-		bicSwift: z.string(),
-		rollNumber: z.string(),
-		additionalRef1: z.string(),
-		additionalRef2: z.string(),
-		additionalRef3: z.string(),
-		paymentType: z.number(),
-		sendInvoicesElectronically: z.boolean(),
-		sendLettersElectronically: z.boolean(),
-		analysis1: z.string(),
-		analysis2: z.string(),
-		analysis3: z.string(),
-		deptNumber: z.number(),
-		paymentDueDays: z.number(),
-		paymentDueFrom: z.number(),
-		accountStatus: z.number(),
-		inactiveAccount: z.boolean(),
-		onHold: z.boolean(),
-		creditLimit: z.number(),
-		balance: z.number(),
-		vatNumber: z.string(),
-		memo: z.string(),
-		discountRate: z.number(),
-		discountType: z.number(),
-		www: z.string(),
-		priceListRef: z.string(),
-		tradeContact: z.string(),
-		telephone2: z.string(),
-		fax: z.string(),
-	}),
-	message: z.string().nullable(),
-});
-type ReadCustomer2Output = z.infer<typeof ReadCustomer2OutputSchema>;
-const NewRequestInputSchema = z.void();
-type NewRequestInput = z.infer<typeof NewRequestInputSchema>;
-const NewRequestOutputSchema = z.void();
-type NewRequestOutput = z.infer<typeof NewRequestOutputSchema>;
 export class HyperAccountsClient {
 	axios: Axios;
 	constructor(config: HAConfig) {
@@ -4148,41 +3579,5 @@ export class HyperAccountsClient {
 		const url = "/api/fixedAssets";
 		const response = await this.axios.patch(url, input);
 		return UpdateFixedAssetsOutputSchema.parse(response.data);
-	}
-	async readApiVersion2(
-		input: ReadApiVersion2Input,
-	): Promise<ReadApiVersion2Output> {
-		input = ReadApiVersion2InputSchema.parse(input);
-		const url = "/api/system/version";
-		const response = await this.axios.get(url);
-		return ReadApiVersion2OutputSchema.parse(response.data);
-	}
-	async readCompanySettings2(
-		input: ReadCompanySettings2Input,
-	): Promise<ReadCompanySettings2Output> {
-		input = ReadCompanySettings2InputSchema.parse(input);
-		const url = "/api/company";
-		const response = await this.axios.get(url);
-		return ReadCompanySettings2OutputSchema.parse(response.data);
-	}
-	async searchCustomer2(
-		input: SearchCustomer2Input,
-	): Promise<SearchCustomer2Output> {
-		input = SearchCustomer2InputSchema.parse(input);
-		const url = "/api/searchSalesLedger";
-		const response = await this.axios.post(url, input);
-		return SearchCustomer2OutputSchema.parse(response.data);
-	}
-	async readCustomer2(input: ReadCustomer2Input): Promise<ReadCustomer2Output> {
-		input = ReadCustomer2InputSchema.parse(input);
-		const url = `/api/customer/${input.customer}`;
-		const response = await this.axios.get(url);
-		return ReadCustomer2OutputSchema.parse(response.data);
-	}
-	async newRequest(input: NewRequestInput): Promise<NewRequestOutput> {
-		input = NewRequestInputSchema.parse(input);
-		const url = "";
-		const response = await this.axios.get(url);
-		return NewRequestOutputSchema.parse(response.data);
 	}
 }
