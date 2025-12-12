@@ -8,6 +8,11 @@ type-safe requests and responses using Zod.
 - **GitHub Repository**: https://github.com/chneau/hyperaccounts-js
 - **NPM Package**: https://www.npmjs.com/package/@chneau/hyperaccounts
 
+<!--
+From https://sage-50-accounts-api-v1-docs.hyperext.com/
+Get the json file starting with _postman_id to use for AI code generation.
+ -->
+
 ## Installation
 
 ```bash
@@ -80,7 +85,7 @@ const newOrder = await client.createSalesOrder({
 		{
 			stockCode: "WIDGET-01",
 			quantity: 10,
-			unitPrice: 15.50,
+			unitPrice: 15.5,
 			description: "Premium Widget",
 			taxCode: 1,
 		},
