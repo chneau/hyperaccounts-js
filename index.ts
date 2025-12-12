@@ -2439,118 +2439,98 @@ export class HyperAccountsClient {
 			transformRequest: (data) => JSON.stringify(data),
 		});
 	}
-	async readApiStatus(): Promise<z.infer<typeof ReadApiStatusOutputSchema>> {
+	async readApiStatus() {
 		const url = "/api/status";
 		const response = await this.axios.get(url);
 		return ReadApiStatusOutputSchema.parse(response.data);
 	}
-	async readApiVersion(): Promise<z.infer<typeof ReadApiVersionOutputSchema>> {
+	async readApiVersion() {
 		const url = "/api/system/version";
 		const response = await this.axios.get(url);
 		return ReadApiVersionOutputSchema.parse(response.data);
 	}
-	async readCompanySettings(): Promise<
-		z.infer<typeof ReadCompanySettingsOutputSchema>
-	> {
+	async readCompanySettings() {
 		const url = "/api/company";
 		const response = await this.axios.get(url);
 		return ReadCompanySettingsOutputSchema.parse(response.data);
 	}
-	async readRdaEnabled(): Promise<z.infer<typeof ReadRdaEnabledOutputSchema>> {
+	async readRdaEnabled() {
 		const url = "/api/setup";
 		const response = await this.axios.get(url);
 		return ReadRdaEnabledOutputSchema.parse(response.data);
 	}
-	async readExchangeRates(): Promise<
-		z.infer<typeof ReadExchangeRatesOutputSchema>
-	> {
+	async readExchangeRates() {
 		const url = "/api/currency";
 		const response = await this.axios.get(url);
 		return ReadExchangeRatesOutputSchema.parse(response.data);
 	}
 	async updateExchangeRate(
 		input: z.infer<typeof UpdateExchangeRateInputSchema>,
-	): Promise<z.infer<typeof UpdateExchangeRateOutputSchema>> {
+	) {
 		input = UpdateExchangeRateInputSchema.parse(input);
 		const url = "/api/currency";
 		const response = await this.axios.patch(url, input);
 		return UpdateExchangeRateOutputSchema.parse(response.data);
 	}
-	async readCountries(): Promise<z.infer<typeof ReadCountriesOutputSchema>> {
+	async readCountries() {
 		const url = "/api/country";
 		const response = await this.axios.get(url);
 		return ReadCountriesOutputSchema.parse(response.data);
 	}
-	async readCouriers(): Promise<z.infer<typeof ReadCouriersOutputSchema>> {
+	async readCouriers() {
 		const url = "/api/courier";
 		const response = await this.axios.get(url);
 		return ReadCouriersOutputSchema.parse(response.data);
 	}
-	async readNominals(): Promise<z.infer<typeof ReadNominalsOutputSchema>> {
+	async readNominals() {
 		const url = "/api/nominal/";
 		const response = await this.axios.get(url);
 		return ReadNominalsOutputSchema.parse(response.data);
 	}
-	async readTaxCodes(): Promise<z.infer<typeof ReadTaxCodesOutputSchema>> {
+	async readTaxCodes() {
 		const url = "/api/taxCode";
 		const response = await this.axios.get(url);
 		return ReadTaxCodesOutputSchema.parse(response.data);
 	}
-	async readControlAccounts(): Promise<
-		z.infer<typeof ReadControlAccountsOutputSchema>
-	> {
+	async readControlAccounts() {
 		const url = "/api/control";
 		const response = await this.axios.get(url);
 		return ReadControlAccountsOutputSchema.parse(response.data);
 	}
-	async getPaymentMethods(): Promise<
-		z.infer<typeof GetPaymentMethodsOutputSchema>
-	> {
+	async getPaymentMethods() {
 		const url = "/api/paymentMethod";
 		const response = await this.axios.get(url);
 		return GetPaymentMethodsOutputSchema.parse(response.data);
 	}
-	async readDepartments(): Promise<
-		z.infer<typeof ReadDepartmentsOutputSchema>
-	> {
+	async readDepartments() {
 		const url = "/api/department";
 		const response = await this.axios.get(url);
 		return ReadDepartmentsOutputSchema.parse(response.data);
 	}
-	async readChartOfAccounts(): Promise<
-		z.infer<typeof ReadChartOfAccountsOutputSchema>
-	> {
+	async readChartOfAccounts() {
 		const url = "/api/coa";
 		const response = await this.axios.get(url);
 		return ReadChartOfAccountsOutputSchema.parse(response.data);
 	}
-	async searchCustomer(
-		input: z.infer<typeof SearchCustomerInputSchema>,
-	): Promise<z.infer<typeof SearchCustomerOutputSchema>> {
+	async searchCustomer(input: z.infer<typeof SearchCustomerInputSchema>) {
 		input = SearchCustomerInputSchema.parse(input);
 		const url = "/api/searchSalesLedger";
 		const response = await this.axios.post(url, input);
 		return SearchCustomerOutputSchema.parse(response.data);
 	}
-	async readCustomer(
-		input: z.infer<typeof ReadCustomerInputSchema>,
-	): Promise<z.infer<typeof ReadCustomerOutputSchema>> {
+	async readCustomer(input: z.infer<typeof ReadCustomerInputSchema>) {
 		input = ReadCustomerInputSchema.parse(input);
 		const url = `/api/customer/${input.customer}`;
 		const response = await this.axios.get(url);
 		return ReadCustomerOutputSchema.parse(response.data);
 	}
-	async createCustomer(
-		input: z.infer<typeof CreateCustomerInputSchema>,
-	): Promise<z.infer<typeof CreateCustomerOutputSchema>> {
+	async createCustomer(input: z.infer<typeof CreateCustomerInputSchema>) {
 		input = CreateCustomerInputSchema.parse(input);
 		const url = "/api/customer/";
 		const response = await this.axios.post(url, input);
 		return CreateCustomerOutputSchema.parse(response.data);
 	}
-	async updateCustomer(
-		input: z.infer<typeof UpdateCustomerInputSchema>,
-	): Promise<z.infer<typeof UpdateCustomerOutputSchema>> {
+	async updateCustomer(input: z.infer<typeof UpdateCustomerInputSchema>) {
 		input = UpdateCustomerInputSchema.parse(input);
 		const url = "/api/customer/";
 		const response = await this.axios.patch(url, input);
@@ -2558,7 +2538,7 @@ export class HyperAccountsClient {
 	}
 	async readCustomerAgedBalances(
 		input: z.infer<typeof ReadCustomerAgedBalancesInputSchema>,
-	): Promise<z.infer<typeof ReadCustomerAgedBalancesOutputSchema>> {
+	) {
 		input = ReadCustomerAgedBalancesInputSchema.parse(input);
 		const url = `/api/agedDebtors/?id=${input.customer}`;
 		const response = await this.axios.get(url);
@@ -2566,7 +2546,7 @@ export class HyperAccountsClient {
 	}
 	async readCustomerAddress(
 		input: z.infer<typeof ReadCustomerAddressInputSchema>,
-	): Promise<z.infer<typeof ReadCustomerAddressOutputSchema>> {
+	) {
 		input = ReadCustomerAddressInputSchema.parse(input);
 		const url = `/api/customerAddress/${input.customer}/2`;
 		const response = await this.axios.get(url);
@@ -2574,7 +2554,7 @@ export class HyperAccountsClient {
 	}
 	async createCustomerAddress(
 		input: z.infer<typeof CreateCustomerAddressInputSchema>,
-	): Promise<z.infer<typeof CreateCustomerAddressOutputSchema>> {
+	) {
 		input = CreateCustomerAddressInputSchema.parse(input);
 		const url = "/api/customerAddress";
 		const response = await this.axios.post(url, input);
@@ -2582,7 +2562,7 @@ export class HyperAccountsClient {
 	}
 	async updateCustomerAddress(
 		input: z.infer<typeof UpdateCustomerAddressInputSchema>,
-	): Promise<z.infer<typeof UpdateCustomerAddressOutputSchema>> {
+	) {
 		input = UpdateCustomerAddressInputSchema.parse(input);
 		const url = "/api/customerAddress";
 		const response = await this.axios.patch(url, input);
@@ -2590,94 +2570,72 @@ export class HyperAccountsClient {
 	}
 	async searchCustomerAddress(
 		input: z.infer<typeof SearchCustomerAddressInputSchema>,
-	): Promise<z.infer<typeof SearchCustomerAddressOutputSchema>> {
+	) {
 		input = SearchCustomerAddressInputSchema.parse(input);
 		const url = "/api/searchCustomerAddress";
 		const response = await this.axios.post(url, input);
 		return SearchCustomerAddressOutputSchema.parse(response.data);
 	}
-	async searchSupplier(
-		input: z.infer<typeof SearchSupplierInputSchema>,
-	): Promise<z.infer<typeof SearchSupplierOutputSchema>> {
+	async searchSupplier(input: z.infer<typeof SearchSupplierInputSchema>) {
 		input = SearchSupplierInputSchema.parse(input);
 		const url = "/api/searchPurchaseLedger";
 		const response = await this.axios.post(url, input);
 		return SearchSupplierOutputSchema.parse(response.data);
 	}
-	async readSupplier(
-		input: z.infer<typeof ReadSupplierInputSchema>,
-	): Promise<z.infer<typeof ReadSupplierOutputSchema>> {
+	async readSupplier(input: z.infer<typeof ReadSupplierInputSchema>) {
 		input = ReadSupplierInputSchema.parse(input);
 		const url = `/api/supplier/${input.supplier}`;
 		const response = await this.axios.get(url);
 		return ReadSupplierOutputSchema.parse(response.data);
 	}
-	async createSupplier(
-		input: z.infer<typeof CreateSupplierInputSchema>,
-	): Promise<z.infer<typeof CreateSupplierOutputSchema>> {
+	async createSupplier(input: z.infer<typeof CreateSupplierInputSchema>) {
 		input = CreateSupplierInputSchema.parse(input);
 		const url = "/api/supplier";
 		const response = await this.axios.post(url, input);
 		return CreateSupplierOutputSchema.parse(response.data);
 	}
-	async updateSupplier(
-		input: z.infer<typeof UpdateSupplierInputSchema>,
-	): Promise<z.infer<typeof UpdateSupplierOutputSchema>> {
+	async updateSupplier(input: z.infer<typeof UpdateSupplierInputSchema>) {
 		input = UpdateSupplierInputSchema.parse(input);
 		const url = "/api/supplier";
 		const response = await this.axios.patch(url, input);
 		return UpdateSupplierOutputSchema.parse(response.data);
 	}
-	async searchProduct(
-		input: z.infer<typeof SearchProductInputSchema>,
-	): Promise<z.infer<typeof SearchProductOutputSchema>> {
+	async searchProduct(input: z.infer<typeof SearchProductInputSchema>) {
 		input = SearchProductInputSchema.parse(input);
 		const url = "/api/searchProduct";
 		const response = await this.axios.post(url, input);
 		return SearchProductOutputSchema.parse(response.data);
 	}
-	async readProduct(
-		input: z.infer<typeof ReadProductInputSchema>,
-	): Promise<z.infer<typeof ReadProductOutputSchema>> {
+	async readProduct(input: z.infer<typeof ReadProductInputSchema>) {
 		input = ReadProductInputSchema.parse(input);
 		const url = `/api/product/${input.stockCode}`;
 		const response = await this.axios.get(url);
 		return ReadProductOutputSchema.parse(response.data);
 	}
-	async readStockCategories(): Promise<
-		z.infer<typeof ReadStockCategoriesOutputSchema>
-	> {
+	async readStockCategories() {
 		const url = "/api/stockCat";
 		const response = await this.axios.get(url);
 		return ReadStockCategoriesOutputSchema.parse(response.data);
 	}
-	async readProductImage(
-		input: z.infer<typeof ReadProductImageInputSchema>,
-	): Promise<z.infer<typeof ReadProductImageOutputSchema>> {
+	async readProductImage(input: z.infer<typeof ReadProductImageInputSchema>) {
 		input = ReadProductImageInputSchema.parse(input);
 		const url = `/api/product/${input.stockCode}/webImage`;
 		const response = await this.axios.get(url);
 		return ReadProductImageOutputSchema.parse(response.data);
 	}
-	async createProduct(
-		input: z.infer<typeof CreateProductInputSchema>,
-	): Promise<z.infer<typeof CreateProductOutputSchema>> {
+	async createProduct(input: z.infer<typeof CreateProductInputSchema>) {
 		input = CreateProductInputSchema.parse(input);
 		const url = "/api/product";
 		const response = await this.axios.post(url, input);
 		return CreateProductOutputSchema.parse(response.data);
 	}
-	async updateProduct(
-		input: z.infer<typeof UpdateProductInputSchema>,
-	): Promise<z.infer<typeof UpdateProductOutputSchema>> {
+	async updateProduct(input: z.infer<typeof UpdateProductInputSchema>) {
 		input = UpdateProductInputSchema.parse(input);
 		const url = "/api/product";
 		const response = await this.axios.patch(url, input);
 		return UpdateProductOutputSchema.parse(response.data);
 	}
-	async stockAdjustments(
-		input: z.infer<typeof StockAdjustmentsInputSchema>,
-	): Promise<z.infer<typeof StockAdjustmentsOutputSchema>> {
+	async stockAdjustments(input: z.infer<typeof StockAdjustmentsInputSchema>) {
 		input = StockAdjustmentsInputSchema.parse(input);
 		const url = "/api/stock";
 		const response = await this.axios.post(url, input);
@@ -2685,7 +2643,7 @@ export class HyperAccountsClient {
 	}
 	async readStockMovements(
 		input: z.infer<typeof ReadStockMovementsInputSchema>,
-	): Promise<z.infer<typeof ReadStockMovementsOutputSchema>> {
+	) {
 		input = ReadStockMovementsInputSchema.parse(input);
 		const url = `/api/stock/${input.stockCode}`;
 		const response = await this.axios.get(url);
@@ -2693,7 +2651,7 @@ export class HyperAccountsClient {
 	}
 	async searchStockMovements(
 		input: z.infer<typeof SearchStockMovementsInputSchema>,
-	): Promise<z.infer<typeof SearchStockMovementsOutputSchema>> {
+	) {
 		input = SearchStockMovementsInputSchema.parse(input);
 		const url = "/api/searchStock";
 		const response = await this.axios.post(url, input);
@@ -2701,54 +2659,44 @@ export class HyperAccountsClient {
 	}
 	async readCustomerPriceLists(
 		input: z.infer<typeof ReadCustomerPriceListsInputSchema>,
-	): Promise<z.infer<typeof ReadCustomerPriceListsOutputSchema>> {
+	) {
 		input = ReadCustomerPriceListsInputSchema.parse(input);
 		const url = `/api/priceList/${input.customer}`;
 		const response = await this.axios.get(url);
 		return ReadCustomerPriceListsOutputSchema.parse(response.data);
 	}
-	async readAllPriceLists(): Promise<
-		z.infer<typeof ReadAllPriceListsOutputSchema>
-	> {
+	async readAllPriceLists() {
 		const url = "/api/priceList";
 		const response = await this.axios.get(url);
 		return ReadAllPriceListsOutputSchema.parse(response.data);
 	}
 	async searchProductSellingPrices(
 		input: z.infer<typeof SearchProductSellingPricesInputSchema>,
-	): Promise<z.infer<typeof SearchProductSellingPricesOutputSchema>> {
+	) {
 		input = SearchProductSellingPricesInputSchema.parse(input);
 		const url = "/api/searchPrice";
 		const response = await this.axios.post(url, input);
 		return SearchProductSellingPricesOutputSchema.parse(response.data);
 	}
-	async searchSalesOrder(
-		input: z.infer<typeof SearchSalesOrderInputSchema>,
-	): Promise<z.infer<typeof SearchSalesOrderOutputSchema>> {
+	async searchSalesOrder(input: z.infer<typeof SearchSalesOrderInputSchema>) {
 		input = SearchSalesOrderInputSchema.parse(input);
 		const url = "/api/searchSalesOrder";
 		const response = await this.axios.post(url, input);
 		return SearchSalesOrderOutputSchema.parse(response.data);
 	}
-	async createSalesOrder(
-		input: z.infer<typeof CreateSalesOrderInputSchema>,
-	): Promise<z.infer<typeof CreateSalesOrderOutputSchema>> {
+	async createSalesOrder(input: z.infer<typeof CreateSalesOrderInputSchema>) {
 		input = CreateSalesOrderInputSchema.parse(input);
 		const url = "/api/salesOrder/";
 		const response = await this.axios.post(url, input);
 		return CreateSalesOrderOutputSchema.parse(response.data);
 	}
-	async readSalesOrder(
-		input: z.infer<typeof ReadSalesOrderInputSchema>,
-	): Promise<z.infer<typeof ReadSalesOrderOutputSchema>> {
+	async readSalesOrder(input: z.infer<typeof ReadSalesOrderInputSchema>) {
 		input = ReadSalesOrderInputSchema.parse(input);
 		const url = `/api/salesOrder/${input.orderNumber}`;
 		const response = await this.axios.get(url);
 		return ReadSalesOrderOutputSchema.parse(response.data);
 	}
-	async updateSalesOrder(
-		input: z.infer<typeof UpdateSalesOrderInputSchema>,
-	): Promise<z.infer<typeof UpdateSalesOrderOutputSchema>> {
+	async updateSalesOrder(input: z.infer<typeof UpdateSalesOrderInputSchema>) {
 		input = UpdateSalesOrderInputSchema.parse(input);
 		const url = "/api/salesorder/";
 		const response = await this.axios.patch(url, input);
@@ -2756,7 +2704,7 @@ export class HyperAccountsClient {
 	}
 	async partiallyAllocateSalesOrder(
 		input: z.infer<typeof PartiallyAllocateSalesOrderInputSchema>,
-	): Promise<z.infer<typeof PartiallyAllocateSalesOrderOutputSchema>> {
+	) {
 		input = PartiallyAllocateSalesOrderInputSchema.parse(input);
 		const url = "/api/salesOrderPartialAllocation";
 		const response = await this.axios.post(url, input);
@@ -2764,7 +2712,7 @@ export class HyperAccountsClient {
 	}
 	async fullyAllocateSalesOrder(
 		input: z.infer<typeof FullyAllocateSalesOrderInputSchema>,
-	): Promise<z.infer<typeof FullyAllocateSalesOrderOutputSchema>> {
+	) {
 		input = FullyAllocateSalesOrderInputSchema.parse(input);
 		const url = `/api/salesOrder/${input.id}/fullyAllocate`;
 		const response = await this.axios.post(url, undefined);
@@ -2772,7 +2720,7 @@ export class HyperAccountsClient {
 	}
 	async fullyUnAllocateSalesOrder(
 		input: z.infer<typeof FullyUnAllocateSalesOrderInputSchema>,
-	): Promise<z.infer<typeof FullyUnAllocateSalesOrderOutputSchema>> {
+	) {
 		input = FullyUnAllocateSalesOrderInputSchema.parse(input);
 		const url = `/api/salesOrderDeAllocation/${input.id}`;
 		const response = await this.axios.post(url, undefined);
@@ -2780,7 +2728,7 @@ export class HyperAccountsClient {
 	}
 	async partiallyDespatchSalesOrder(
 		input: z.infer<typeof PartiallyDespatchSalesOrderInputSchema>,
-	): Promise<z.infer<typeof PartiallyDespatchSalesOrderOutputSchema>> {
+	) {
 		input = PartiallyDespatchSalesOrderInputSchema.parse(input);
 		const url = "/api/salesOrderPartialDespatch";
 		const response = await this.axios.post(url, input);
@@ -2788,7 +2736,7 @@ export class HyperAccountsClient {
 	}
 	async completeSalesOrder(
 		input: z.infer<typeof CompleteSalesOrderInputSchema>,
-	): Promise<z.infer<typeof CompleteSalesOrderOutputSchema>> {
+	) {
 		input = CompleteSalesOrderInputSchema.parse(input);
 		const url = `/api/salesOrder/${input.id}/complete`;
 		const response = await this.axios.post(url, undefined);
@@ -2796,7 +2744,7 @@ export class HyperAccountsClient {
 	}
 	async completeSalesOrderWithOwnInvoiceDate(
 		input: z.infer<typeof CompleteSalesOrderWithOwnInvoiceDateInputSchema>,
-	): Promise<z.infer<typeof CompleteSalesOrderWithOwnInvoiceDateOutputSchema>> {
+	) {
 		input = CompleteSalesOrderWithOwnInvoiceDateInputSchema.parse(input);
 		const url = "/api/salesOrderComplete";
 		const response = await this.axios.post(url, input);
@@ -2804,32 +2752,24 @@ export class HyperAccountsClient {
 			response.data,
 		);
 	}
-	async holdSalesOrder(
-		input: z.infer<typeof HoldSalesOrderInputSchema>,
-	): Promise<z.infer<typeof HoldSalesOrderOutputSchema>> {
+	async holdSalesOrder(input: z.infer<typeof HoldSalesOrderInputSchema>) {
 		input = HoldSalesOrderInputSchema.parse(input);
 		const url = `/api/salesOrder/${input.id}/hold`;
 		const response = await this.axios.post(url, undefined);
 		return HoldSalesOrderOutputSchema.parse(response.data);
 	}
-	async cancelSalesOrder(): Promise<
-		z.infer<typeof CancelSalesOrderOutputSchema>
-	> {
+	async cancelSalesOrder() {
 		const url = "/api/salesOrder/32";
 		const response = await this.axios.delete(url);
 		return CancelSalesOrderOutputSchema.parse(response.data);
 	}
-	async searchDispatches(
-		input: z.infer<typeof SearchDispatchesInputSchema>,
-	): Promise<z.infer<typeof SearchDispatchesOutputSchema>> {
+	async searchDispatches(input: z.infer<typeof SearchDispatchesInputSchema>) {
 		input = SearchDispatchesInputSchema.parse(input);
 		const url = "/api/searchDispatch";
 		const response = await this.axios.post(url, input);
 		return SearchDispatchesOutputSchema.parse(response.data);
 	}
-	async searchSalesItems(
-		input: z.infer<typeof SearchSalesItemsInputSchema>,
-	): Promise<z.infer<typeof SearchSalesItemsOutputSchema>> {
+	async searchSalesItems(input: z.infer<typeof SearchSalesItemsInputSchema>) {
 		input = SearchSalesItemsInputSchema.parse(input);
 		const url = "/api/searchSopItem";
 		const response = await this.axios.post(url, input);
@@ -2837,7 +2777,7 @@ export class HyperAccountsClient {
 	}
 	async updateSalesOrderItems(
 		input: z.infer<typeof UpdateSalesOrderItemsInputSchema>,
-	): Promise<z.infer<typeof UpdateSalesOrderItemsOutputSchema>> {
+	) {
 		input = UpdateSalesOrderItemsInputSchema.parse(input);
 		const url = "/api/salesOrderItems";
 		const response = await this.axios.patch(url, input);
@@ -2845,7 +2785,7 @@ export class HyperAccountsClient {
 	}
 	async searchPurchaseOrders(
 		input: z.infer<typeof SearchPurchaseOrdersInputSchema>,
-	): Promise<z.infer<typeof SearchPurchaseOrdersOutputSchema>> {
+	) {
 		input = SearchPurchaseOrdersInputSchema.parse(input);
 		const url = "/api/searchPurchaseOrder";
 		const response = await this.axios.post(url, input);
@@ -2853,15 +2793,13 @@ export class HyperAccountsClient {
 	}
 	async createPurchaseOrder(
 		input: z.infer<typeof CreatePurchaseOrderInputSchema>,
-	): Promise<z.infer<typeof CreatePurchaseOrderOutputSchema>> {
+	) {
 		input = CreatePurchaseOrderInputSchema.parse(input);
 		const url = "/api/purchaseOrder";
 		const response = await this.axios.post(url, input);
 		return CreatePurchaseOrderOutputSchema.parse(response.data);
 	}
-	async readPurchaseOrder(
-		input: z.infer<typeof ReadPurchaseOrderInputSchema>,
-	): Promise<z.infer<typeof ReadPurchaseOrderOutputSchema>> {
+	async readPurchaseOrder(input: z.infer<typeof ReadPurchaseOrderInputSchema>) {
 		input = ReadPurchaseOrderInputSchema.parse(input);
 		const url = `/api/purchaseOrder/${input.orderNumber}`;
 		const response = await this.axios.get(url);
@@ -2869,7 +2807,7 @@ export class HyperAccountsClient {
 	}
 	async updatePurchaseOrder(
 		input: z.infer<typeof UpdatePurchaseOrderInputSchema>,
-	): Promise<z.infer<typeof UpdatePurchaseOrderOutputSchema>> {
+	) {
 		input = UpdatePurchaseOrderInputSchema.parse(input);
 		const url = "/api/purchaseOrder/";
 		const response = await this.axios.patch(url, input);
@@ -2877,7 +2815,7 @@ export class HyperAccountsClient {
 	}
 	async deletePurchaseOrder(
 		input: z.infer<typeof DeletePurchaseOrderInputSchema>,
-	): Promise<z.infer<typeof DeletePurchaseOrderOutputSchema>> {
+	) {
 		input = DeletePurchaseOrderInputSchema.parse(input);
 		const url = `/api/purchaseOrder/${input.orderNumber}`;
 		const response = await this.axios.delete(url);
@@ -2885,7 +2823,7 @@ export class HyperAccountsClient {
 	}
 	async searchPurchaseItems(
 		input: z.infer<typeof SearchPurchaseItemsInputSchema>,
-	): Promise<z.infer<typeof SearchPurchaseItemsOutputSchema>> {
+	) {
 		input = SearchPurchaseItemsInputSchema.parse(input);
 		const url = "/api/searchPopItem";
 		const response = await this.axios.post(url, input);
@@ -2893,7 +2831,7 @@ export class HyperAccountsClient {
 	}
 	async searchGoodsReceivedNotes(
 		input: z.infer<typeof SearchGoodsReceivedNotesInputSchema>,
-	): Promise<z.infer<typeof SearchGoodsReceivedNotesOutputSchema>> {
+	) {
 		input = SearchGoodsReceivedNotesInputSchema.parse(input);
 		const url = "/api/searchGoodsReceivedNotes";
 		const response = await this.axios.post(url, input);
@@ -2901,15 +2839,13 @@ export class HyperAccountsClient {
 	}
 	async goodsReceivedNotes(
 		input: z.infer<typeof GoodsReceivedNotesInputSchema>,
-	): Promise<z.infer<typeof GoodsReceivedNotesOutputSchema>> {
+	) {
 		input = GoodsReceivedNotesInputSchema.parse(input);
 		const url = "/api/goodsReceivedNotes";
 		const response = await this.axios.post(url, input);
 		return GoodsReceivedNotesOutputSchema.parse(response.data);
 	}
-	async searchDeliveries(
-		input: z.infer<typeof SearchDeliveriesInputSchema>,
-	): Promise<z.infer<typeof SearchDeliveriesOutputSchema>> {
+	async searchDeliveries(input: z.infer<typeof SearchDeliveriesInputSchema>) {
 		input = SearchDeliveriesInputSchema.parse(input);
 		const url = "/api/searchDelivery";
 		const response = await this.axios.post(url, input);
@@ -2917,15 +2853,13 @@ export class HyperAccountsClient {
 	}
 	async searchSalesInvoices(
 		input: z.infer<typeof SearchSalesInvoicesInputSchema>,
-	): Promise<z.infer<typeof SearchSalesInvoicesOutputSchema>> {
+	) {
 		input = SearchSalesInvoicesInputSchema.parse(input);
 		const url = "/api/searchInvoice";
 		const response = await this.axios.post(url, input);
 		return SearchSalesInvoicesOutputSchema.parse(response.data);
 	}
-	async readSalesInvoice(
-		input: z.infer<typeof ReadSalesInvoiceInputSchema>,
-	): Promise<z.infer<typeof ReadSalesInvoiceOutputSchema>> {
+	async readSalesInvoice(input: z.infer<typeof ReadSalesInvoiceInputSchema>) {
 		input = ReadSalesInvoiceInputSchema.parse(input);
 		const url = `/api/salesInvoice/${input.id}`;
 		const response = await this.axios.get(url);
@@ -2933,7 +2867,7 @@ export class HyperAccountsClient {
 	}
 	async updateSalesInvoice(
 		input: z.infer<typeof UpdateSalesInvoiceInputSchema>,
-	): Promise<z.infer<typeof UpdateSalesInvoiceOutputSchema>> {
+	) {
 		input = UpdateSalesInvoiceInputSchema.parse(input);
 		const url = "/api/salesInvoice/";
 		const response = await this.axios.patch(url, input);
@@ -2941,7 +2875,7 @@ export class HyperAccountsClient {
 	}
 	async createSalesInvoice(
 		input: z.infer<typeof CreateSalesInvoiceInputSchema>,
-	): Promise<z.infer<typeof CreateSalesInvoiceOutputSchema>> {
+	) {
 		input = CreateSalesInvoiceInputSchema.parse(input);
 		const url = "/api/salesInvoice/";
 		const response = await this.axios.post(url, input);
@@ -2949,7 +2883,7 @@ export class HyperAccountsClient {
 	}
 	async searchSalesInvoiceItems(
 		input: z.infer<typeof SearchSalesInvoiceItemsInputSchema>,
-	): Promise<z.infer<typeof SearchSalesInvoiceItemsOutputSchema>> {
+	) {
 		input = SearchSalesInvoiceItemsInputSchema.parse(input);
 		const url = "/api/searchInvoiceItem";
 		const response = await this.axios.post(url, input);
@@ -2957,47 +2891,37 @@ export class HyperAccountsClient {
 	}
 	async createPurchaseInvoice(
 		input: z.infer<typeof CreatePurchaseInvoiceInputSchema>,
-	): Promise<z.infer<typeof CreatePurchaseInvoiceOutputSchema>> {
+	) {
 		input = CreatePurchaseInvoiceInputSchema.parse(input);
 		const url = "/api/purchaseInvoice";
 		const response = await this.axios.post(url, input);
 		return CreatePurchaseInvoiceOutputSchema.parse(response.data);
 	}
-	async readDocumentLink(
-		input: z.infer<typeof ReadDocumentLinkInputSchema>,
-	): Promise<z.infer<typeof ReadDocumentLinkOutputSchema>> {
+	async readDocumentLink(input: z.infer<typeof ReadDocumentLinkInputSchema>) {
 		input = ReadDocumentLinkInputSchema.parse(input);
 		const url = `/api/documentLink/${input.transactionNumber}`;
 		const response = await this.axios.get(url);
 		return ReadDocumentLinkOutputSchema.parse(response.data);
 	}
-	async searchProjects(
-		input: z.infer<typeof SearchProjectsInputSchema>,
-	): Promise<z.infer<typeof SearchProjectsOutputSchema>> {
+	async searchProjects(input: z.infer<typeof SearchProjectsInputSchema>) {
 		input = SearchProjectsInputSchema.parse(input);
 		const url = "/api/searchProject";
 		const response = await this.axios.post(url, input);
 		return SearchProjectsOutputSchema.parse(response.data);
 	}
-	async createProject(
-		input: z.infer<typeof CreateProjectInputSchema>,
-	): Promise<z.infer<typeof CreateProjectOutputSchema>> {
+	async createProject(input: z.infer<typeof CreateProjectInputSchema>) {
 		input = CreateProjectInputSchema.parse(input);
 		const url = "/api/project";
 		const response = await this.axios.post(url, input);
 		return CreateProjectOutputSchema.parse(response.data);
 	}
-	async readProject(
-		input: z.infer<typeof ReadProjectInputSchema>,
-	): Promise<z.infer<typeof ReadProjectOutputSchema>> {
+	async readProject(input: z.infer<typeof ReadProjectInputSchema>) {
 		input = ReadProjectInputSchema.parse(input);
 		const url = `/api/project/${input.id}`;
 		const response = await this.axios.get(url);
 		return ReadProjectOutputSchema.parse(response.data);
 	}
-	async updateProject(
-		input: z.infer<typeof UpdateProjectInputSchema>,
-	): Promise<z.infer<typeof UpdateProjectOutputSchema>> {
+	async updateProject(input: z.infer<typeof UpdateProjectInputSchema>) {
 		input = UpdateProjectInputSchema.parse(input);
 		const url = "/api/project";
 		const response = await this.axios.patch(url, input);
@@ -3005,7 +2929,7 @@ export class HyperAccountsClient {
 	}
 	async readProjectTransactions(
 		input: z.infer<typeof ReadProjectTransactionsInputSchema>,
-	): Promise<z.infer<typeof ReadProjectTransactionsOutputSchema>> {
+	) {
 		input = ReadProjectTransactionsInputSchema.parse(input);
 		const url = `/api/project/${input.projectReference}/transactions`;
 		const response = await this.axios.get(url);
@@ -3013,7 +2937,7 @@ export class HyperAccountsClient {
 	}
 	async searchProjectOnlyTransactions(
 		input: z.infer<typeof SearchProjectOnlyTransactionsInputSchema>,
-	): Promise<z.infer<typeof SearchProjectOnlyTransactionsOutputSchema>> {
+	) {
 		input = SearchProjectOnlyTransactionsInputSchema.parse(input);
 		const url = "/api/searchProjectTransaction";
 		const response = await this.axios.post(url, input);
@@ -3021,7 +2945,7 @@ export class HyperAccountsClient {
 	}
 	async searchProjectTransactions(
 		input: z.infer<typeof SearchProjectTransactionsInputSchema>,
-	): Promise<z.infer<typeof SearchProjectTransactionsOutputSchema>> {
+	) {
 		input = SearchProjectTransactionsInputSchema.parse(input);
 		const url = "/api/searchProjectTran";
 		const response = await this.axios.post(url, input);
@@ -3029,53 +2953,47 @@ export class HyperAccountsClient {
 	}
 	async createProjectTransactions(
 		input: z.infer<typeof CreateProjectTransactionsInputSchema>,
-	): Promise<z.infer<typeof CreateProjectTransactionsOutputSchema>> {
+	) {
 		input = CreateProjectTransactionsInputSchema.parse(input);
 		const { projectReference, ...body } = input;
 		const url = `/api/project/${projectReference}/transactions`;
 		const response = await this.axios.post(url, body);
 		return CreateProjectTransactionsOutputSchema.parse(response.data);
 	}
-	async readProjectCostCodes(): Promise<
-		z.infer<typeof ReadProjectCostCodesOutputSchema>
-	> {
+	async readProjectCostCodes() {
 		const url = "/api/projectCostCode";
 		const response = await this.axios.get(url);
 		return ReadProjectCostCodesOutputSchema.parse(response.data);
 	}
 	async createProjectCostCodes(
 		input: z.infer<typeof CreateProjectCostCodesInputSchema>,
-	): Promise<z.infer<typeof CreateProjectCostCodesOutputSchema>> {
+	) {
 		input = CreateProjectCostCodesInputSchema.parse(input);
 		const url = "/api/projectCostCode";
 		const response = await this.axios.post(url, input);
 		return CreateProjectCostCodesOutputSchema.parse(response.data);
 	}
-	async readProjectBudgets(): Promise<
-		z.infer<typeof ReadProjectBudgetsOutputSchema>
-	> {
+	async readProjectBudgets() {
 		const url = "/api/projectBudgets";
 		const response = await this.axios.get(url);
 		return ReadProjectBudgetsOutputSchema.parse(response.data);
 	}
 	async allocatePaymentOnAccount(
 		input: z.infer<typeof AllocatePaymentOnAccountInputSchema>,
-	): Promise<z.infer<typeof AllocatePaymentOnAccountOutputSchema>> {
+	) {
 		input = AllocatePaymentOnAccountInputSchema.parse(input);
 		const url = "/api/allocatePaymentOnAccount";
 		const response = await this.axios.post(url, input);
 		return AllocatePaymentOnAccountOutputSchema.parse(response.data);
 	}
-	async searchAuditHeaders(): Promise<
-		z.infer<typeof SearchAuditHeadersOutputSchema>
-	> {
+	async searchAuditHeaders() {
 		const url = "/api/search/auditHeaders";
 		const response = await this.axios.post(url, undefined);
 		return SearchAuditHeadersOutputSchema.parse(response.data);
 	}
 	async createHeaderTransaction(
 		input: z.infer<typeof CreateHeaderTransactionInputSchema>,
-	): Promise<z.infer<typeof CreateHeaderTransactionOutputSchema>> {
+	) {
 		input = CreateHeaderTransactionInputSchema.parse(input);
 		const url = "/api/transactionPost";
 		const response = await this.axios.post(url, input);
@@ -3083,70 +3001,54 @@ export class HyperAccountsClient {
 	}
 	async createBatchHeaderTransaction(
 		input: z.infer<typeof CreateBatchHeaderTransactionInputSchema>,
-	): Promise<z.infer<typeof CreateBatchHeaderTransactionOutputSchema>> {
+	) {
 		input = CreateBatchHeaderTransactionInputSchema.parse(input);
 		const url = "/api/batchtransactionPost";
 		const response = await this.axios.post(url, input);
 		return CreateBatchHeaderTransactionOutputSchema.parse(response.data);
 	}
-	async searchAuditSplits(
-		input: z.infer<typeof SearchAuditSplitsInputSchema>,
-	): Promise<z.infer<typeof SearchAuditSplitsOutputSchema>> {
+	async searchAuditSplits(input: z.infer<typeof SearchAuditSplitsInputSchema>) {
 		input = SearchAuditSplitsInputSchema.parse(input);
 		const url = "/api/searchSplit";
 		const response = await this.axios.post(url, input);
 		return SearchAuditSplitsOutputSchema.parse(response.data);
 	}
-	async searchAuditUsage(
-		input: z.infer<typeof SearchAuditUsageInputSchema>,
-	): Promise<z.infer<typeof SearchAuditUsageOutputSchema>> {
+	async searchAuditUsage(input: z.infer<typeof SearchAuditUsageInputSchema>) {
 		input = SearchAuditUsageInputSchema.parse(input);
 		const url = "/api/searchUsage";
 		const response = await this.axios.post(url, input);
 		return SearchAuditUsageOutputSchema.parse(response.data);
 	}
-	async createBankTx(
-		input: z.infer<typeof CreateBankTxInputSchema>,
-	): Promise<z.infer<typeof CreateBankTxOutputSchema>> {
+	async createBankTx(input: z.infer<typeof CreateBankTxInputSchema>) {
 		input = CreateBankTxInputSchema.parse(input);
 		const url = "/api/bank";
 		const response = await this.axios.post(url, input);
 		return CreateBankTxOutputSchema.parse(response.data);
 	}
-	async createJournalTx(
-		input: z.infer<typeof CreateJournalTxInputSchema>,
-	): Promise<z.infer<typeof CreateJournalTxOutputSchema>> {
+	async createJournalTx(input: z.infer<typeof CreateJournalTxInputSchema>) {
 		input = CreateJournalTxInputSchema.parse(input);
 		const url = "/api/journal";
 		const response = await this.axios.post(url, input);
 		return CreateJournalTxOutputSchema.parse(response.data);
 	}
-	async createFixedAssets(
-		input: z.infer<typeof CreateFixedAssetsInputSchema>,
-	): Promise<z.infer<typeof CreateFixedAssetsOutputSchema>> {
+	async createFixedAssets(input: z.infer<typeof CreateFixedAssetsInputSchema>) {
 		input = CreateFixedAssetsInputSchema.parse(input);
 		const url = "/api/fixedAssets";
 		const response = await this.axios.post(url, input);
 		return CreateFixedAssetsOutputSchema.parse(response.data);
 	}
-	async searchFixedAssets(
-		input: z.infer<typeof SearchFixedAssetsInputSchema>,
-	): Promise<z.infer<typeof SearchFixedAssetsOutputSchema>> {
+	async searchFixedAssets(input: z.infer<typeof SearchFixedAssetsInputSchema>) {
 		input = SearchFixedAssetsInputSchema.parse(input);
 		const url = "/api/searchfixedAsset";
 		const response = await this.axios.post(url, input);
 		return SearchFixedAssetsOutputSchema.parse(response.data);
 	}
-	async readSearchAssets(): Promise<
-		z.infer<typeof ReadSearchAssetsOutputSchema>
-	> {
+	async readSearchAssets() {
 		const url = "/api/fixedAssets/HYPE";
 		const response = await this.axios.get(url);
 		return ReadSearchAssetsOutputSchema.parse(response.data);
 	}
-	async updateFixedAssets(
-		input: z.infer<typeof UpdateFixedAssetsInputSchema>,
-	): Promise<z.infer<typeof UpdateFixedAssetsOutputSchema>> {
+	async updateFixedAssets(input: z.infer<typeof UpdateFixedAssetsInputSchema>) {
 		input = UpdateFixedAssetsInputSchema.parse(input);
 		const url = "/api/fixedAssets";
 		const response = await this.axios.patch(url, input);
