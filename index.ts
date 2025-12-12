@@ -1247,6 +1247,9 @@ const CompleteSalesOrderWithOwnInvoiceDateOutputSchema = ResponseSchema(
 const HoldSalesOrderInputSchema = z.object({
 	id: z.string(),
 });
+const CancelSalesOrderInputSchema = z.object({
+	id: z.string(),
+});
 const HoldSalesOrderOutputSchema = ResponseSchema(z.number());
 const CancelSalesOrderOutputSchema = ResponseSchema(z.number());
 const SearchDispatchesInputSchema = z.array(
@@ -2349,6 +2352,9 @@ const SearchFixedAssetsInputSchema = z.array(
 		value: z.string(),
 	}),
 );
+const ReadSearchAssetsInputSchema = z.object({
+	assetRef: z.string(),
+});
 const SearchFixedAssetsOutputSchema = ResultsSchema(
 	z.object({
 		recordCreateDate: z.string(),
@@ -2758,8 +2764,9 @@ export class HyperAccountsClient {
 		const response = await this.axios.post(url, undefined);
 		return HoldSalesOrderOutputSchema.parse(response.data);
 	}
-	async cancelSalesOrder() {
-		const url = "/api/salesOrder/32";
+	async cancelSalesOrder(input: z.infer<typeof CancelSalesOrderInputSchema>) {
+		input = CancelSalesOrderInputSchema.parse(input);
+		const url = `/api/salesOrder/${input.id}`;
 		const response = await this.axios.delete(url);
 		return CancelSalesOrderOutputSchema.parse(response.data);
 	}
@@ -3043,8 +3050,9 @@ export class HyperAccountsClient {
 		const response = await this.axios.post(url, input);
 		return SearchFixedAssetsOutputSchema.parse(response.data);
 	}
-	async readSearchAssets() {
-		const url = "/api/fixedAssets/HYPE";
+	async readSearchAssets(input: z.infer<typeof ReadSearchAssetsInputSchema>) {
+		input = ReadSearchAssetsInputSchema.parse(input);
+		const url = `/api/fixedAssets/${input.assetRef}`;
 		const response = await this.axios.get(url);
 		return ReadSearchAssetsOutputSchema.parse(response.data);
 	}
