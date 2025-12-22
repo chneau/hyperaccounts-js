@@ -67,7 +67,7 @@ const ReadCompanySettingsOutputSchema = ResponseSchema(
 		vatCashFlag: z.number(),
 		vatRegNumber: z.string(),
 		vatRegisteredFlag: z.boolean(),
-		lockDate: z.string(),
+		lockDate: z.string().optional(),
 	}),
 );
 const ReadRdaEnabledOutputSchema = ResponseSchema(
