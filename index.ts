@@ -1896,7 +1896,8 @@ const CreateSalesInvoiceInputSchema = z.object({
 	invoiceItems: z.array(
 		z.object({
 			stockCode: z.string(),
-			description: z.string(),
+			description: z.string().max(120),
+			details: z.string().max(1023),
 			quantity: z.number(),
 			unitPrice: z.number(),
 			unitOfSale: z.string().optional(),
