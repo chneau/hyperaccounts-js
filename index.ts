@@ -226,7 +226,7 @@ const SearchCustomerOutputSchema = ResultsSchema(
 		priorYear: z.number().nullish(),
 		vatRegNumber: z.string(),
 		eoriNumber: z.string(),
-		lastPaymentDate: z.string(),
+		lastPaymentDate: z.string().nullish(),
 		lastInvDate: z.string().nullish(),
 		recordCreateDate: z.string(),
 		recordModifyDate: z.string(),
@@ -258,7 +258,7 @@ const SearchCustomerOutputSchema = ResultsSchema(
 		discountType: z.number(),
 		priceListRef: z.string(),
 		tradeContact: z.string(),
-		companyRegistrationNumber: z.string(),
+		companyRegistrationNumber: z.string().nullish(),
 	}),
 );
 const ReadCustomerInputSchema = z.object({
@@ -543,7 +543,7 @@ const SearchSupplierOutputSchema = ResultsSchema(
 		tradeContact: z.string(),
 		vatRegNumber: z.string(),
 		eoriNumber: z.string(),
-		companyRegistrationNumber: z.string(),
+		companyRegistrationNumber: z.string().nullish(),
 	}),
 );
 const ReadSupplierInputSchema = z.object({
