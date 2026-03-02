@@ -2573,7 +2573,7 @@ export class HyperAccountsClient {
 	}
 	async readCustomer(input: z.infer<typeof ReadCustomerInputSchema>) {
 		input = ReadCustomerInputSchema.parse(input);
-		const url = `/api/customer/${input.customer}`;
+		const url = `/api/customer/?id=${encodeURIComponent(input.customer)}`;
 		const response = await this.axios.get(url);
 		return ReadCustomerOutputSchema.parse(response.data);
 	}
