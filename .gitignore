@@ -1,3 +1,5 @@
 node_modules
 dist
-_t.ts
+_t.tsprivate/
+
+private/
