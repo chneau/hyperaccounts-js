@@ -20,6 +20,8 @@ const ResultsSchema = <T extends z.ZodTypeAny>(schema: T) =>
 const HAConfigSchema = z.object({
 	baseURL: z.url(),
 	authToken: z.string().min(1),
+	/** Per-request timeout. Also bounds how long one queued call can hold an operation. */
+	timeoutMs: z.number().int().positive().optional(),
 });
 const ReadApiStatusOutputSchema = ResponseSchema(
 	z.object({
@@ -2470,10 +2472,178 @@ const UpdateFixedAssetsInputSchema = z.object({
 	netBook: z.number().nullish(),
 });
 const UpdateFixedAssetsOutputSchema = ResponseSchema(z.string());
+
+const DEFAULT_TIMEOUT_MS = 120_000;
+
+/** A HyperAccounts request that failed, carrying the HTTP status and body. */
+export class HyperAccountsError extends Error {
+	readonly status?: number;
+	readonly body?: unknown;
+
+	constructor(
+		message: string,
+		details: { status?: number; body?: unknown } = {},
+	) {
+		super(message);
+		this.name = "HyperAccountsError";
+		this.status = details.status;
+		this.body = details.body;
+	}
+}
+
+/** The `Message`/`message` a HyperAccounts error body carries, when present. */
+const messageFromBody = (body: unknown): string | undefined => {
+	if (body === null || typeof body !== "object") {
+		return undefined;
+	}
+	if ("Message" in body && typeof body.Message === "string") {
+		return body.Message;
+	}
+	if ("message" in body && typeof body.message === "string") {
+		return body.message;
+	}
+	return undefined;
+};
+
+/** Every endpoint answers with the `{ success, code, ... }` envelope but the version one. */
+const looksLikeEnvelope = (data: unknown): boolean =>
+	data !== null &&
+	typeof data === "object" &&
+	"success" in data &&
+	typeof data.success === "boolean" &&
+	"code" in data &&
+	typeof data.code === "number";
+
+type FailureDetails = {
+	status?: number;
+	body?: unknown;
+	url?: string;
+	config?: object;
+};
+
+/** The status, body, url and config an axios error carries, when it carries them. */
+const failureDetails = (error: unknown): FailureDetails => {
+	if (error === null || typeof error !== "object") {
+		return {};
+	}
+	const config = "config" in error ? error.config : undefined;
+	const configObject =
+		config !== null && typeof config === "object" ? config : undefined;
+	const url =
+		configObject !== undefined &&
+		"url" in configObject &&
+		typeof configObject.url === "string"
+			? configObject.url
+			: undefined;
+	const response = "response" in error ? error.response : undefined;
+	if (response === null || typeof response !== "object") {
+		return { url, config: configObject };
+	}
+	const status =
+		"status" in response && typeof response.status === "number"
+			? response.status
+			: undefined;
+	const body = "data" in response ? response.data : undefined;
+	return { status, body, url, config: configObject };
+};
+
+/**
+ * HyperAccounts runs one process per operation: a second concurrent call for the
+ * same operation on the same instance answers 409 "A <Operation> process is
+ * already running". The client is built per request (see the invoice service) and
+ * several business units can share one Sage instance, so calls are queued by
+ * instance + operation rather than by client object. Different operations still
+ * overlap, which is what the API allows.
+ */
+const operationTails = new Map<string, Promise<void>>();
+
+type Release = () => void;
+
+/** Wait for `promise`, but never longer than `ms`: a lost release must not stall a queue. */
+const settleWithin = (promise: Promise<unknown>, ms: number): Promise<void> => {
+	const { promise: waited, resolve } = Promise.withResolvers<void>();
+	const timer = setTimeout(() => resolve(), ms);
+	void promise.then(
+		() => {
+			clearTimeout(timer);
+			resolve();
+		},
+		() => {
+			clearTimeout(timer);
+			resolve();
+		},
+	);
+	return waited;
+};
+
+/** Queue behind any in-flight call to `key`, resolving with its release function. */
+const acquireOperation = async (
+	key: string,
+	waitMs: number,
+): Promise<Release> => {
+	const previous = operationTails.get(key) ?? Promise.resolve();
+	const { promise: gate, resolve: release } = Promise.withResolvers<void>();
+	const tail = previous.then(
+		() => gate,
+		() => gate,
+	);
+	operationTails.set(key, tail);
+	void tail.then(() => {
+		if (operationTails.get(key) === tail) {
+			operationTails.delete(key);
+		}
+	});
+	await settleWithin(previous, waitMs);
+	return release;
+};
+
+/**
+ * The Sage instance a request targets. `baseURL` is per business unit
+ * (`SAGE_HYPEREXT_URL`), so different customers — different HyperAccounts
+ * installs — get independent queues, while two spellings of one instance
+ * (`https://host:50027` vs `https://host:50027/`) share one.
+ *
+ * The token is deliberately not part of the key: two companies inside one
+ * install still share that install's process lock, and including the token
+ * would let them run in parallel.
+ */
+const instanceKey = (baseURL: string | undefined): string => {
+	if (!baseURL) {
+		return "";
+	}
+	try {
+		const url = new URL(baseURL);
+		return `${url.origin}${url.pathname.replace(/\/+$/, "")}`;
+	} catch {
+		return baseURL.replace(/\/+$/, "");
+	}
+};
+
+/**
+ * What makes two requests the same operation: instance, method and API resource.
+ * Path parameters are dropped, so `/api/salesOrder/123/complete` and
+ * `/api/salesOrder/456/complete` are one endpoint — a per-id URL can never open a
+ * second queue for the same endpoint.
+ */
+const operationKey = (
+	baseURL: string | undefined,
+	method: string | undefined,
+	url: string | undefined,
+): string => {
+	const [pathname = ""] = (url ?? "").split("?");
+	const resource = pathname
+		.split("/")
+		.filter((segment) => segment.length > 0)
+		.slice(0, 2)
+		.join("/");
+	return `${instanceKey(baseURL)}|${method ?? ""}|/${resource}`;
+};
+
 export class HyperAccountsClient {
 	axios: Axios;
 	constructor(config: z.infer<typeof HAConfigSchema>) {
 		config = HAConfigSchema.parse(config);
+		const timeoutMs = config.timeoutMs ?? DEFAULT_TIMEOUT_MS;
 		this.axios = new Axios({
 			baseURL: config.baseURL,
 			headers: {
@@ -2481,6 +2651,10 @@ export class HyperAccountsClient {
 				AuthToken: config.authToken,
 			},
 			responseType: "json",
+			// The Axios constructor does not merge axios's global defaults, so
+			// validateStatus must be set here or every status resolves as success.
+			validateStatus: (status) => status >= 200 && status < 300,
+			timeout: timeoutMs,
 			transformResponse: (x) => {
 				try {
 					return JSON.parse(x);
@@ -2491,6 +2665,47 @@ export class HyperAccountsClient {
 			},
 			transformRequest: (data) => JSON.stringify(data),
 		});
+
+		const releases = new WeakMap<object, Release>();
+		this.axios.interceptors.request.use(async (config) => {
+			const key = operationKey(config.baseURL, config.method, config.url);
+			releases.set(config, await acquireOperation(key, timeoutMs + 5_000));
+			return config;
+		});
+		this.axios.interceptors.response.use(
+			(response) => {
+				releases.get(response.config)?.();
+				if (
+					response.data !== null &&
+					typeof response.data === "object" &&
+					!looksLikeEnvelope(response.data)
+				) {
+					throw new HyperAccountsError(
+						messageFromBody(response.data) ??
+							"HyperAccounts returned a body without the { success, code } envelope.",
+						{ status: response.status, body: response.data },
+					);
+				}
+				return response;
+			},
+			(error: unknown) => {
+				const details = failureDetails(error);
+				if (details.config) {
+					releases.get(details.config)?.();
+				}
+				const message =
+					messageFromBody(details.body) ??
+					(error instanceof Error
+						? error.message
+						: "HyperAccounts request failed");
+				return Promise.reject(
+					new HyperAccountsError(
+						details.url ? `${message} (${details.url})` : message,
+						{ status: details.status, body: details.body },
+					),
+				);
+			},
+		);
 	}
 	async readApiStatus() {
 		const url = "/api/status";

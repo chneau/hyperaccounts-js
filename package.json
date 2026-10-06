@@ -10,7 +10,8 @@
 		"check:oxlint": "oxlint --fix-dangerously --fix-suggestions --fix --quiet",
 		"check:biome": "timeout 3s biome check --write --unsafe --vcs-enabled=true --vcs-client-kind=git --vcs-use-ignore-file=true .",
 		"check:clean": "rm -rf dist out build",
-		"check:export": "ts-unused-exports tsconfig.json --excludePathsFromReport=/index.ts"
+		"check:export": "ts-unused-exports tsconfig.json --excludePathsFromReport=/index.ts",
+		"test": "bun test"
 	},
 	"dependencies": {
 		"axios": "^1.20.0",

@@ -2,3 +2,6 @@ node_modules
 dist
 _t.tsprivate/
 private/
+.env
+.env.*
+!.env.example
