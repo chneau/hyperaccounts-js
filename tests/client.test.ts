@@ -200,11 +200,11 @@ describe("serialisation", () => {
 		await withFakeApi({}, async (api) => {
 			api.hold();
 			// Same fake server, two origins: two HyperAccounts installs.
-			const gcl = clientFor(`http://127.0.0.1:${api.port}`);
-			const mdf = clientFor(`http://localhost:${api.port}`);
+			const first = clientFor(`http://127.0.0.1:${api.port}`);
+			const second = clientFor(`http://localhost:${api.port}`);
 			const calls = [
-				settle(() => gcl.readCustomer({ customer: "A" })),
-				settle(() => mdf.readCustomer({ customer: "A" })),
+				settle(() => first.readCustomer({ customer: "A" })),
+				settle(() => second.readCustomer({ customer: "A" })),
 			];
 			await flushEventLoop();
 			expect(api.maxInFlight["/api/customer"]).toBe(2);
@@ -316,6 +316,59 @@ describe("errors", () => {
 			{ "/api/system/version": { status: 200, body: "1.2.3" } },
 			async (api) => {
 				expect(await clientFor(api.origin).readApiVersion()).toBe("1.2.3");
+			},
+		);
+	});
+
+	test("a search result that omits optional line fields still parses", async () => {
+		// Some `searchInvoiceItem` results carry none of the optional line
+		// fields — no `details`, `foreignNetAmount`, `comment1` or `comment2`.
+		const item = {
+			id: 0,
+			invoiceNumber: 1001,
+			description: "TEST-000001",
+			stockCode: "S1",
+			nominal: "4000",
+			taxCode: "T0",
+			taxRate: 0,
+			unitPrice: 100,
+			quantity: 1,
+			discount: 0,
+			netAmount: 100,
+			departmentNumber: 0,
+			projectId: 0,
+			recordCreateDate: "1/1/2026 12:00:00 PM",
+		};
+		await withFakeApi(
+			{ "/api/searchInvoiceItem": { status: 200, body: results([item]) } },
+			async (api) => {
+				const items = await clientFor(api.origin).searchSalesInvoiceItems([
+					{ field: "description", type: "like", value: "%TEST-000001%" },
+				]);
+				expect(items.success).toBe(true);
+				expect(items.results).toEqual([item]);
+			},
+		);
+	});
+
+	test("a null results list reads as the empty list", async () => {
+		await withFakeApi(
+			{
+				"/api/taxCode": {
+					status: 200,
+					body: {
+						results: null,
+						success: true,
+						code: 200,
+						response: null,
+						message: null,
+					},
+				},
+			},
+			async (api) => {
+				const taxCodes = await clientFor(api.origin).readTaxCodes();
+				expect(taxCodes.success).toBe(true);
+				expect(taxCodes.results).toEqual([]);
 			},
 		);
 	});

@@ -2,16 +2,21 @@
 import { Axios } from "axios";
 import z from "zod";
 
-const ResponseSchema = <T extends z.ZodTypeAny>(schema: T) =>
+const ResponseSchema = <T extends z.ZodType>(schema: T) =>
 	z.object({
 		success: z.boolean(),
 		code: z.number(),
 		response: schema,
 		message: z.string().nullish(),
 	});
-const ResultsSchema = <T extends z.ZodTypeAny>(schema: T) =>
+const ResultsSchema = <T extends z.ZodType>(schema: T) =>
 	z.object({
-		results: z.array(schema),
+		// HyperAccounts answers a search that matches nothing with `results: null`
+		// rather than `[]`, so read that as the empty list it means.
+		results: z
+			.array(schema)
+			.nullish()
+			.transform((results) => results ?? []),
 		success: z.boolean(),
 		code: z.number(),
 		response: z.string().nullish(),
@@ -1927,22 +1932,26 @@ const SearchSalesInvoiceItemsInputSchema = z.array(
 	}),
 );
 const SearchSalesInvoiceItemsOutputSchema = ResultsSchema(
+	// HyperAccounts omits the optional line fields it has no value for: a real
+	// `searchInvoiceItem` result carries no `details`, `foreignNetAmount`,
+	// `comment1` or `comment2`. Requiring them turned a valid response into a
+	// ZodError, so a re-invoice lookup failed where a first invoice succeeded.
 	z.object({
 		id: z.number(),
 		invoiceNumber: z.number(),
 		description: z.string(),
 		stockCode: z.string(),
 		nominal: z.string(),
-		details: z.string(),
+		details: z.string().nullish(),
 		taxCode: z.string(),
 		taxRate: z.number(),
 		unitPrice: z.number(),
 		quantity: z.number(),
 		discount: z.number(),
 		netAmount: z.number(),
-		foreignNetAmount: z.number(),
-		comment1: z.string(),
-		comment2: z.string(),
+		foreignNetAmount: z.number().nullish(),
+		comment1: z.string().nullish(),
+		comment2: z.string().nullish(),
 		departmentNumber: z.number(),
 		projectId: z.number(),
 		recordCreateDate: z.string(),
