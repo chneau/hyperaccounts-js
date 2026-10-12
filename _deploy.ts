@@ -6,7 +6,9 @@ await $`rm -rf dist`;
 await $`bun build --outfile=dist/index.js --target=node --production --no-bundle index.ts`;
 // TypeScript 7 removed --outFile, and naming files on the command line skips
 // tsconfig.json (TS5112), so the options it would have contributed are passed here.
-await $`tsc --ignoreConfig --declaration --emitDeclarationOnly --outDir dist --module preserve --moduleResolution bundler --target esnext --lib esnext --types bun --skipLibCheck index.ts`;
+// Run the pinned devDependency (`bun x tsc`), not whatever `tsc` is on PATH: TS5
+// rejects --ignoreConfig and would break the publish.
+await $`bun x tsc --ignoreConfig --declaration --emitDeclarationOnly --outDir dist --module preserve --moduleResolution bundler --target esnext --lib esnext --types bun --skipLibCheck index.ts`;
 await $`cp README.md dist/`;
 
 // A release without declarations still publishes fine while `types` points at a
